@@ -19,33 +19,38 @@ CREATE TABLE smart_devices (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE financial_transactions (
+CREATE TABLE transactions (
     transaction_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES properties(user_id),
     property_id INT REFERENCES properties(property_id),
     transaction_type VARCHAR(50),
     amount DECIMAL(10, 2),
-    date DATE,
-    description TEXT,
+    date TIMESTAMP,
+    description VARCHAR(200),
     plaid_transaction_id VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE todo_list (
+CREATE TABLE todo (
     todo_id SERIAL PRIMARY KEY,
     property_id INT REFERENCES properties(property_id),
-    description TEXT NOT NULL,
-    status VARCHAR(50) DEFAULT 'pending',
+    description VARCHAR(2000) NOT NULL,
+    status VARCHAR(50) CHECK (status IN ('active', 'inactive', 'pending')),
     due_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ai_interactions (
-    interaction_id SERIAL PRIMARY KEY,
+CREATE TABLE chats (
+    chat_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES properties(user_id),
-    property_id INT REFERENCES properties(property_id),
-    request TEXT,
-    response TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    conversation_id INTEGER REFERENCES chats(chat_id),
+    sender_id INTEGER REFERENCES properties(user_id),
+    message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
