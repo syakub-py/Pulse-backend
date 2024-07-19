@@ -49,8 +49,9 @@ CREATE TABLE chats (
 
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    conversation_id INTEGER REFERENCES chats(chat_id),
-    sender_id INTEGER REFERENCES properties(user_id),
+    chat_id INTEGER REFERENCES chats(chat_id),
+    user_id INTEGER REFERENCES properties(user_id),
+    role VARCHAR(10) CHECK (role IN ('user', 'assistant')) NOT NULL,
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
