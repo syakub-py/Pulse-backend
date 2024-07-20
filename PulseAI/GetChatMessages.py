@@ -1,10 +1,9 @@
 import pandas as pd
 from DB.DbConnection import get_postgres_connection
-from typing import List
-from Models.Message import Message
+from typing import Any
 
 
-def getChatMessages(chatId: int) -> List[Message]:
+def getChatMessages(chatId: int) -> dict[str, Any]:
     conn = get_postgres_connection()
     if conn is None:
         return []
@@ -25,7 +24,7 @@ def getChatMessages(chatId: int) -> List[Message]:
                     chats.chat_id = %s;
                 """
         df = pd.read_sql_query(query, conn, params=(chatId,))
-        return [Message(user_id=row['message_user_id'], role=row['message_role'], message=row['message']) for index, row in df.iterrows()]
+        # return [Message(user_id=row['message_user_id'], role=row['message_role'], message=row['message']) for index, row in df.iterrows()]
     except Exception as e:
         print(f"Error: {e}")
         return []
