@@ -1,6 +1,6 @@
 CREATE TABLE properties (
     property_id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(100),
@@ -43,14 +43,14 @@ CREATE TABLE todo (
 
 CREATE TABLE chats (
     chat_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES properties(user_id),
+    user_id VARCHAR(255) REFERENCES properties(user_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    conversation_id INTEGER REFERENCES chats(chat_id),
-    sender_id INTEGER REFERENCES properties(user_id),
+    chat_id SERIAL REFERENCES chats(chat_id),
+    role VARCHAR(10) CHECK (role IN ('user', 'assistant')) NOT NULL,
     message TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at VARCHAR(60)
 );
