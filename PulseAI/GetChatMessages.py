@@ -1,6 +1,5 @@
 import pandas as pd
 from DB.DbConnection import get_postgres_connection
-import numpy as np
 
 def getChatMessages(chatId: int) -> list[dict]:
     conn = get_postgres_connection()
@@ -9,7 +8,8 @@ def getChatMessages(chatId: int) -> list[dict]:
     try:
         query = """
                 SELECT
-                    messages.role AS role,
+                    messages.id as _id,
+                    messages.role AS user,
                     messages.message AS text,
                     messages.created_at AS createdAt
                 FROM
@@ -20,7 +20,6 @@ def getChatMessages(chatId: int) -> list[dict]:
                     chats.chat_id = %s;
                 """
         df = pd.read_sql_query(query, conn, params=(chatId,))
-        df['_id'] = np.where(df['role'] == 'user', 1, 2)
         return df.to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
