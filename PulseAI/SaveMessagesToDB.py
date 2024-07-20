@@ -1,5 +1,6 @@
 from DB.DbConnection import get_postgres_connection
 import datetime
+
 def saveMessagesToDB(chatId:int, message: str, role:str):
     conn = get_postgres_connection()
     cursor = conn.cursor()

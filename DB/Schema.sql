@@ -43,7 +43,7 @@ CREATE TABLE todo (
 
 CREATE TABLE chats (
     chat_id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255),
+    user_id VARCHAR(255) REFERENCES properties(user_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
