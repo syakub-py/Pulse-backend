@@ -19,25 +19,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/chat/{chat_id}")
+@app.get("/getMessages/{chat_id}")
 def get_chat_messages(chat_id: int):
     messages = getChatMessages(chat_id)
     if not messages:
         raise HTTPException(status_code=404, detail="No messages found for this chat ID")
     return messages
 
-@app.get("/generateResponse/{prompt}", response_model= dict[str, str])
-def generate_response(prompt: str):
-    saveMessagesToDB("", prompt, "user")
+@app.get("/generateResponse/{chat_id}/{prompt}", response_model= dict[str, str])
+def generate_response(prompt: str, chat_id:int):
+    saveMessagesToDB(chat_id, prompt, "user")
     aiResponse = generateResponse(prompt)
     if not aiResponse:
         raise HTTPException(status_code=404, detail="No messages found for this chat ID")
 
-    saveMessagesToDB("", aiResponse['text'], "assistant")
+    saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
     return aiResponse
 
 @app.get("/createChat/{user_id}", response_model= dict[str, str])
 def create_chat(user_id: str):
     chat_id = createChat(user_id)
-    print(chat_id)
     return {"chat_id": str(chat_id)}

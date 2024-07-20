@@ -1,21 +1,17 @@
 import pandas as pd
 from DB.DbConnection import get_postgres_connection
-from typing import Any
+import numpy as np
 
-
-def getChatMessages(chatId: int) -> dict[str, Any]:
+def getChatMessages(chatId: int) -> list[dict]:
     conn = get_postgres_connection()
     if conn is None:
         return []
-
     try:
         query = """
                 SELECT
-                    messages.id AS message_id,
-                    messages.user_id AS message_user_id,
-                    messages.role AS message_role,
-                    messages.message,
-                    messages.created_at AS message_created_at
+                    messages.role AS role,
+                    messages.message AS text,
+                    messages.created_at AS createdAt
                 FROM
                     chats
                 JOIN
@@ -24,12 +20,10 @@ def getChatMessages(chatId: int) -> dict[str, Any]:
                     chats.chat_id = %s;
                 """
         df = pd.read_sql_query(query, conn, params=(chatId,))
-        # return [Message(user_id=row['message_user_id'], role=row['message_role'], message=row['message']) for index, row in df.iterrows()]
+        df['_id'] = np.where(df['role'] == 'user', 1, 2)
+        return df.to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
         return []
     finally:
         conn.close()
-
-chat_info = getChatMessages(1)
-print(chat_info)
