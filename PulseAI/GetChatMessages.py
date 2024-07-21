@@ -1,28 +1,33 @@
 import pandas as pd
-from DB.DbConnection import get_postgres_connection
+from DB.ORM.Models.Message import Message
+from DB.ORM.Models.Chat import Chat
+from DB.ORM.Utils.Session import session
+
 
 def getChatMessages(chatId: int) -> list[dict]:
-    conn = get_postgres_connection()
-    if conn is None:
+    if session is None:
         return []
     try:
-        query = """
-                SELECT
-                    messages.id as _id,
-                    messages.role AS user,
-                    messages.message AS text,
-                    messages.created_at AS createdAt
-                FROM
-                    chats
-                JOIN
-                    messages ON chats.chat_id = messages.chat_id
-                WHERE
-                    chats.chat_id = %s;
-                """
-        df = pd.read_sql_query(query, conn, params=(chatId,))
+        # Perform the query using SQLAlchemy ORM
+        messages = session.query(
+            Message.id.label('_id'),
+            Message.role.label('user'),
+            Message.message.label('text'),
+            Message.created_at.label('createdAt')
+        ).join(Chat, Chat.chat_id == Message.chat_id) \
+            .filter(Chat.chat_id == chatId) \
+            .all()
+
+        df = pd.DataFrame([{
+            '_id': msg._id,
+            'user': msg.user,
+            'text': msg.text,
+            'createdAt': msg.createdAt
+        } for msg in messages])
+
         return df.to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
         return []
     finally:
-        conn.close()
+        session.close()

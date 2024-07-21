@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from DB.DbConnection import get_postgres_connection
+from DB.DbConnection import getPostgresConnection
 from dotenv import load_dotenv
 from PulseAI.GenerateResponse import generateResponse
 from PulseAI.GetChatMessages import getChatMessages
@@ -10,7 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
 app = FastAPI()
-conn = get_postgres_connection()
+conn = getPostgresConnection()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
