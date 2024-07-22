@@ -17,4 +17,3 @@ def createChat(userId:str):
         if session is not None:
             session.close()
 
-print(createChat("admin"))

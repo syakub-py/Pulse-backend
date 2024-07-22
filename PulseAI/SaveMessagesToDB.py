@@ -2,7 +2,7 @@ from datetime import datetime
 from DB.ORM.Models.Message import Message
 from DB.ORM.Utils.Session import session
 
-def save_messages_to_db(chat_id: int, message: str, role: str):
+def saveMessagesToDB(chat_id: int, message: str, role: str):
     try:
         print("Saving messages to database")
 
@@ -10,7 +10,7 @@ def save_messages_to_db(chat_id: int, message: str, role: str):
             chat_id=chat_id,
             message=message,
             role=role,
-            created_at=datetime.utcnow()  # Use UTC time for consistency
+            created_at=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z")
         )
 
         session.add(new_message)

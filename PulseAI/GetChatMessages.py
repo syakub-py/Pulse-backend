@@ -8,7 +8,6 @@ def getChatMessages(chatId: int) -> list[dict]:
     if session is None:
         return []
     try:
-        # Perform the query using SQLAlchemy ORM
         messages = session.query(
             Message.id.label('_id'),
             Message.role.label('user'),
@@ -18,14 +17,12 @@ def getChatMessages(chatId: int) -> list[dict]:
             .filter(Chat.chat_id == chatId) \
             .all()
 
-        df = pd.DataFrame([{
+        return pd.DataFrame([{
             '_id': msg._id,
             'user': msg.user,
             'text': msg.text,
             'createdAt': msg.createdAt
-        } for msg in messages])
-
-        return df.to_dict(orient='records')
+        } for msg in messages]).to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
         return []

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, CheckConstraint, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, CheckConstraint, Text
 from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
 
@@ -8,6 +8,6 @@ class Message(Base):
     chat_id = Column(Integer, ForeignKey('chats.chat_id'))
     role = Column(String(10), CheckConstraint("role IN ('user', 'assistant')"), nullable=False)
     message = Column(Text, nullable=False)
-    created_at = Column(TIMESTAMP, default='CURRENT_TIMESTAMP')
+    created_at = Column(String(20), nullable=False)
 
     chat = relationship("Chat", back_populates="messages")
