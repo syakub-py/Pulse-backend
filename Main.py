@@ -3,12 +3,15 @@ from dotenv import load_dotenv
 from PulseAI.GenerateResponse import generateResponse
 from PulseAI.GetChatMessages import getChatMessages
 from PulseAI.SaveMessagesToDB import saveMessagesToDB
-from PulseAI.CreateChat import createChat
 from starlette.middleware.cors import CORSMiddleware
 from LoggerConfig import logger
+# from Properties.AddProperty import router as PropertiesRouter
+from PulseAI.CreateChat import router as CreateChatRouter
 
 load_dotenv()
 app = FastAPI()
+# app.include_router(PropertiesRouter)
+app.include_router(CreateChatRouter)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,7 +19,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/getMessages/{chat_id}")
 def get_chat_messages(chat_id: int):
@@ -41,7 +43,3 @@ def generate_response(prompt: str, chat_id: int):
     return aiResponse
 
 
-@app.get("/createChat/{user_id}", response_model=dict[str, str])
-def create_chat(user_id: str):
-    chat_id = createChat(user_id)
-    return {"chat_id": str(chat_id)}
