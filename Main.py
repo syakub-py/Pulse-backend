@@ -36,7 +36,7 @@ def generate_response(prompt: str, chat_id: int):
         messages = messages.rename(columns={'user': 'role', 'text': 'content'})
     saveMessagesToDB(chat_id, prompt, "user")
     aiResponse = generateResponse(prompt, messages.to_dict(orient='records'))
-    logger.info("Responses for Chat: %s" % aiResponse)
+    logger.info("Responses for Chat %s: %s" % (str(chat_id), aiResponse))
     saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
     return aiResponse
 
