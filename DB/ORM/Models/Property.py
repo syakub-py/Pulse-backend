@@ -6,12 +6,10 @@ class Property(Base):
     __tablename__ = 'properties'
     property_id = Column(Integer, primary_key=True)
     user_id = Column(String(255), unique=True, nullable=False)
-    name = Column(String(255), nullable=False)
+    nick_name = Column(String(255), nullable=False)
     address = Column(String(255), nullable=False)
-    city = Column(String(100))
-    state = Column(String(100))
-    zip_code = Column(String(20))
-    country = Column(String(100))
+    property_type = Column(String(255), nullable=False)
+    image_urls = Column(String(255), nullable=True)
     created_at = Column(TIMESTAMP, default='CURRENT_TIMESTAMP')
 
     smart_devices = relationship("SmartDevice", back_populates="property")

@@ -9,7 +9,6 @@ router = APIRouter()
 def createChat(userId:str):
     try:
         existing_chat = session.query(Chat).filter(Chat.user_id == userId).first()
-
         if existing_chat:
             logger.info(f'Chat already exists for user ID: {userId}')
             return {"chat_id": str(existing_chat.chat_id)}

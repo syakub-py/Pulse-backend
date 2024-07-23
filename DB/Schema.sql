@@ -1,12 +1,10 @@
 CREATE TABLE properties (
     property_id SERIAL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
+    nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    city VARCHAR(100),
-    state VARCHAR(100),
-    zip_code VARCHAR(20),
-    country VARCHAR(100),
+    image_urls VARCHAR(255),
+    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Apartment', 'Condo')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,7 +41,7 @@ CREATE TABLE todo (
 
 CREATE TABLE chats (
     chat_id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) REFERENCES properties(user_id),
+    user_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
