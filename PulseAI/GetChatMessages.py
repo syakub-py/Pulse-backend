@@ -4,9 +4,9 @@ from DB.ORM.Models.Chat import Chat
 from DB.ORM.Utils.Session import session
 
 
-def getChatMessages(chatId: int) -> list[dict]:
+def getChatMessages(chatId: int) -> pd.DataFrame:
     if session is None:
-        return []
+        return pd.DataFrame()
     try:
         messages = session.query(
             Message.id.label('_id'),
@@ -22,7 +22,7 @@ def getChatMessages(chatId: int) -> list[dict]:
             'user': msg.user,
             'text': msg.text,
             'createdAt': msg.createdAt
-        } for msg in messages]).to_dict(orient='records')
+        } for msg in messages])
     except Exception as e:
         print(f"Error: {e}")
         return []

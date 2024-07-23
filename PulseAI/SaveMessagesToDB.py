@@ -4,7 +4,6 @@ from DB.ORM.Utils.Session import session
 
 def saveMessagesToDB(chat_id: int, message: str, role: str):
     try:
-        print("Saving messages to database")
 
         new_message = Message(
             chat_id=chat_id,
