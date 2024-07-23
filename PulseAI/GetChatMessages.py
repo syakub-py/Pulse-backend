@@ -2,7 +2,7 @@ import pandas as pd
 from DB.ORM.Models.Message import Message
 from DB.ORM.Models.Chat import Chat
 from DB.ORM.Utils.Session import session
-
+from LoggerConfig import logger
 
 def getChatMessages(chatId: int) -> pd.DataFrame:
     if session is None:
@@ -16,7 +16,6 @@ def getChatMessages(chatId: int) -> pd.DataFrame:
         ).join(Chat, Chat.chat_id == Message.chat_id) \
             .filter(Chat.chat_id == chatId) \
             .all()
-
         return pd.DataFrame([{
             '_id': msg._id,
             'user': msg.user,
@@ -24,7 +23,7 @@ def getChatMessages(chatId: int) -> pd.DataFrame:
             'createdAt': msg.createdAt
         } for msg in messages])
     except Exception as e:
-        print(f"Error: {e}")
-        return []
+        logger.error("Error getting chat messages: " + str(e))
+        return pd.DataFrame()
     finally:
         session.close()
