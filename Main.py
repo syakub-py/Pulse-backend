@@ -5,7 +5,7 @@ from PulseAI.GetChatMessages import getChatMessages
 from PulseAI.SaveMessagesToDB import saveMessagesToDB
 from PulseAI.CreateChat import createChat
 from starlette.middleware.cors import CORSMiddleware
-
+from LoggerConfig import logger
 
 load_dotenv()
 app = FastAPI()
@@ -17,24 +17,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/getMessages/{chat_id}")
 def get_chat_messages(chat_id: int):
     messages = getChatMessages(chat_id).to_dict(orient='records')
+    logger.info("Messages for Chat %s: %s" % (str(chat_id), messages))
     if not messages:
+        logger.warning("Chat %s has no messages" % str(chat_id))
         return []
     return messages
 
-@app.get("/generateResponse/{chat_id}/{prompt}", response_model= dict[str, str])
-def generate_response(prompt: str, chat_id:int):
+
+@app.get("/generateResponse/{chat_id}/{prompt}", response_model=dict[str, str])
+def generate_response(prompt: str, chat_id: int):
     messages = getChatMessages(chat_id)
-    messages = messages.drop(columns=['_id', 'createdAt'])
-    messages = messages.rename(columns={'user': 'role', 'text': 'content'})
+    if messages.to_dict(orient='records'):
+        messages = messages.drop(columns=['_id', 'createdAt'])
+        messages = messages.rename(columns={'user': 'role', 'text': 'content'})
     saveMessagesToDB(chat_id, prompt, "user")
     aiResponse = generateResponse(prompt, messages.to_dict(orient='records'))
+    logger.info("Responses for Chat: %s" % aiResponse)
     saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
     return aiResponse
 
-@app.get("/createChat/{user_id}", response_model= dict[str, str])
+
+@app.get("/createChat/{user_id}", response_model=dict[str, str])
 def create_chat(user_id: str):
     chat_id = createChat(user_id)
     return {"chat_id": str(chat_id)}
