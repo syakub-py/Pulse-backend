@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from DB.DbConnection import get_postgres_connection
+from fastapi import FastAPI
 from dotenv import load_dotenv
 from PulseAI.GenerateResponse import generateResponse
 from PulseAI.GetChatMessages import getChatMessages
@@ -10,7 +9,6 @@ from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
 app = FastAPI()
-conn = get_postgres_connection()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,18 +19,18 @@ app.add_middleware(
 
 @app.get("/getMessages/{chat_id}")
 def get_chat_messages(chat_id: int):
-    messages = getChatMessages(chat_id)
+    messages = getChatMessages(chat_id).to_dict(orient='records')
     if not messages:
-        raise HTTPException(status_code=404, detail="No messages found for this chat ID")
+        return []
     return messages
 
 @app.get("/generateResponse/{chat_id}/{prompt}", response_model= dict[str, str])
 def generate_response(prompt: str, chat_id:int):
+    messages = getChatMessages(chat_id)
+    messages = messages.drop(columns=['_id', 'createdAt'])
+    messages = messages.rename(columns={'user': 'role', 'text': 'content'})
     saveMessagesToDB(chat_id, prompt, "user")
-    aiResponse = generateResponse(prompt)
-    if not aiResponse:
-        raise HTTPException(status_code=404, detail="No messages found for this chat ID")
-
+    aiResponse = generateResponse(prompt, messages.to_dict(orient='records'))
     saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
     return aiResponse
 

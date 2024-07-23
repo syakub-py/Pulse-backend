@@ -1,18 +1,24 @@
-from DB.DbConnection import get_postgres_connection
-import datetime
+from datetime import datetime
+from DB.ORM.Models.Message import Message
+from DB.ORM.Utils.Session import session
 
-def saveMessagesToDB(chatId:int, message: str, role:str):
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
-
+def saveMessagesToDB(chat_id: int, message: str, role: str):
     try:
-        print("Saving messages to database")
-        cursor.execute("INSERT INTO messages (chat_id, message, role, created_at) VALUES (%s ,%s ,%s, %s)", (chatId, message, role, datetime.datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z")))
-        conn.commit()
+
+        new_message = Message(
+            chat_id=chat_id,
+            message=message,
+            role=role,
+            created_at=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z")
+        )
+
+        session.add(new_message)
+
+        session.commit()
+
     except Exception as e:
         print(f"Error saving message to database: {e}")
-        conn.rollback()
+        session.rollback()
 
     finally:
-        cursor.close()
-        conn.close()
+        session.close()
