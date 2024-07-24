@@ -5,12 +5,14 @@ from PulseAI.GetChatMessages import getChatMessages
 from PulseAI.SaveMessagesToDB import saveMessagesToDB
 from starlette.middleware.cors import CORSMiddleware
 from LoggerConfig import logger
-
+from Properties.AddProperty import router as AddPropertyRouter
 from PulseAI.CreateChat import router as CreateChatRouter
 
 load_dotenv()
 app = FastAPI()
 app.include_router(CreateChatRouter)
+app.include_router(AddPropertyRouter)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -1,16 +1,15 @@
 CREATE TABLE properties (
     property_id SERIAL PRIMARY KEY,
+    device_id INT REFERENCES smart_devices(device_id),
     user_id VARCHAR(255) NOT NULL UNIQUE,
     nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    image_urls VARCHAR(255),
     property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home','Apartment', 'Condo')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at VARCHAR(60)
 );
 
 CREATE TABLE smart_devices (
     device_id SERIAL PRIMARY KEY,
-    property_id INT REFERENCES properties(property_id),
     device_name VARCHAR(255) NOT NULL,
     device_type VARCHAR(100),
     device_status VARCHAR(50),

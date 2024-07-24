@@ -1,4 +1,3 @@
-from datetime import datetime
 from DB.ORM.Models.Message import Message
 from DB.ORM.Utils.Session import session
 from LoggerConfig import logger
@@ -9,9 +8,7 @@ def saveMessagesToDB(chat_id: int, message: str, role: str):
         new_message = Message(
             chat_id=chat_id,
             message=message,
-            role=role,
-            created_at=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z")
-        )
+            role=role)
 
         session.add(new_message)
         session.commit()
