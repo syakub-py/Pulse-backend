@@ -7,12 +7,14 @@ from starlette.middleware.cors import CORSMiddleware
 from LoggerConfig import logger
 from Properties.AddProperty import router as AddPropertyRouter
 from PulseAI.CreateChat import router as CreateChatRouter
+from Properties.GetProperties import router as GetPropertiesRouter
+
 
 load_dotenv()
 app = FastAPI()
 app.include_router(CreateChatRouter)
 app.include_router(AddPropertyRouter)
-
+app.include_router(GetPropertiesRouter)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
