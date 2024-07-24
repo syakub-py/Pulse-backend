@@ -4,7 +4,7 @@ CREATE TABLE properties (
     nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     image_urls VARCHAR(255),
-    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Apartment', 'Condo')),
+    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home','Apartment', 'Condo')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

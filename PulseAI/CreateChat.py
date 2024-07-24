@@ -5,8 +5,9 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
+
 @router.get("/createChat/{userId}", response_model=dict[str, str])
-def createChat(userId:str):
+def createChat(userId: str):
     try:
         existing_chat = session.query(Chat).filter(Chat.user_id == userId).first()
         if existing_chat:
@@ -24,4 +25,3 @@ def createChat(userId:str):
         return None
     finally:
         session.close()
-

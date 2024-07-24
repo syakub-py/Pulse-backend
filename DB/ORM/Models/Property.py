@@ -11,7 +11,6 @@ class Property(Base):
     property_type = Column(String(255), nullable=False)
     image_urls = Column(String(255), nullable=True)
     created_at = Column(TIMESTAMP, default='CURRENT_TIMESTAMP')
-
     smart_devices = relationship("SmartDevice", back_populates="property")
     transactions = relationship("Transaction", back_populates="property")
     todos = relationship("Todo", back_populates="property")
