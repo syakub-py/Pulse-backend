@@ -2,6 +2,7 @@ from fastapi import APIRouter
 import pandas as pd
 from DB.ORM.Utils.Session import session
 from DB.ORM.Models.Property import Property
+
 router = APIRouter()
 
 @router.get("/getProperty/{userId}")

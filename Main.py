@@ -8,13 +8,15 @@ from LoggerConfig import logger
 from Properties.AddProperty import router as AddPropertyRouter
 from PulseAI.CreateChat import router as CreateChatRouter
 from Properties.GetProperties import router as GetPropertiesRouter
-
+from Properties.DeleteProperty import router as DeletePropertyRouter
 
 load_dotenv()
 app = FastAPI()
 app.include_router(CreateChatRouter)
 app.include_router(AddPropertyRouter)
 app.include_router(GetPropertiesRouter)
+app.include_router(DeletePropertyRouter)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
