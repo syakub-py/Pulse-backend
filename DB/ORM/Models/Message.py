@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Integer, String, ForeignKey, CheckConstraint, Text
 from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
@@ -8,6 +10,6 @@ class Message(Base):
     chat_id = Column(Integer, ForeignKey('chats.chat_id'))
     role = Column(String(10), CheckConstraint("role IN ('user', 'assistant')"), nullable=False)
     message = Column(Text, nullable=False)
-    created_at = Column(String(20), nullable=False)
+    created_at = Column(String(20), nullable=False, default=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z"))
 
     chat = relationship("Chat", back_populates="messages")

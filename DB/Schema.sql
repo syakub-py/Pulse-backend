@@ -1,18 +1,16 @@
 CREATE TABLE properties (
     property_id SERIAL PRIMARY KEY,
+--     device_id INT REFERENCES smart_devices(device_id),
     user_id VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
+    nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    city VARCHAR(100),
-    state VARCHAR(100),
-    zip_code VARCHAR(20),
-    country VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home','Apartment', 'Condo')),
+    is_rental BOOLEAN CHECK (is_rental IN (TRUE, FALSE)),
+    created_at VARCHAR(60)
 );
 
 CREATE TABLE smart_devices (
     device_id SERIAL PRIMARY KEY,
-    property_id INT REFERENCES properties(property_id),
     device_name VARCHAR(255) NOT NULL,
     device_type VARCHAR(100),
     device_status VARCHAR(50),
@@ -43,7 +41,7 @@ CREATE TABLE todo (
 
 CREATE TABLE chats (
     chat_id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) REFERENCES properties(user_id),
+    user_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
