@@ -17,12 +17,12 @@ def GetProperties(userId: str):
             "Name": prop.nick_name,
             "Address": prop.address,
             "PropertyType": prop.property_type,
+            "isRental": prop.is_rental,
         }
         for prop in properties
     ]
 
     properties_df = pd.DataFrame(properties_list)
-
     return properties_df.to_json(orient="records")
 
 

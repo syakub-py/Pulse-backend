@@ -11,6 +11,7 @@ class PropertyDetails(BaseModel):
     Name: str
     Address: str
     PropertyType: str
+    isRental:bool
 
 @router.post("/addProperty/{userId}")
 def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int]:
@@ -22,7 +23,8 @@ def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int]
             user_id=userId,
             nick_name=propertyDetails.Name,
             address=propertyDetails.Address,
-            property_type=propertyDetails.PropertyType
+            property_type=propertyDetails.PropertyType,
+            is_rental=propertyDetails.isRental
         )
 
         session.add(new_property)

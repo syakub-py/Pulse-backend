@@ -1,10 +1,11 @@
 CREATE TABLE properties (
     property_id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES smart_devices(device_id),
+--     device_id INT REFERENCES smart_devices(device_id),
     user_id VARCHAR(255) NOT NULL UNIQUE,
     nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home','Apartment', 'Condo')),
+    is_rental BOOLEAN CHECK (is_rental IN (TRUE, FALSE)),
     created_at VARCHAR(60)
 );
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
 
@@ -10,6 +10,7 @@ class Property(Base):
     nick_name = Column(String(255), nullable=False)
     address = Column(String(255), nullable=False)
     property_type = Column(String(255), nullable=False)
+    is_rental = Column(Boolean, nullable=False, default=False)
     created_at = Column(TIMESTAMP, default=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z"))
     # smart_devices = relationship("SmartDevice", back_populates="property")
     # transactions = relationship("Transaction", back_populates="property")
