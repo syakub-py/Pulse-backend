@@ -11,7 +11,7 @@ class Property(Base):
     address = Column(String(255), nullable=False)
     property_type = Column(String(255), nullable=False)
     is_rental = Column(Boolean, nullable=False, default=False)
-    created_at = Column(String, default=datetime.now().strftime("%a %b %d %Y %H:%M:%S GMT%z"))
+    created_at = Column(String, default=datetime.now().strftime("%a %b %d %Y %H:%M:%S"))
     # smart_devices = relationship("SmartDevice", back_populates="property")
     # transactions = relationship("Transaction", back_populates="property")
     # todos = relationship("Todo", back_populates="property")

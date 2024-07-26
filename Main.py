@@ -39,7 +39,7 @@ def get_chat_messages(chat_id: int):
 
 
 @app.get("/generateResponse/{chat_id}/{prompt}", response_model=dict[str, str])
-def generate_response(prompt: str, chat_id: int):
+def return_and_save_response(prompt: str, chat_id: int):
     try:
         messages = getChatMessages(chat_id)
         if messages.to_dict(orient='records'):

@@ -4,17 +4,9 @@ CREATE TABLE properties (
     user_id VARCHAR(255) NOT NULL,
     nick_name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home', 'Condo')),
+    property_type VARCHAR(50) CHECK (property_type IN ('Home', 'Vacation Home', 'Condo', 'Multi-Family', 'Commercial Building')),
     is_rental BOOLEAN CHECK (is_rental IN (TRUE, FALSE)),
     created_at VARCHAR(60)
-);
-
-CREATE TABLE smart_devices (
-    device_id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255) NOT NULL,
-    device_type VARCHAR(100),
-    device_status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE transactions (
@@ -35,8 +27,8 @@ CREATE TABLE todo (
     description VARCHAR(2000) NOT NULL,
     status VARCHAR(50) CHECK (status IN ('active', 'inactive', 'pending')),
     due_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at VARCHAR(60),
+    updated_at VARCHAR(60)
 );
 
 CREATE TABLE chats (
