@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
-from DB.ORM.Models import Property
+from DB.ORM.Models.Property import Property
 from DB.ORM.Utils.Session import session
+from LoggerConfig import logger
 
 router = APIRouter()
 
@@ -11,11 +12,12 @@ def deleteProperty(propertyId: int):
         if property_to_delete:
             session.delete(property_to_delete)
             session.commit()
-            return {"message": "Property deleted successfully"}
+            logger.info("Deleted Property {}".format(propertyId))
         else:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Property not found")
+            logger.error(f"Property {propertyId} not found")
     except Exception as e:
+        logger.error(e)
         session.rollback()
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to delete property") from e
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to delete property")
 
 

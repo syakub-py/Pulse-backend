@@ -27,24 +27,45 @@ app.add_middleware(
 
 @app.get("/getMessages/{chat_id}")
 def get_chat_messages(chat_id: int):
-    messages = getChatMessages(chat_id).to_dict(orient='records')
-    logger.info("Messages for Chat %s: %s" % (str(chat_id), messages))
-    if not messages:
-        logger.warning("Chat %s has no messages" % str(chat_id))
+    try:
+        messages = getChatMessages(chat_id).to_dict(orient='records')
+        if not messages:
+            logger.warning("Chat %s has no messages" % str(chat_id))
+            return []
+        return messages
+    except Exception as e:
+        logger.error("Failed to retrieve chat messages for chat %s: %s" % (str(chat_id), str(e)))
         return []
-    return messages
 
 
 @app.get("/generateResponse/{chat_id}/{prompt}", response_model=dict[str, str])
 def generate_response(prompt: str, chat_id: int):
-    messages = getChatMessages(chat_id)
-    if messages.to_dict(orient='records'):
-        messages = messages.drop(columns=['_id', 'createdAt'])
-        messages = messages.rename(columns={'user': 'role', 'text': 'content'})
-    saveMessagesToDB(chat_id, prompt, "user")
-    aiResponse = generateResponse(prompt, messages.to_dict(orient='records'))
-    logger.info("Responses for Chat %s: %s" % (str(chat_id), aiResponse))
-    saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
-    return aiResponse
+    try:
+        messages = getChatMessages(chat_id)
+        if messages.to_dict(orient='records'):
+            try:
+                messages = messages.drop(columns=['_id', 'createdAt'])
+                messages = messages.rename(columns={'user': 'role', 'text': 'content'})
+            except KeyError as e:
+                logger.error("Missing key in chat messages: %s" % str(e))
+            except Exception as e:
+                logger.error("Failed to process chat messages: %s" % str(e))
+        try:
+            saveMessagesToDB(chat_id, prompt, "user")
+        except Exception as e:
+            logger.error("Failed to save user message to DB: %s" % str(e))
+        try:
+            aiResponse = generateResponse(prompt, messages.to_dict(orient='records'))
+        except Exception as e:
+            logger.error("Failed to generate AI response: %s" % str(e))
+            return {"error": "Failed to generate AI response"}
+        try:
+            saveMessagesToDB(chat_id, aiResponse['text'], "assistant")
+        except Exception as e:
+            logger.error("Failed to save AI response to DB: %s" % str(e))
+        return aiResponse
+    except Exception as e:
+        logger.error("Failed to process chat: %s" % str(e))
+        return {"error": "Failed to process chat"}
 
 
