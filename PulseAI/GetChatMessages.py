@@ -5,8 +5,6 @@ from DB.ORM.Utils.Session import session
 from LoggerConfig import logger
 
 def getChatMessages(chatId: int) -> pd.DataFrame:
-    if session is None:
-        return pd.DataFrame()
     try:
         messages = session.query(
             Message.id.label('_id'),
@@ -16,6 +14,7 @@ def getChatMessages(chatId: int) -> pd.DataFrame:
         ).join(Chat, Chat.chat_id == Message.chat_id) \
             .filter(Chat.chat_id == chatId) \
             .all()
+
         return pd.DataFrame([{
             '_id': msg._id,
             'user': msg.user,
@@ -23,7 +22,7 @@ def getChatMessages(chatId: int) -> pd.DataFrame:
             'createdAt': msg.createdAt
         } for msg in messages])
     except Exception as e:
-        logger.error("Error getting chat messages: " + str(e))
+        logger.error("Error getting chat messages: %s", str(e))
         return pd.DataFrame()
     finally:
         session.close()

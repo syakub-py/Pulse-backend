@@ -9,6 +9,19 @@ CREATE TABLE properties (
     created_at VARCHAR(60)
 );
 
+CREATE TABLE leases (
+    lease_id VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    monthly_rent FLOAT NOT NULL
+    FOREIGN KEY (tenant_id) REFERENCES tenants (tenant_id)
+);
+
+CREATE TABLE tenants (
+     tenant_id INTEGER PRIMARY KEY AUTOINCREMENT,
+     name VARCHAR NOT NULL,
+);
+
 CREATE TABLE transactions (
     transaction_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES properties(user_id),
