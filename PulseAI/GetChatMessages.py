@@ -1,12 +1,20 @@
+from typing import List
 import pandas as pd
+from fastapi import APIRouter
+
 from DB.ORM.Models.Message import Message
 from DB.ORM.Models.Chat import Chat
 from DB.ORM.Utils.Session import session
+
 from LoggerConfig import logger
 
-def getChatMessages(chatId: int) -> pd.DataFrame:
+router = APIRouter()
+
+@router.get("/getMessages/{chatId}")
+def getChatMessages(chatId: int) -> List[dict]:
     try:
         messages = session.query(
+            Message.id.label('_id'),
             Message.id.label('_id'),
             Message.role.label('user'),
             Message.message.label('text'),
@@ -20,9 +28,9 @@ def getChatMessages(chatId: int) -> pd.DataFrame:
             'user': msg.user,
             'text': msg.text,
             'createdAt': msg.createdAt
-        } for msg in messages])
+        } for msg in messages]).to_dict(orient='records')
     except Exception as e:
         logger.error("Error getting chat messages: %s", str(e))
-        return pd.DataFrame()
+        return pd.DataFrame().to_dict(orient='records')
     finally:
         session.close()

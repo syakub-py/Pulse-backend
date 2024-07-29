@@ -20,6 +20,7 @@ CREATE TABLE leases (
 CREATE TABLE tenants (
      tenant_id INTEGER PRIMARY KEY AUTOINCREMENT,
      name VARCHAR NOT NULL,
+     dob DATE NOT NULL,
 );
 
 CREATE TABLE transactions (
