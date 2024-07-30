@@ -1,7 +1,6 @@
 from DB.ORM.Base import Base
-from sqlalchemy import Column, Date, String, ForeignKey, Float
+from sqlalchemy import Column, Date, String, Float
 from sqlalchemy.orm import relationship
-from datetime import datetime
 
 class Lease(Base):
     __tablename__ = 'leases'
@@ -11,8 +10,4 @@ class Lease(Base):
     end_date = Column(Date, nullable=False)
     monthly_rent = Column(Float, nullable=False)
 
-    Tenants = relationship('Tenant', back_populates='lease')
-
-    def IsActive(self) -> bool:
-        today = datetime.now().date()
-        return self.start_date <= today <= self.end_date
+    properties = relationship("PropertyLease", back_populates="lease")

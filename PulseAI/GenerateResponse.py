@@ -15,7 +15,6 @@ router = APIRouter()
 def generateResponse(chat_id: int, prompt: str) -> Dict[str, str]:
     try:
         messages = getChatMessages(chat_id)
-
         if not messages:
             messages_list = [{'role': 'user', 'content': prompt}]
         else:

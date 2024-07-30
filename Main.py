@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-
 from PulseAI.GetChatMessages import router as GetChatMessagesRouter
 from PulseAI.CreateChat import router as CreateChatRouter
 from PulseAI.GenerateResponse import router as GenerateResponseRouter
@@ -11,8 +10,6 @@ from Properties.GetProperties import router as GetPropertiesRouter
 from Properties.DeleteProperty import router as DeletePropertyRouter
 
 from starlette.middleware.cors import CORSMiddleware
-
-
 
 load_dotenv()
 app = FastAPI()
@@ -31,6 +28,4 @@ app.include_router(GetPropertiesRouter)
 app.include_router(DeletePropertyRouter)
 app.include_router(GetChatMessagesRouter)
 app.include_router(GenerateResponseRouter)
-
-
 
