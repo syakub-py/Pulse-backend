@@ -10,11 +10,9 @@ CREATE TABLE properties (
 
 CREATE TABLE leases (
     lease_id SERIAL PRIMARY KEY,
-    property_id INTEGER NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    monthly_rent FLOAT NOT NULL,
-    FOREIGN KEY (property_id) REFERENCES properties (property_id)
+    start_date VARCHAR(60) NOT NULL,
+    end_date VARCHAR(60) NOT NULL,
+    monthly_rent VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE property_leases (

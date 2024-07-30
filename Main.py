@@ -9,6 +9,8 @@ from Properties.AddProperty import router as AddPropertyRouter
 from Properties.GetProperties import router as GetPropertiesRouter
 from Properties.DeleteProperty import router as DeletePropertyRouter
 
+from Leases.AddLease import router as AddLeaseRouter
+
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -28,4 +30,4 @@ app.include_router(GetPropertiesRouter)
 app.include_router(DeletePropertyRouter)
 app.include_router(GetChatMessagesRouter)
 app.include_router(GenerateResponseRouter)
-
+app.include_router(AddLeaseRouter)
