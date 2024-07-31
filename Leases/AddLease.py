@@ -1,4 +1,3 @@
-import datetime
 from typing import Dict
 
 from fastapi import APIRouter

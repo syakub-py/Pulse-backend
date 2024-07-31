@@ -13,8 +13,6 @@ def saveMessagesToDB(chat_id: int, message: str, role: str):
             db_session.add(new_message)
             db_session.flush()
 
-            logger.info(f"Saved message to Chat ID: {chat_id} with Message: {message}")
-
             return new_message.id
     except Exception as e:
         logger.error(f"Error Saving Messages to DB: {str(e)}")
