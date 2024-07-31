@@ -1,6 +1,6 @@
 from DB.ORM.Models.Message import Message
 from DB.ORM.Utils.Session import session_scope as session
-from LoggerConfig import logger
+from LoggerConfig import pulse_database_logger as logger
 
 def saveMessagesToDB(chat_id: int, message: str, role: str):
     try:

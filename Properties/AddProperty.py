@@ -1,7 +1,7 @@
 from typing import Dict
 from fastapi import APIRouter
 from DB.ORM.Utils.Session import session_scope as session
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.Property import Property
 
 from .Classes.PropertyDetails import PropertyDetails

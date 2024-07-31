@@ -8,7 +8,7 @@ from DB.ORM.Models.Lease import Lease
 
 from .Classes.LeaseDetails import LeaseDetails
 
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 

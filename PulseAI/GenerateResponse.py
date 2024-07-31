@@ -3,7 +3,7 @@ from typing import Dict
 import ollama
 from dotenv import load_dotenv
 from fastapi import APIRouter
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 from PulseAI.GetChatMessages import getChatMessages
 from PulseAI.SaveMessagesToDB import saveMessagesToDB
 

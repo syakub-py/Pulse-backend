@@ -3,7 +3,7 @@ from DB.ORM.Models.Property import Property
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Utils.Session import session_scope as session
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 
 
 router = APIRouter()

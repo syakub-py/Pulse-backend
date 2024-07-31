@@ -1,6 +1,6 @@
 from DB.ORM.Models.Chat import Chat
 from DB.ORM.Utils.Session import session_scope as session
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 from fastapi import APIRouter
 
 router = APIRouter()

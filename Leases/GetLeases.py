@@ -6,7 +6,7 @@ from DB.ORM.Models.Property import Property
 from DB.ORM.Utils.Session import session_scope as session
 import pandas as pd
 
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
@@ -35,7 +35,7 @@ def getLeases(property_id: int):
             ]
 
             df = pd.DataFrame(lease_data)
-
+            logger.info("Got Leases Successfully")
             return df.to_json(orient="records")
     except Exception as e:
         logger.error("Error retrieving leases: " + str(e))

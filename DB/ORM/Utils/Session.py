@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from DB.ORM.Config import DATABASE_URL
 from contextlib import contextmanager
 from DB.ORM.Base import Base
-from LoggerConfig import logger
+from LoggerConfig import pulse_database_logger as logger
 
 @contextmanager
 def session_scope():
