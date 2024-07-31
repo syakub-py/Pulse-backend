@@ -11,6 +11,7 @@ from Properties.DeleteProperty import router as DeletePropertyRouter
 
 from Leases.AddLease import router as AddLeaseRouter
 from Leases.GetLeases import router as GetLeasesRouter
+from Leases.DeleteLease import router as DeleteLeaseRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
@@ -33,3 +34,4 @@ app.include_router(GetChatMessagesRouter)
 app.include_router(GenerateResponseRouter)
 app.include_router(AddLeaseRouter)
 app.include_router(GetLeasesRouter)
+app.include_router(DeleteLeaseRouter)
