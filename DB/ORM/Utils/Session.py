@@ -1,9 +1,23 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from DB.ORM.Config import DATABASE_URL
+from contextlib import contextmanager
+from DB.ORM.Base import Base
+from LoggerConfig import logger
 
-engine = create_engine(DATABASE_URL)
-
-Session = sessionmaker(bind=engine)
-
-session = Session()
+@contextmanager
+def session_scope():
+    engine = create_engine(DATABASE_URL)
+    logger.info("Connected to database")
+    session = scoped_session(sessionmaker(bind=engine))
+    logger.info("Session created successfully")
+    Base.metadata.create_all(engine)
+    logger.info("All Tables created successfully")
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logger.error(e)
+    finally:
+        session.remove()

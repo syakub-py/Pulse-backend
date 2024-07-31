@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import os
-
 load_dotenv()
 
 db_host = os.getenv('DB_HOST')
@@ -10,3 +9,4 @@ db_password = os.getenv('DB_PASSWORD')
 db_port = os.getenv('DB_PORT')
 
 DATABASE_URL = f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+
