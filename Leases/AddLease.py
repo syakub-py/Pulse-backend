@@ -5,18 +5,12 @@ from fastapi import APIRouter
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
-from pydantic import BaseModel
+
+from .Classes.LeaseDetails import LeaseDetails
 
 from LoggerConfig import logger
 
 router = APIRouter()
-
-
-class LeaseDetails(BaseModel):
-    StartDate: str
-    EndDate: str
-    MonthlyRent: str
-    PropertyId: int
 
 
 @router.post("/addLease/{propertyId}")

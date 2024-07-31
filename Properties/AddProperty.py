@@ -3,15 +3,12 @@ from fastapi import APIRouter
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import logger
 from DB.ORM.Models.Property import Property
-from pydantic import BaseModel
+
+from .Classes.PropertyDetails import PropertyDetails
 
 router = APIRouter()
 
-class PropertyDetails(BaseModel):
-    Name: str
-    Address: str
-    PropertyType: str
-    isRental: bool
+
 
 @router.post("/addProperty/{userId}")
 def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int | str]:
