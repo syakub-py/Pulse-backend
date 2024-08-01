@@ -23,6 +23,13 @@ CREATE TABLE property_leases (
      FOREIGN KEY (lease_id) REFERENCES leases (lease_id)
 );
 
+CREATE TABLE tenant_leases (
+     tenant_id INTEGER NOT NULL,
+     lease_id INTEGER,
+     PRIMARY KEY (tenant_id, lease_id),
+     FOREIGN KEY (tenant_id) REFERENCES tenants (tenant_id),
+     FOREIGN KEY (lease_id) REFERENCES leases (lease_id)
+);
 
 CREATE TABLE tenants (
      tenant_id INTEGER PRIMARY KEY AUTOINCREMENT,

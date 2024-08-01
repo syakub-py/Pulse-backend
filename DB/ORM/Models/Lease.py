@@ -1,5 +1,5 @@
 from DB.ORM.Base import Base
-from sqlalchemy import Column, Date, String, Float, Integer
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 
 class Lease(Base):
@@ -11,3 +11,4 @@ class Lease(Base):
     monthly_rent = Column(String, nullable=False)
 
     properties = relationship("PropertyLease", back_populates="lease")
+    tenants = relationship("TenantLease", back_populates="leases")

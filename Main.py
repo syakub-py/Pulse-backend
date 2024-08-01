@@ -13,6 +13,10 @@ from Leases.AddLease import router as AddLeaseRouter
 from Leases.GetLeases import router as GetLeasesRouter
 from Leases.DeleteLease import router as DeleteLeaseRouter
 
+from Tenants.AddTenant import router as AddTenantRouter
+
+
+
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -35,3 +39,4 @@ app.include_router(GenerateResponseRouter)
 app.include_router(AddLeaseRouter)
 app.include_router(GetLeasesRouter)
 app.include_router(DeleteLeaseRouter)
+app.include_router(AddTenantRouter)
