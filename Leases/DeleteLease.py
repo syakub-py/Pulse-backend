@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 
 from DB.ORM.Models.PropertyLease import PropertyLease
+from DB.ORM.Models.Tenant import Tenant
+from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
 
@@ -18,6 +20,17 @@ def deleteLease(leaseId: int):
 
     try:
         with session() as db_session:
+            tenant_leases = db_session.query(TenantLease).filter(TenantLease.lease_id == leaseId).all()
+            tenant_ids = [tenant_lease.tenant_id for tenant_lease in tenant_leases]
+            for tenant_lease in tenant_leases:
+                db_session.delete(tenant_lease)
+            db_session.commit()
+
+            tenants = db_session.query(Tenant).filter(Tenant.tenant_id.in_(tenant_ids)).all()
+            for tenant in tenants:
+                db_session.delete(tenant)
+            db_session.commit()
+
             property_lease = db_session.query(PropertyLease).filter(PropertyLease.lease_id == leaseId).first()
             if property_lease:
                 db_session.delete(property_lease)
@@ -31,7 +44,7 @@ def deleteLease(leaseId: int):
             db_session.delete(lease)
             db_session.commit()
 
-            logger.info(f"Lease deleted successfully: {leaseId}")
+            logger.info(f"Lease and associated tenants deleted successfully: {leaseId}")
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error deleting a lease: {str(e)}")

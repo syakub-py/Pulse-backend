@@ -15,11 +15,11 @@ router = APIRouter()
 
 @router.post("/addTenant/{leaseId}")
 def addTenant(leaseId: int, tenant: TenantDetails) -> Dict[str, int | str]:
-    logger.info(f"Adding tenant: {tenant.name} to lease: {leaseId}")
+    logger.info(f"Adding tenant: {tenant.Name} to lease: {leaseId}")
     try:
         with session() as db_session:
             new_tenant = Tenant(
-                name=tenant.name,
+                name=tenant.Name,
                 annual_income=tenant.AnnualIncome,
                 phone_number=tenant.PhoneNumber,
                 date_of_birth=tenant.DateOfBirth,
