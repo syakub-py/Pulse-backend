@@ -41,7 +41,7 @@ def getTenants(userId: str):
                     "AnnualIncome": tenant.annual_income,
                     "PhoneNumber": tenant.phone_number,
                     "DateOfBirth": tenant.date_of_birth,
-                    "leaseId":tenant.lease_id
+                    "LeaseId": tenant.lease_id
                 }
                 for tenant in tenants
             ]

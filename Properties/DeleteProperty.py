@@ -2,6 +2,8 @@ from fastapi import APIRouter
 from DB.ORM.Models.Property import Property
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
+from DB.ORM.Models.TenantLease import TenantLease
+from DB.ORM.Models.Tenant import Tenant
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 
@@ -13,11 +15,25 @@ def deleteProperty(propertyId: int):
     try:
         with session() as db_session:
             property_to_delete = db_session.query(Property).filter(Property.property_id == propertyId).first()
+
             if property_to_delete:
                 property_leases_to_delete = db_session.query(PropertyLease).filter(PropertyLease.property_id == propertyId).all()
-
                 lease_ids = [pl.lease_id for pl in property_leases_to_delete]
+
                 leases_to_delete = db_session.query(Lease).filter(Lease.lease_id.in_(lease_ids)).all()
+
+                tenant_ids = []
+                for lease in leases_to_delete:
+                    tenant_leases = db_session.query(TenantLease).filter(TenantLease.lease_id == lease.lease_id).all()
+                    tenant_ids.extend([tl.tenant_id for tl in tenant_leases])
+                    for tenant_lease in tenant_leases:
+                        db_session.delete(tenant_lease)
+
+                tenants_to_delete = db_session.query(Tenant).filter(Tenant.tenant_id.in_(tenant_ids)).all()
+
+                for tenant in tenants_to_delete:
+                    db_session.delete(tenant)
+
                 for lease in leases_to_delete:
                     db_session.delete(lease)
 
@@ -25,9 +41,10 @@ def deleteProperty(propertyId: int):
                     db_session.delete(property_lease)
 
                 db_session.delete(property_to_delete)
+
                 db_session.commit()
 
-                logger.info(f"Deleted Property {propertyId} and associated leases")
+                logger.info(f"Deleted Property {propertyId} and associated leases and tenants")
             else:
                 logger.error(f"Property {propertyId} not found")
                 return {"error": "Property not found"}
@@ -35,4 +52,5 @@ def deleteProperty(propertyId: int):
         logger.error(f"Error deleting property with property ID {propertyId}: " + str(e))
         db_session.rollback()
         return {"error": str(e)}
+
 
