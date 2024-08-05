@@ -16,7 +16,7 @@ def deleteLease(leaseId: int):
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:
         logger.error("No leaseId provided")
-        return {"error": "No leaseId provided"}
+        return
 
     try:
         with session() as db_session:
