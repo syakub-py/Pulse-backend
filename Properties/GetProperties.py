@@ -8,7 +8,7 @@ from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
-@router.get("/getProperty/{userId}")
+@router.get("/property/getProperty/{userId}")
 def GetProperties(userId: str):
     try:
         with session() as db_session:

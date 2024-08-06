@@ -10,7 +10,7 @@ from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
-@router.get("/getMessages/{chatId}")
+@router.get("/chat/getMessages/{chatId}")
 def getChatMessages(chatId: int) -> List[dict]:
     try:
         with session() as db_session:

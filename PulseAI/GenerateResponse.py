@@ -11,7 +11,7 @@ load_dotenv()
 
 router = APIRouter()
 
-@router.get("/generateResponse/{chat_id}/{prompt}", response_model=Dict[str, str])
+@router.get("/chat/generateResponse/{chat_id}/{prompt}", response_model=Dict[str, str])
 def generateResponse(chat_id: int, prompt: str) -> Dict[str, str]:
     try:
         messages = getChatMessages(chat_id)

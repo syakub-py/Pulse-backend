@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.get("/createChat/{userId}", response_model=dict[str, str])
+@router.get("/chat/createChat/{userId}", response_model=dict[str, str])
 def createChat(userId: str):
     try:
         with session() as db_session:

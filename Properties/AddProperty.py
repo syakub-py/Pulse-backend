@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 
-@router.post("/addProperty/{userId}")
+@router.post("/property/addProperty/{userId}")
 def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int | str]:
     logger.info(f"Adding property for user: {userId}")
     if not userId:

@@ -11,7 +11,7 @@ from LoggerConfig import pulse_logger as logger
 router = APIRouter()
 
 
-@router.delete("/deleteLease/{leaseId}")
+@router.delete("/lease/deleteLease/{leaseId}")
 def deleteLease(leaseId: int):
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:

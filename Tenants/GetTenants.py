@@ -13,7 +13,7 @@ import pandas as pd
 
 router = APIRouter()
 
-@router.get("/getTenants/{userId}")
+@router.get("/tenant/getTenants/{userId}")
 def getTenants(userId: str):
     try:
         with session() as db_session:

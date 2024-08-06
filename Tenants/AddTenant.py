@@ -13,7 +13,7 @@ from LoggerConfig import pulse_logger as logger
 router = APIRouter()
 
 
-@router.post("/addTenant/{leaseId}")
+@router.post("/tenant/addTenant/{leaseId}")
 def addTenant(leaseId: int, tenant: TenantDetails) -> Dict[str, int | str]:
     logger.info(f"Adding tenant: {tenant.Name} to lease: {leaseId}")
     try:

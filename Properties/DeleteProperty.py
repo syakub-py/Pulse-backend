@@ -10,7 +10,7 @@ from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
-@router.delete("/deleteProperty/{propertyId}")
+@router.delete("/property/deleteProperty/{propertyId}")
 def deleteProperty(propertyId: int):
     try:
         with session() as db_session:
