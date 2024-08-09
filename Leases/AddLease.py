@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.post("/lease/addLease/{propertyId}")
-def addLease(propertyId: int, leaseDetails: LeaseDetails) -> Dict[str, int | str]:
+def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
     logger.info(f"Adding lease for property: {propertyId}")
     if not propertyId:
         logger.error("No propertyId provided")
@@ -23,9 +23,11 @@ def addLease(propertyId: int, leaseDetails: LeaseDetails) -> Dict[str, int | str
     try:
         with session() as db_session:
             new_lease = Lease(
-                start_date=leaseDetails.StartDate,
-                end_date=leaseDetails.EndDate,
-                monthly_rent=leaseDetails.MonthlyRent,
+                start_date=lease.StartDate,
+                end_date=lease.EndDate,
+                monthly_rent=lease.MonthlyRent,
+                terms=lease.Terms,
+                status=lease.Status,
             )
 
             db_session.add(new_lease)

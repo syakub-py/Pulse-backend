@@ -7,3 +7,7 @@ class TenantDetails(BaseModel):
     AnnualIncome: int
     PhoneNumber: str
     DateOfBirth: str
+    Email: str
+    DocumentProvidedUrl: str
+    SocialSecurity: str
+

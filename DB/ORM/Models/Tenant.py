@@ -10,4 +10,7 @@ class Tenant(Base):
     annual_income = Column(Integer, nullable=False)
     phone_number = Column(String, nullable=False)
     date_of_birth = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    document_provided_url = Column(String, nullable=False)
+    social_security = Column(String, nullable=False)
     leases = relationship("TenantLease", back_populates="tenant")
