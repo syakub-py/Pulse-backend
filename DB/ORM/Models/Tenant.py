@@ -13,4 +13,5 @@ class Tenant(Base):
     email = Column(String, nullable=False)
     document_provided_url = Column(String, nullable=False)
     social_security = Column(String, nullable=False)
+    user_id = Column(String, nullable=False)
     leases = relationship("TenantLease", back_populates="tenant")

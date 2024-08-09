@@ -10,6 +10,6 @@ class Lease(Base):
     end_date = Column(String, nullable=False)
     monthly_rent = Column(String, nullable=False)
     terms = Column(String, nullable=False)
-    status = Column(Boolean, nullable=False)
+    is_expired = Column(Boolean, nullable=False)
     properties = relationship("PropertyLease", back_populates="lease")
     tenants = relationship("TenantLease", back_populates="leases")

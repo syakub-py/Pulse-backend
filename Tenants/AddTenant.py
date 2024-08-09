@@ -20,6 +20,7 @@ def addTenant(leaseId: int, tenant: TenantDetails) -> Dict[str, int | str]:
     try:
         with session() as db_session:
             new_tenant = Tenant(
+                user_id=tenant.UserId,
                 name=tenant.Name,
                 annual_income=tenant.AnnualIncome,
                 phone_number=tenant.PhoneNumber,
