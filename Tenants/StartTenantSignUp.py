@@ -14,7 +14,7 @@ import resend
 router = APIRouter()
 load_dotenv()
 
-@router.get('/tenant/tenantSignUp/{leaseId}/{tenantEmail}')
+@router.get('/tenant/startTenantSignUp/{leaseId}/{tenantEmail}')
 def tenantSignUp(leaseId: int, tenantEmail: str):
     with session() as db_session:
         unique_code = str(random.randint(100000, 999999))
@@ -32,7 +32,7 @@ def tenantSignUp(leaseId: int, tenantEmail: str):
 
         resend.api_key = os.getenv('RESEND_API_KEY')
         params: resend.Emails.SendParams = {
-            "from": "<onboarding@resend.dev>",
+            "from": "Pulse <onboarding@resend.dev>",
             "to": tenantEmail,
             "subject": "Invitation to Join Pulse – Your Tenant Portal",
             "html": """

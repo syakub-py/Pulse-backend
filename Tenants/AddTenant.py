@@ -1,3 +1,4 @@
+from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Models.Tenant import Tenant
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
@@ -13,12 +14,14 @@ from LoggerConfig import pulse_logger as logger
 router = APIRouter()
 
 
-@router.post("/tenant/addTenant/{leaseId}")
-def addTenant(leaseId: int, tenant: TenantDetails) -> Dict[str, int | str]:
-    logger.info(f"Adding tenant: {tenant.Name} to lease: {leaseId}")
+@router.post("/tenant/addTenant/")
+def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
+    logger.info(f"finding lease Id with {tenant.Name}")
 
     try:
         with session() as db_session:
+            leaseId = db_session.query(PendingTenantSignUp.lease_id).filter(PendingTenantSignUp.email == tenant.Email).first().lease_id
+
             new_tenant = Tenant(
                 user_id=tenant.UserId,
                 name=tenant.Name,
