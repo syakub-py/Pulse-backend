@@ -1,5 +1,6 @@
 import random
 import os
+from datetime import datetime,timedelta
 
 from dotenv import load_dotenv
 from fastapi import APIRouter
@@ -23,7 +24,8 @@ def tenantSignUp(leaseId: int, tenantEmail: str):
             lease_id=leaseId,
             email=tenantEmail,
             code=unique_code,
-            isCodeUsed=False
+            is_code_used=False,
+            expires=datetime.now() + timedelta(hours=24)
         )
 
         db_session.add(new_sign_up)

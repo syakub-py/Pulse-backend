@@ -21,4 +21,4 @@ def createChat(userId: str):
             return {"chat_id": str(new_chat.chat_id)}
     except Exception as e:
         logger.error(f"Error creating Chat: {str(e)}")
-        return None
+        return {"error": str(e)}

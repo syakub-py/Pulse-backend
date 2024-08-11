@@ -18,7 +18,7 @@ def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
     logger.info(f"Adding lease for property: {propertyId}")
     if not propertyId:
         logger.error("No propertyId provided")
-        return {"error": "No propertyId provided"}
+        raise HTTPException(status_code=400, detail="No propertyId provided")
 
     try:
         with session() as db_session:
@@ -45,6 +45,5 @@ def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error adding a lease: {str(e)}")
-        return {"error": str(e)}
     finally:
         db_session.close()

@@ -14,14 +14,11 @@ from LoggerConfig import pulse_logger as logger
 router = APIRouter()
 
 
-@router.post("/tenant/addTenant/")
-def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
+@router.post("/tenant/addTenant/{code}")
+def addTenant(code: str, tenant: TenantDetails) -> Dict[str, int | str]:
     logger.info(f"finding lease Id with {tenant.Name}")
-
     try:
         with session() as db_session:
-            leaseId = db_session.query(PendingTenantSignUp.lease_id).filter(PendingTenantSignUp.email == tenant.Email).first().lease_id
-
             new_tenant = Tenant(
                 user_id=tenant.UserId,
                 name=tenant.Name,
@@ -32,23 +29,27 @@ def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
                 document_provided_url=tenant.DocumentProvidedUrl,
                 social_security=tenant.SocialSecurity,
             )
-
             db_session.add(new_tenant)
             db_session.flush()
 
             new_tenant_lease = TenantLease(
                 tenant_id=new_tenant.tenant_id,
-                lease_id=leaseId
+                lease_id=tenant.LeaseId
             )
-
             db_session.add(new_tenant_lease)
+
+            updated_rows = db_session.query(PendingTenantSignUp).filter(
+                PendingTenantSignUp.code == code
+            ).update({"is_code_used": True})
+
             db_session.commit()
+
+            if updated_rows == 0:
+                logger.warning(f"No pending tenant sign-up found with code: {code}")
 
             logger.info(f"Tenant added successfully. Tenant ID: {new_tenant.tenant_id}")
             return {"tenant_id": new_tenant.tenant_id}
     except Exception as e:
-        db_session.rollback()
         logger.error(f"Unexpected error adding tenant: {str(e)}")
-        return {"error": str(e)}
     finally:
         db_session.close()
