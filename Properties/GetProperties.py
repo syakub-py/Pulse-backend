@@ -19,7 +19,6 @@ router = APIRouter()
 def getProperties(userId: str):
     try:
         with session() as db_session:
-            # Alias for tenant to join on the same table multiple times
             TenantAlias = aliased(Tenant)
             TenantLeaseAlias = aliased(TenantLease)
 
@@ -30,7 +29,7 @@ def getProperties(userId: str):
                     Property.address,
                     Property.property_type,
                     Property.is_rental,
-                    (TenantAlias.user_id == userId).label("is_tenant")  # Set is_tenant only if userId is in tenants table
+                    (TenantAlias.user_id == userId).label("is_tenant")
                 )
                 .outerjoin(PropertyLease, Property.property_id == PropertyLease.property_id)
                 .outerjoin(Lease, PropertyLease.lease_id == Lease.lease_id)
@@ -38,8 +37,8 @@ def getProperties(userId: str):
                 .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.tenant_id)
                 .filter(
                     or_(
-                        Property.user_id == userId,  # Check if userId is the property owner
-                        TenantAlias.user_id == userId  # Check if userId is a tenant
+                        Property.user_id == userId,
+                        TenantAlias.user_id == userId
                     )
                 )
             )
