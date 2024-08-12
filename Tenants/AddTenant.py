@@ -1,4 +1,3 @@
-from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Models.Tenant import Tenant
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session

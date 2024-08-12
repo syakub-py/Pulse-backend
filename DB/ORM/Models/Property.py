@@ -16,3 +16,4 @@ class Property(Base):
     created_at = Column(String, default=lambda: datetime.now().strftime("%a %b %d %Y %H:%M:%S"))
 
     leases = relationship("PropertyLease", back_populates="property")
+    todos = relationship("Todo", back_populates="property")
