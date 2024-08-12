@@ -1,11 +1,11 @@
 from DB.ORM.Models.Chat import Chat
 from DB.ORM.Utils.Session import session_scope as session
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.get("/createChat/{userId}", response_model=dict[str, str])
+@router.get("/chat/createChat/{userId}", response_model=dict[str, str])
 def createChat(userId: str):
     try:
         with session() as db_session:
@@ -21,4 +21,4 @@ def createChat(userId: str):
             return {"chat_id": str(new_chat.chat_id)}
     except Exception as e:
         logger.error(f"Error creating Chat: {str(e)}")
-        return None
+        return {"error": str(e)}

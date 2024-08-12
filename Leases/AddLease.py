@@ -8,24 +8,26 @@ from DB.ORM.Models.Lease import Lease
 
 from .Classes.LeaseDetails import LeaseDetails
 
-from LoggerConfig import logger
+from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
 
-@router.post("/addLease/{propertyId}")
-def addLease(propertyId: int, leaseDetails: LeaseDetails) -> Dict[str, int | str]:
+@router.post("/lease/addLease/{propertyId}")
+def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
     logger.info(f"Adding lease for property: {propertyId}")
     if not propertyId:
         logger.error("No propertyId provided")
-        return {"error": "No propertyId provided"}
+        raise HTTPException(status_code=400, detail="No propertyId provided")
 
     try:
         with session() as db_session:
             new_lease = Lease(
-                start_date=leaseDetails.StartDate,
-                end_date=leaseDetails.EndDate,
-                monthly_rent=leaseDetails.MonthlyRent,
+                start_date=lease.StartDate,
+                end_date=lease.EndDate,
+                monthly_rent=lease.MonthlyRent,
+                terms=lease.Terms,
+                is_expired=lease.isExpired,
             )
 
             db_session.add(new_lease)
@@ -43,6 +45,5 @@ def addLease(propertyId: int, leaseDetails: LeaseDetails) -> Dict[str, int | str
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error adding a lease: {str(e)}")
-        return {"error": str(e)}
     finally:
         db_session.close()
