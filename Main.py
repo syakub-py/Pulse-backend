@@ -20,6 +20,7 @@ from Tenants.CheckTenantCode import router as CheckTenantCodeRouter
 
 from Todos.AddTodo import router as AddTodoRouter
 from Todos.GetTodos import router as GetTodosRouter
+from Todos.DeleteTodo import router as DeleteTodoRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
@@ -49,3 +50,4 @@ app.include_router(TenantSignUpRouter)
 app.include_router(CheckTenantCodeRouter)
 app.include_router(AddTodoRouter)
 app.include_router(GetTodosRouter)
+app.include_router(DeleteTodoRouter)
