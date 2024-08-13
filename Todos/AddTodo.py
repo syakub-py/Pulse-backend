@@ -5,22 +5,22 @@ from LoggerConfig import pulse_logger as logger
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Todo import Todo
 
+from .Classes.TodoDetails import TodoDetails
+
 router = APIRouter()
 
-
-
-@router.post("/Todo/AddTodo/")
-def AddTodo(todo:Todo):
+@router.post("/todo/addTodo/")
+def addTodo(todo: TodoDetails):
     try:
         with session() as db_session:
-            logger.info("Adding Todo to property id: {}".format(todo.property_id))
+            logger.info("Adding Todo to property id: {}".format(todo.PropertyId))
             new_todo = Todo(
-                property_id=todo.property_id,
-                title=todo.title,
-                description=todo.description,
-                status=todo.status,
-                priority=todo.priority,
-                added_by=todo.added_by,
+                property_id=todo.PropertyId,
+                title=todo.Title,
+                description=todo.Description,
+                status=todo.Status,
+                priority=todo.Priority,
+                added_by=todo.AddedBy,
                 created_at=datetime.now(),
                 updated_at=datetime.now()
             )
@@ -30,12 +30,14 @@ def AddTodo(todo:Todo):
 
             db_session.refresh(new_todo)
 
-            return {"message": "Todo created successfully", "todo_id": new_todo.id}
+            return {"RecommendedProfessional": "Todo created successfully", "todo_id": new_todo.id}
     except Exception as e:
-        logger.info("error adding the todo: {}".format(e))
+        logger.error("Error adding the todo: {}".format(e))
         db_session.rollback()
+        return {"error": str(e)}
     finally:
         db_session.close()
+
 
 
 
