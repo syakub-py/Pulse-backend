@@ -10,5 +10,6 @@ class TenantDetails(BaseModel):
     DateOfBirth: str
     Email: str
     DocumentProvidedUrl: str
+    DocumentType: str
     SocialSecurity: str
 

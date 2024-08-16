@@ -26,6 +26,7 @@ def getTenants(userId: str):
                 Tenant.email.label('email'),
                 Tenant.social_security.label('social_security'),
                 Tenant.document_provided_url.label('document_provided_url'),
+                Tenant.document_type.label('document_type'),
                 Property.user_id.label('user_id'),
                 TenantLease.lease_id.label('lease_id')
             ). \
@@ -46,7 +47,8 @@ def getTenants(userId: str):
                     "DateOfBirth": tenant.date_of_birth,
                     "SocialSecurity": tenant.social_security,
                     "DocumentProvidedUrl":tenant.document_provided_url,
-                    "Email":tenant.email,
+                    "DocumentType":tenant.document_type,
+                    "Email": tenant.email,
                     "LeaseId": tenant.lease_id
                 }
                 for tenant in tenants

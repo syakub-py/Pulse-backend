@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.Tenant import Tenant
@@ -24,19 +25,41 @@ def getLeases(property_id: int):
                 .all()
             )
 
+            pending_signups = (
+                db_session.query(Lease, PendingTenantSignUp)
+                .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
+                .join(PendingTenantSignUp, Lease.lease_id == PendingTenantSignUp.lease_id)
+                .filter(PropertyLease.property_id == property_id)
+                .all()
+            )
+
             lease_data = [
                 {
-                    "LeaseId": lease.Lease.lease_id,
-                    "StartDate": lease.Lease.start_date,
-                    "EndDate": lease.Lease.end_date,
-                    "MonthlyRent": lease.Lease.monthly_rent,
+                    "LeaseId": lease.lease_id,
+                    "StartDate": lease.start_date,
+                    "EndDate": lease.end_date,
+                    "MonthlyRent": lease.monthly_rent,
                     "PropertyId": property_id,
-                    "TenantUid": lease.user_id,
+                    "TenantUid": user_id,
                 }
-                for lease in leases
+                for lease, user_id in leases
             ]
-            df = pd.DataFrame(lease_data)
+
+            pending_signup_data = [
+                {
+                    "LeaseId": lease.lease_id,
+                    "StartDate": lease.start_date,
+                    "EndDate": lease.end_date,
+                    "MonthlyRent": lease.monthly_rent,
+                    "PropertyId": property_id,
+                    "TenantUid": "",
+                }
+                for lease, signup in pending_signups if not signup.is_code_used
+            ]
+
+            df = pd.DataFrame(lease_data + pending_signup_data)
             logger.info("Got Leases Successfully")
             return df.to_json(orient="records")
     except Exception as e:
         logger.error("Error retrieving leases: " + str(e))
+

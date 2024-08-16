@@ -27,6 +27,7 @@ def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
                 email=tenant.Email,
                 document_provided_url=tenant.DocumentProvidedUrl,
                 social_security=tenant.SocialSecurity,
+                document_type=tenant.DocumentType,
             )
             db_session.add(new_tenant)
             db_session.flush()
