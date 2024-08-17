@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter
 
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
@@ -41,6 +43,7 @@ def getLeases(property_id: int):
                     "MonthlyRent": lease.monthly_rent,
                     "PropertyId": property_id,
                     "TenantUid": user_id,
+                    "isLeaseExpired": datetime.now() > datetime.strptime(lease.end_date, "%Y-%m-%d")
                 }
                 for lease, user_id in leases
             ]
@@ -53,8 +56,11 @@ def getLeases(property_id: int):
                     "MonthlyRent": lease.monthly_rent,
                     "PropertyId": property_id,
                     "TenantUid": "",
+                    "isLeaseExpired": datetime.now() > datetime.strptime(lease.end_date, "%Y-%m-%d"),
+                    "isTenantCodeExpired": datetime.now().date() > signup.expires
                 }
-                for lease, signup in pending_signups if not signup.is_code_used
+                for lease, signup in pending_signups
+                if not signup.is_code_used
             ]
 
             df = pd.DataFrame(lease_data + pending_signup_data)

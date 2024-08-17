@@ -18,8 +18,6 @@ def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
     logger.info(f"Adding lease for property: {propertyId}")
     if not propertyId:
         logger.error("No propertyId provided")
-        raise HTTPException(status_code=400, detail="No propertyId provided")
-
     try:
         with session() as db_session:
             new_lease = Lease(
@@ -27,7 +25,7 @@ def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
                 end_date=lease.EndDate,
                 monthly_rent=lease.MonthlyRent,
                 terms=lease.Terms,
-                is_expired=lease.isExpired,
+                is_expired=lease.isLeaseExpired,
             )
 
             db_session.add(new_lease)
