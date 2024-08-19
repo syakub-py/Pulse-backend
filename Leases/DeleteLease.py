@@ -40,8 +40,9 @@ def deleteLease(leaseId: int):
             if not lease:
                 logger.error(f"Lease not found: {leaseId}")
                 return {"message": "Lease not found", "status_code": 500}
-
             db_session.delete(lease)
+            db_session.flush()
+
             db_session.commit()
 
             logger.info(f"Lease and associated tenants deleted successfully: {leaseId}")

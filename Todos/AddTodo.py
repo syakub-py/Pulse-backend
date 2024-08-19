@@ -32,7 +32,7 @@ def addTodo(todo: TodoDetails):
 
             db_session.refresh(new_todo)
 
-            return {"RecommendedProfessional": "Todo created successfully", "todoId": new_todo.id}
+            return new_todo.id
     except Exception as e:
         logger.error("Error adding the todo: {}".format(e))
         db_session.rollback()
