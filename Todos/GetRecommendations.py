@@ -24,9 +24,16 @@ def getRecommendations(todoId: int):
 
         places_result = gmaps.places_nearby(location=(latitude, longitude), radius=1500, type=str(todo.recommended_professional).lower())
 
-        place_names = [place['name'] for place in places_result['results']]
+        place_details = [
+            {
+                "name": place.get("name", "N/A"),
+                "vicinity": place.get("vicinity", "N/A"),
+                "rating": place.get("rating", "N/A"),
+            }
+            for place in places_result["results"]
+        ]
 
-        return pd.DataFrame(place_names, columns=["name"]).to_json(orient="records")
+        return pd.DataFrame(place_details).to_json(orient="records")
 
 
 
