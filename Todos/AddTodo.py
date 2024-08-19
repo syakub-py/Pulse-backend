@@ -11,6 +11,8 @@ router = APIRouter()
 
 @router.post("/todo/addTodo/")
 def addTodo(todo: TodoDetails):
+    if not todo:
+        return {"message": "no todo details were provided", "status_code": 500}
     try:
         with session() as db_session:
             logger.info("Adding Todo to property id: {}".format(todo.PropertyId))
@@ -34,7 +36,7 @@ def addTodo(todo: TodoDetails):
     except Exception as e:
         logger.error("Error adding the todo: {}".format(e))
         db_session.rollback()
-        return {"error": str(e)}
+        return {"message": str(e), "status_code": 500}
     finally:
         db_session.close()
 

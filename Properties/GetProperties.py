@@ -17,6 +17,8 @@ router = APIRouter()
 
 @router.get("/property/getProperty/{userId}")
 def getProperties(userId: str):
+    if not userId:
+        return {"message": "userId is required", "status_code": 500}
     try:
         with session() as db_session:
             TenantAlias = aliased(Tenant)
@@ -63,4 +65,4 @@ def getProperties(userId: str):
             return properties_df.to_json(orient="records")
     except Exception as e:
         logger.error(f"Error retrieving properties: {str(e)}")
-        return pd.DataFrame().to_json(orient="records")
+        return {"message":str(e), "status_code": 500}

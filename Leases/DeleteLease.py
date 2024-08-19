@@ -16,7 +16,7 @@ def deleteLease(leaseId: int):
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:
         logger.error("No leaseId provided")
-        return
+        return {"message": "Lease not found", "status_code": 500}
 
     try:
         with session() as db_session:
@@ -24,22 +24,22 @@ def deleteLease(leaseId: int):
             tenant_ids = [tenant_lease.tenant_id for tenant_lease in tenant_leases]
             for tenant_lease in tenant_leases:
                 db_session.delete(tenant_lease)
-            db_session.commit()
+            db_session.flush()
 
             tenants = db_session.query(Tenant).filter(Tenant.tenant_id.in_(tenant_ids)).all()
             for tenant in tenants:
                 db_session.delete(tenant)
-            db_session.commit()
+            db_session.flush()
 
             property_lease = db_session.query(PropertyLease).filter(PropertyLease.lease_id == leaseId).first()
             if property_lease:
                 db_session.delete(property_lease)
-                db_session.commit()
+                db_session.flush()
 
             lease = db_session.query(Lease).filter(Lease.lease_id == leaseId).first()
             if not lease:
                 logger.error(f"Lease not found: {leaseId}")
-                return {"error": "Lease not found"}
+                return {"message": "Lease not found", "status_code": 500}
 
             db_session.delete(lease)
             db_session.commit()
@@ -48,6 +48,6 @@ def deleteLease(leaseId: int):
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error deleting a lease: {str(e)}")
-        return {"error": str(e)}
+        return {"message": str(e), "status_code": 500}
     finally:
         db_session.close()

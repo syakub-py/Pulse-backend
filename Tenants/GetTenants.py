@@ -15,6 +15,8 @@ router = APIRouter()
 
 @router.get("/tenant/getTenants/{userId}")
 def getTenants(userId: str):
+    if not userId:
+        return {"message": "userId is required", "status_code": 500}
     try:
         with session() as db_session:
             query = db_session.query(
@@ -57,4 +59,4 @@ def getTenants(userId: str):
             return pd.DataFrame(tenants_list).to_json(orient="records")
     except Exception as e:
         logger.error(f"Error retrieving tenants: {str(e)}")
-        return pd.DataFrame().to_json(orient="records")
+        return {"message": str(e), "status_code":500}

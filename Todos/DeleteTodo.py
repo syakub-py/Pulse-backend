@@ -8,6 +8,8 @@ router = APIRouter()
 
 @router.delete("/todo/deleteTodo/{todo_id}")
 def deleteTodo(todo_id: int):
+    if not todo_id:
+        return {"message": "todo_id was not provided", "status_code": 500}
     try:
         with session() as db_session:
             todo = db_session.query(Todo).filter(Todo.id == todo_id).first()
@@ -16,3 +18,4 @@ def deleteTodo(todo_id: int):
             logger.info(f'Deleted todo {todo_id}')
     except Exception as e:
         logger.error(e)
+        return {"message": str(e), "status_code": 500}

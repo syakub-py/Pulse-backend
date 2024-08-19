@@ -15,7 +15,6 @@ from Leases.DeleteLease import router as DeleteLeaseRouter
 
 from Tenants.AddTenant import router as AddTenantRouter
 from Tenants.GetTenants import router as GetTenantsRouter
-from Tenants.StartTenantSignUp import router as TenantSignUpRouter
 from Tenants.CheckTenantCode import router as CheckTenantCodeRouter
 
 from Todos.AddTodo import router as AddTodoRouter
@@ -46,7 +45,6 @@ app.include_router(GetLeasesRouter)
 app.include_router(DeleteLeaseRouter)
 app.include_router(AddTenantRouter)
 app.include_router(GetTenantsRouter)
-app.include_router(TenantSignUpRouter)
 app.include_router(CheckTenantCodeRouter)
 app.include_router(AddTodoRouter)
 app.include_router(GetTodosRouter)

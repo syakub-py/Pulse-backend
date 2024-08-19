@@ -1,11 +1,9 @@
 from DB.ORM.Models.Tenant import Tenant
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
-
-from typing import Dict
-
 from fastapi import APIRouter
 
+from typing import Dict
 from .Classes.TenantDetails import TenantDetails
 
 from LoggerConfig import pulse_logger as logger
@@ -14,10 +12,10 @@ router = APIRouter()
 
 
 @router.post("/tenant/addTenant/")
-def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
-    logger.info(f"finding lease Id with {tenant.Name}")
-    try:
-        with session() as db_session:
+def addTenant(tenant: TenantDetails) -> int | Dict[str, int | str]:
+    logger.info(f"Adding tenant: {tenant.Name}")
+    with session() as db_session:
+        try:
             new_tenant = Tenant(
                 user_id=tenant.UserId,
                 name=tenant.Name,
@@ -41,8 +39,13 @@ def addTenant(tenant: TenantDetails) -> Dict[str, int | str]:
             db_session.commit()
 
             logger.info(f"Tenant added successfully. Tenant ID: {new_tenant.tenant_id}")
-            return {"tenant_id": new_tenant.tenant_id}
-    except Exception as e:
-        logger.error(f"Unexpected error adding tenant: {str(e)}")
-    finally:
-        db_session.close()
+            return new_tenant.tenant_id
+
+        except Exception as e:
+            db_session.rollback()
+            logger.error(f"Error during tenant creation: {str(e)}")
+            return {"message": str(e), "status_code": 500}
+        finally:
+            db_session.close()
+
+

@@ -8,6 +8,8 @@ router = APIRouter()
 
 @router.get("/todo/getTodos/{propertyId}")
 def getTodos(propertyId:int):
+    if not propertyId:
+        return {"message": "propertyId is required", "status_code": 500}
     try:
         with session() as db_session:
             todos = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
@@ -31,4 +33,4 @@ def getTodos(propertyId:int):
             return pd.DataFrame(todos_list).to_json(orient="records")
     except Exception as e:
         logger.error(f"Error retrieving todos for property ID {propertyId}: {e}")
-        return []
+        return {"message": f"Error retrieving todos for property ID {propertyId}: {e}", "status_code":500}

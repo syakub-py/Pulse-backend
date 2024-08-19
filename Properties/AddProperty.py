@@ -11,12 +11,11 @@ router = APIRouter()
 
 
 @router.post("/property/addProperty/{userId}")
-def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int | str]:
+def addProperty(userId: str, propertyDetails: PropertyDetails) -> int | Dict[str, int | str]:
     logger.info(f"Adding property for user: {userId}")
     if not userId:
         logger.error("No userId provided")
-        return {"error": "No userId provided"}
-
+        return {"message": "No user id provided", "status_code": 500}
     try:
         with session() as db_session:
             new_property = Property(
@@ -31,7 +30,7 @@ def addProperty(userId: str, propertyDetails: PropertyDetails) -> Dict[str, int 
             db_session.commit()
 
             logger.info(f"Property added successfully. Property ID: {new_property.property_id}")
-            return {"property_id": new_property.property_id}
+            return new_property.property_id
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error: {str(e)}")

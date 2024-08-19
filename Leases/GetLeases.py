@@ -68,4 +68,5 @@ def getLeases(property_id: int):
             return df.to_json(orient="records")
     except Exception as e:
         logger.error("Error retrieving leases: " + str(e))
+        return {"message": "Error retrieving leases: " + str(e), "status_code": 500}
 
