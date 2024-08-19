@@ -1,18 +1,32 @@
 from fastapi import APIRouter
-import ollama
+import pandas as pd
 from dotenv import load_dotenv
 import os
+import googlemaps
+
+from DB.ORM.Models.Todo import Todo
+from DB.ORM.Utils.Session import session_scope as session
+
 
 router = APIRouter()
 load_dotenv()
 
 
-@router.get("/todo/getRecommendations/{prompt}")
-def getRecommendations(prompt: str):
-    system_prompt = {"role": "system", "content": """You are an expert assistant specializing in recommending professionals to resolve property management issues. When the user provides a description of a problem, your task is to identify the most appropriate type of professional or service provider to address the issue. Your response should always consist of just the professional's title, without any additional information."""}
-    messages_list = [system_prompt, {"role": "user", "content": prompt}]
-    aiResponse = ollama.chat(model=os.getenv("CHAT_MODEL"), messages=messages_list)
+@router.get("/todo/getRecommendations/{todoId}")
+def getRecommendations(todoId: int):
+    with session() as db_session:
+        todo = db_session.query(Todo).filter(Todo.id == todoId).first()
 
-    return aiResponse['message']['content']
+        gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
+        geocode_result = gmaps.geocode("1600 Amphitheatre Parkway, Mountain View, CA")
+        location = geocode_result[0]['geometry']['location']
+        latitude, longitude = location['lat'], location['lng']
+
+        places_result = gmaps.places_nearby(location=(latitude, longitude), radius=1500, type=str(todo.recommended_professional).lower())
+
+        place_names = [place['name'] for place in places_result['results']]
+
+        return pd.DataFrame(place_names, columns=["name"]).to_json(orient="records")
+
 
 

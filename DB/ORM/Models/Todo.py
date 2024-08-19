@@ -15,6 +15,7 @@ class Todo(Base):
     status = Column(String(100))
     priority = Column(String(255))
     added_by = Column(String(100))
+    recommended_professional = Column(String(255))
     created_at = Column(Date, default=datetime.now)
     updated_at = Column(Date, default=datetime.now, onupdate=datetime.now)
     property = relationship("Property", back_populates="todos")
