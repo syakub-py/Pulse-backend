@@ -12,13 +12,13 @@ router = APIRouter()
 load_dotenv()
 
 
-@router.get("/todo/getRecommendations/{todoId}")
-def getRecommendations(todoId: int):
+@router.get("/todo/getRecommendations/{todoId}/{propertyAddress}")
+def getRecommendations(todoId: int, propertyAddress:str):
     with session() as db_session:
         todo = db_session.query(Todo).filter(Todo.id == todoId).first()
 
         gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
-        geocode_result = gmaps.geocode("1600 Amphitheatre Parkway, Mountain View, CA")
+        geocode_result = gmaps.geocode(propertyAddress)
         location = geocode_result[0]['geometry']['location']
         latitude, longitude = location['lat'], location['lng']
 

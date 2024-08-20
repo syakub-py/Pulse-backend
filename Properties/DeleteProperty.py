@@ -4,6 +4,7 @@ from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Models.Tenant import Tenant
+from DB.ORM.Models.Todo import Todo
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 
@@ -34,6 +35,8 @@ def deleteProperty(propertyId: int):
 
             tenants_to_delete = db_session.query(Tenant).filter(Tenant.tenant_id.in_(tenant_ids)).all()
 
+            todos_to_delete = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
+
             for tenant in tenants_to_delete:
                 db_session.delete(tenant)
 
@@ -44,6 +47,9 @@ def deleteProperty(propertyId: int):
                 db_session.delete(property_lease)
 
             db_session.delete(property_to_delete)
+
+            for todo in todos_to_delete:
+                db_session.delete(todo)
 
             db_session.commit()
 

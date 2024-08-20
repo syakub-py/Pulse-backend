@@ -14,9 +14,6 @@ def getTodos(propertyId:int):
         with session() as db_session:
             todos = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
 
-            if not todos:
-                return []
-
             todos_list = [
                 {
                     "id": todo.id,
