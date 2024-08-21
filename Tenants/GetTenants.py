@@ -20,8 +20,8 @@ def getTenants(userId: str):
     try:
         with session() as db_session:
             query = db_session.query(
-                User.id.label('tenant_id'),
-                User.name.label('tenant_name'),
+                User.id.label('id'),
+                User.name.label('name'),
                 User.annual_income.label('annual_income'),
                 User.phone_number.label('phone_number'),
                 User.date_of_birth.label('date_of_birth'),
@@ -42,8 +42,8 @@ def getTenants(userId: str):
 
             tenants_list = [
                 {
-                    "TenantId": tenant.tenant_id,
-                    "Name": tenant.tenant_name,
+                    "id": tenant.id,
+                    "Name": tenant.name,
                     "AnnualIncome": tenant.annual_income,
                     "PhoneNumber": tenant.phone_number,
                     "DateOfBirth": tenant.date_of_birth,
