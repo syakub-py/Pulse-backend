@@ -6,4 +6,4 @@ class LeaseDetails(BaseModel):
     MonthlyRent: str
     PropertyId: int
     Terms: str
-    isExpired: bool
+    isLeaseExpired: bool

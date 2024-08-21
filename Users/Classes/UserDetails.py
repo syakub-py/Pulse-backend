@@ -1,14 +1,15 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
-
-class TenantDetails(BaseModel):
+class UserDetails(BaseModel):
     Name: str
     UserId: str
-    LeaseId: int
+    LeaseId: Optional[int] = None
     AnnualIncome: int
     PhoneNumber: str
     DateOfBirth: str
     Email: str
     DocumentProvidedUrl: str
+    DocumentType: str
     SocialSecurity: str
-

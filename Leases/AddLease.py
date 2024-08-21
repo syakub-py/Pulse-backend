@@ -1,11 +1,7 @@
-from typing import Dict
-
-from fastapi import APIRouter
-
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
-
+from fastapi import APIRouter
 from .Classes.LeaseDetails import LeaseDetails
 
 from LoggerConfig import pulse_logger as logger
@@ -14,20 +10,21 @@ router = APIRouter()
 
 
 @router.post("/lease/addLease/{propertyId}")
-def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
+def addLease(propertyId: int, lease: LeaseDetails):
     logger.info(f"Adding lease for property: {propertyId}")
+
     if not propertyId:
         logger.error("No propertyId provided")
-        raise HTTPException(status_code=400, detail="No propertyId provided")
+        return {"message": "No propertyId provided", "status_code": 500}
 
-    try:
-        with session() as db_session:
+    with session() as db_session:
+        try:
             new_lease = Lease(
                 start_date=lease.StartDate,
                 end_date=lease.EndDate,
                 monthly_rent=lease.MonthlyRent,
                 terms=lease.Terms,
-                is_expired=lease.isExpired,
+                is_expired=lease.isLeaseExpired,
             )
 
             db_session.add(new_lease)
@@ -38,12 +35,16 @@ def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, int | str]:
                 lease_id=int(new_lease.lease_id)
             )
             db_session.add(new_property_lease)
-            db_session.commit()
+            db_session.flush()
 
+            db_session.commit()
             logger.info(f"Lease added successfully. Lease ID: {new_lease.lease_id}")
-            return {"lease_id": new_lease.lease_id}
-    except Exception as e:
-        db_session.rollback()
-        logger.error(f"Unexpected error adding a lease: {str(e)}")
-    finally:
-        db_session.close()
+            return new_lease.lease_id
+        except Exception as e:
+            db_session.rollback()
+            logger.error(e)
+            if 'unique constraint' in str(e).lower():
+                return {"message": "This email was already signed up", "status_code": 409}
+            return {"message": str(e), "status_code": 500}
+        finally:
+            db_session.close()
