@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Models.Tenant import Tenant
+from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
@@ -26,7 +26,7 @@ def deleteLease(leaseId: int):
                 db_session.delete(tenant_lease)
             db_session.flush()
 
-            tenants = db_session.query(Tenant).filter(Tenant.tenant_id.in_(tenant_ids)).all()
+            tenants = db_session.query(User).filter(User.id.in_(tenant_ids)).all()
             for tenant in tenants:
                 db_session.delete(tenant)
             db_session.flush()

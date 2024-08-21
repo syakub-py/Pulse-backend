@@ -5,7 +5,7 @@ from sqlalchemy.orm import aliased
 
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Models.Tenant import Tenant
+from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Property import Property
@@ -21,7 +21,7 @@ def getProperties(userId: str):
         return {"message": "userId is required", "status_code": 500}
     try:
         with session() as db_session:
-            TenantAlias = aliased(Tenant)
+            TenantAlias = aliased(User)
             TenantLeaseAlias = aliased(TenantLease)
 
             query = (
@@ -31,16 +31,16 @@ def getProperties(userId: str):
                     Property.address,
                     Property.property_type,
                     Property.is_rental,
-                    (TenantAlias.user_id == userId).label("is_tenant")
+                    (TenantAlias.uid == userId).label("is_tenant")
                 )
                 .outerjoin(PropertyLease, Property.property_id == PropertyLease.property_id)
                 .outerjoin(Lease, PropertyLease.lease_id == Lease.lease_id)
                 .outerjoin(TenantLeaseAlias, Lease.lease_id == TenantLeaseAlias.lease_id)
-                .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.tenant_id)
+                .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.id)
                 .filter(
                     or_(
                         Property.user_id == userId,
-                        TenantAlias.user_id == userId
+                        TenantAlias.uid == userId
                     )
                 )
             )

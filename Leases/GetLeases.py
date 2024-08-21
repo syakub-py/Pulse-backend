@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.Lease import Lease
-from DB.ORM.Models.Tenant import Tenant
+from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 import pandas as pd
@@ -19,10 +19,10 @@ def getLeases(property_id: int):
     try:
         with session() as db_session:
             leases = (
-                db_session.query(Lease, Tenant.user_id)
+                db_session.query(Lease, User.uid)
                 .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .join(TenantLease, Lease.lease_id == TenantLease.lease_id)
-                .join(Tenant, TenantLease.tenant_id == Tenant.tenant_id)
+                .join(User, TenantLease.tenant_id == User.id)
                 .filter(PropertyLease.property_id == property_id)
                 .all()
             )
