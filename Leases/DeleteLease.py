@@ -21,16 +21,8 @@ def deleteLease(leaseId: int):
     try:
         with session() as db_session:
             tenant_leases = db_session.query(TenantLease).filter(TenantLease.lease_id == leaseId).all()
-            tenant_ids = [tenant_lease.tenant_id for tenant_lease in tenant_leases]
             for tenant_lease in tenant_leases:
                 db_session.delete(tenant_lease)
-            db_session.flush()
-
-            tenants = db_session.query(User).filter(User.id.in_(tenant_ids)).all()
-            for tenant in tenants:
-                other_leases = db_session.query(TenantLease).filter(TenantLease.tenant_id == tenant.id).count()
-                if other_leases == 0:
-                    db_session.delete(tenant)
             db_session.flush()
 
             property_lease = db_session.query(PropertyLease).filter(PropertyLease.lease_id == leaseId).first()
