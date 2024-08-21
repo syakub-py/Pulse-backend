@@ -3,9 +3,9 @@ from DB.ORM.Base import Base
 
 class PendingTenantSignUp(Base):
     __tablename__ = 'pending_tenant_sign_ups'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     lease_id = Column(Integer, nullable=False)
-    email = Column(String, unique=True, nullable=False)
+    email = Column(String, nullable=False)
     code = Column(String, unique=True, nullable=False)
     is_code_used = Column(Boolean, nullable=False)
     expires = Column(Date, nullable=False)

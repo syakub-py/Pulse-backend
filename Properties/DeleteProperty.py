@@ -39,25 +39,29 @@ def deleteProperty(propertyId: int):
 
             for tenant in tenants_to_delete:
                 db_session.delete(tenant)
+            db_session.flush()
 
             for lease in leases_to_delete:
                 db_session.delete(lease)
+            db_session.flush()
 
             for property_lease in property_leases_to_delete:
                 db_session.delete(property_lease)
+            db_session.flush()
 
             db_session.delete(property_to_delete)
+            db_session.flush()
 
             for todo in todos_to_delete:
                 db_session.delete(todo)
+            db_session.flush()
 
             db_session.commit()
 
             logger.info(f"Deleted Property {propertyId} and associated leases and tenants")
-
     except Exception as e:
         logger.error(f"Error deleting property with property ID {propertyId}: " + str(e))
         db_session.rollback()
-        return {"error": str(e)}
+        return {"message": str(e), "status_code": 500}
 
 
