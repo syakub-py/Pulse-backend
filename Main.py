@@ -23,6 +23,8 @@ from Todos.GetRecommendations import router as GetRecommendationsRouter
 
 from Users.AddAUser import router as AddUserRouter
 
+from Utils.SendEmail import router as SendEmailRouter
+
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -52,3 +54,4 @@ app.include_router(AddTodoRouter)
 app.include_router(GetTodosRouter)
 app.include_router(DeleteTodoRouter)
 app.include_router(GetRecommendationsRouter)
+app.include_router(SendEmailRouter)

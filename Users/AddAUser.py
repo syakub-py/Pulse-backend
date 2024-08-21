@@ -27,7 +27,7 @@ def addAUser(user: UserDetails):
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(
                     tenant_id=new_user.id,
-                    lease_id=user.LeaaseId
+                    lease_id=user.LeaseId
                 )
                 db_session.add(new_tenant_lease)
                 db_session.flush()
