@@ -31,6 +31,10 @@ def getProperties(userId: str):
                     Property.address,
                     Property.property_type,
                     Property.is_rental,
+                    Property.property_tax,
+                    Property.mortgage_payment,
+                    Property.operating_expenses,
+                    Property.purchase_price,
                     (TenantAlias.uid == userId).label("is_tenant")
                 )
                 .outerjoin(PropertyLease, Property.property_id == PropertyLease.property_id)
@@ -53,8 +57,12 @@ def getProperties(userId: str):
                     "Name": prop.nick_name,
                     "Address": prop.address,
                     "PropertyType": prop.property_type,
+                    "PurchasePrice": prop.purchase_price,
+                    "Taxes": prop.property_tax,
+                    "MortgagePayment": prop.mortgage_payment,
+                    "OperatingExpenses": prop.operating_expenses,
                     "isRental": prop.is_rental,
-                    "isTenant": bool(prop.is_tenant),
+                    "isCurrentUserTenant": bool(prop.is_tenant),
                 }
                 for prop in properties
             ]
