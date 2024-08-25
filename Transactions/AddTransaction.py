@@ -14,11 +14,13 @@ def addTransaction(transaction:TransactionDetails):
                 user_id=transaction.userId,
                 amount=transaction.amount,
                 description=transaction.description,
-                transaction_type=transaction.transactionType,
+                transaction_type=transaction.transaction_type,
+                property_id=transaction.property_id,
+                income_or_expense=transaction.income_or_expense,
             )
             db_session.add(new_transaction)
             db_session.commit()
 
             return new_transaction.id
     except Exception as e:
-        return {"message": str(e), "status_code":500}
+        return {"message": str(e), "status_code": 500}
