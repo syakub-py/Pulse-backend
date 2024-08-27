@@ -11,11 +11,10 @@ from sqlalchemy import func, cast, Date
 router = APIRouter()
 
 def generate_random_rgba():
-
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
-    a = round(random.uniform(0.5, 1), 2)  # Alpha between 0.5 and 1 for better visibility
+    a = round(random.uniform(0.5, 1), 2)
     return f"rgba({r}, {g}, {b}, {a})"
 
 @router.get("/analytics/generateExpenseAnalytics/{propertyId}")
@@ -106,11 +105,10 @@ def generateIncomeAnalytics(propertyId: int):
                 monthly_data[month] = total_amount
 
             return {
-                "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 "data": [monthly_data[str(i).zfill(2)] for i in range(1, 13)],
                 "color": generate_random_rgba(),
             }
-
 
     except Exception as e:
         print("Error:", e)
