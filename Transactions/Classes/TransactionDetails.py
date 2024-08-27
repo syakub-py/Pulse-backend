@@ -8,3 +8,4 @@ class TransactionDetails(BaseModel):
     description: str
     transactionType: str
     incomeOrExpense: str
+    date: str

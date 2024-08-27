@@ -27,6 +27,9 @@ from Utils.SendEmail import router as SendEmailRouter
 
 from Analytics.GenerateAnalytics import router as GenerateAnalyticsRouter
 
+from Transactions.AddTransaction import router as AddTransactionRouter
+from Transactions.GetTransactions import router as GetTransactionsRouter
+
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -58,3 +61,5 @@ app.include_router(DeleteTodoRouter)
 app.include_router(GetRecommendationsRouter)
 app.include_router(SendEmailRouter)
 app.include_router(GenerateAnalyticsRouter)
+app.include_router(AddTransactionRouter)
+app.include_router(GetTransactionsRouter)

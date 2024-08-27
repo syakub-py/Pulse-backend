@@ -6,7 +6,7 @@ from .Classes.TransactionDetails import TransactionDetails
 
 router = APIRouter()
 
-@router.post('/transactions/addTransactions/')
+@router.post('/transaction/addTransaction/')
 def addTransaction(transaction:TransactionDetails):
     try:
         with session() as db_session:
@@ -14,9 +14,10 @@ def addTransaction(transaction:TransactionDetails):
                 user_id=transaction.userId,
                 amount=transaction.amount,
                 description=transaction.description,
-                transaction_type=transaction.transaction_type,
-                property_id=transaction.property_id,
-                income_or_expense=transaction.income_or_expense,
+                transaction_type=transaction.transactionType,
+                property_id=transaction.propertyId,
+                income_or_expense=transaction.incomeOrExpense,
+                date=transaction.date,
             )
             db_session.add(new_transaction)
             db_session.commit()
