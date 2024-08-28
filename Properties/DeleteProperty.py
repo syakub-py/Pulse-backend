@@ -34,7 +34,6 @@ def deleteProperty(propertyId: int):
                 for tenant_lease in tenant_leases:
                     db_session.delete(tenant_lease)
 
-            tenants_to_delete = db_session.query(User).filter(User.id.in_(tenant_ids)).all()
 
             todos_to_delete = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
 
@@ -52,10 +51,6 @@ def deleteProperty(propertyId: int):
 
             for lease in leases_to_delete:
                 db_session.delete(lease)
-            db_session.flush()
-
-            for tenant in tenants_to_delete:
-                db_session.delete(tenant)
             db_session.flush()
 
             db_session.delete(property_to_delete)
