@@ -34,5 +34,6 @@ def addProperty(userId: str, propertyDetails: PropertyDetails):
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error: {str(e)}")
+        return {"message":str(e), "status_code":500}
     finally:
         db_session.close()
