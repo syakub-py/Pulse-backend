@@ -22,8 +22,14 @@ from Todos.DeleteTodo import router as DeleteTodoRouter
 from Todos.GetRecommendations import router as GetRecommendationsRouter
 
 from Users.AddAUser import router as AddUserRouter
+from Users.DeleteAUser import router as DeleteUserRouter
 
 from Utils.SendEmail import router as SendEmailRouter
+
+from Analytics.GenerateAnalytics import router as GenerateAnalyticsRouter
+
+from Transactions.AddTransaction import router as AddTransactionRouter
+from Transactions.GetTransactions import router as GetTransactionsRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
@@ -42,16 +48,28 @@ app.include_router(CreateChatRouter)
 app.include_router(AddPropertyRouter)
 app.include_router(GetPropertiesRouter)
 app.include_router(DeletePropertyRouter)
+
 app.include_router(GetChatMessagesRouter)
 app.include_router(GenerateResponseRouter)
+
+app.include_router(CheckTenantCodeRouter)
 app.include_router(AddLeaseRouter)
 app.include_router(GetLeasesRouter)
 app.include_router(DeleteLeaseRouter)
+app.include_router(SendEmailRouter)
+
 app.include_router(AddUserRouter)
+app.include_router(DeleteUserRouter)
+
 app.include_router(GetTenantsRouter)
-app.include_router(CheckTenantCodeRouter)
+
 app.include_router(AddTodoRouter)
 app.include_router(GetTodosRouter)
 app.include_router(DeleteTodoRouter)
+
 app.include_router(GetRecommendationsRouter)
-app.include_router(SendEmailRouter)
+
+app.include_router(GenerateAnalyticsRouter)
+app.include_router(AddTransactionRouter)
+app.include_router(GetTransactionsRouter)
+

@@ -1,21 +1,17 @@
-from typing import Dict
 from fastapi import APIRouter
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.Property import Property
-
 from .Classes.PropertyDetails import PropertyDetails
 
 router = APIRouter()
 
-
-
 @router.post("/property/addProperty/{userId}")
-def addProperty(userId: str, propertyDetails: PropertyDetails) -> int | Dict[str, int | str]:
+def addProperty(userId: str, propertyDetails: PropertyDetails):
     logger.info(f"Adding property for user: {userId}")
     if not userId:
         logger.error("No userId provided")
-        return {"message": "No user id provided", "status_code": 500}
+        return {"message":"no userId provided", "status_code":500}
     try:
         with session() as db_session:
             new_property = Property(
@@ -24,6 +20,10 @@ def addProperty(userId: str, propertyDetails: PropertyDetails) -> int | Dict[str
                 address=propertyDetails.Address,
                 property_type=propertyDetails.PropertyType,
                 is_rental=propertyDetails.isRental,
+                property_tax=propertyDetails.Taxes,
+                purchase_price=propertyDetails.PurchasePrice,
+                mortgage_payment=propertyDetails.MortgagePayment,
+                operating_expenses=propertyDetails.OperatingExpenses,
             )
 
             db_session.add(new_property)
@@ -34,6 +34,6 @@ def addProperty(userId: str, propertyDetails: PropertyDetails) -> int | Dict[str
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error: {str(e)}")
-        return {"error": str(e)}
+        return {"message":str(e), "status_code":500}
     finally:
         db_session.close()

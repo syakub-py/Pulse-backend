@@ -13,7 +13,11 @@ class Property(Base):
     address = Column(String(255), nullable=False)
     property_type = Column(String(255), nullable=False)
     is_rental = Column(Boolean, nullable=False, default=False)
+    purchase_price = Column(String(255))
+    operating_expenses = Column(String(255))
+    property_tax = Column(String(255))
+    mortgage_payment = Column(String(255))
     created_at = Column(String, default=lambda: datetime.now().strftime("%a %b %d %Y %H:%M:%S"))
-
     leases = relationship("PropertyLease", back_populates="property")
     todos = relationship("Todo", back_populates="property")
+    transactions = relationship("Transaction", back_populates="property")

@@ -5,9 +5,10 @@ from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Models.User import User
 from DB.ORM.Models.Todo import Todo
+from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
-
+from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 
 router = APIRouter()
 
@@ -33,20 +34,23 @@ def deleteProperty(propertyId: int):
                 for tenant_lease in tenant_leases:
                     db_session.delete(tenant_lease)
 
-            tenants_to_delete = db_session.query(User).filter(User.id.in_(tenant_ids)).all()
 
             todos_to_delete = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
 
-            for tenant in tenants_to_delete:
-                db_session.delete(tenant)
-            db_session.flush()
+            transactions_to_delete = db_session.query(Transaction).filter(Transaction.property_id == propertyId).all()
 
-            for lease in leases_to_delete:
-                db_session.delete(lease)
+            pending_signups_to_delete = db_session.query(PendingTenantSignUp).filter(PendingTenantSignUp.lease_id.in_(lease_ids)).all()
+
+            for signup in pending_signups_to_delete:
+                db_session.delete(signup)
             db_session.flush()
 
             for property_lease in property_leases_to_delete:
                 db_session.delete(property_lease)
+            db_session.flush()
+
+            for lease in leases_to_delete:
+                db_session.delete(lease)
             db_session.flush()
 
             db_session.delete(property_to_delete)
@@ -56,12 +60,15 @@ def deleteProperty(propertyId: int):
                 db_session.delete(todo)
             db_session.flush()
 
+            for transaction in transactions_to_delete:
+                db_session.delete(transaction)
+            db_session.flush()
+
             db_session.commit()
 
-            logger.info(f"Deleted Property {propertyId} and associated leases and tenants")
+            logger.info(f"Deleted Property {propertyId} and associated leases, tenants, todos, and transactions")
+            return {"message": "Property and associated data deleted successfully", "status_code": 200}
     except Exception as e:
         logger.error(f"Error deleting property with property ID {propertyId}: " + str(e))
         db_session.rollback()
         return {"message": str(e), "status_code": 500}
-
-
