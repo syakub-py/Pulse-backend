@@ -101,15 +101,15 @@ def generateIncomeAnalytics(propertyId: int):
 
             for transaction in income_transactions:
                 month = transaction.month
-                total_amount = transaction.total_amount + int(lease.monthly_rent)
-                monthly_data[month] = total_amount
+                total_amount = transaction.total_amount
+                monthly_data[month] = total_amount + int(lease.monthly_rent)
 
+            print(monthly_data)
             return {
                 "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 "data": [monthly_data[str(i).zfill(2)] for i in range(1, 13)],
                 "color": generate_random_rgba(),
             }
-
     except Exception as e:
         print("Error:", e)
         return {"message": str(e), "status_code": 500}

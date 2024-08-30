@@ -55,8 +55,9 @@ app.include_router(GenerateResponseRouter)
 app.include_router(CheckTenantCodeRouter)
 app.include_router(AddLeaseRouter)
 app.include_router(GetLeasesRouter)
-
 app.include_router(DeleteLeaseRouter)
+app.include_router(SendEmailRouter)
+
 app.include_router(AddUserRouter)
 app.include_router(DeleteUserRouter)
 
@@ -67,7 +68,6 @@ app.include_router(GetTodosRouter)
 app.include_router(DeleteTodoRouter)
 
 app.include_router(GetRecommendationsRouter)
-app.include_router(SendEmailRouter)
 
 app.include_router(GenerateAnalyticsRouter)
 app.include_router(AddTransactionRouter)
