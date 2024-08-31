@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, String, Boolean, Date
 from DB.ORM.Base import Base
 
 class PendingTenantSignUp(Base):
-    __tablename__ = 'pending_tenant_sign_ups'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = 'pending_tenant_sign_up'
+    pending_tenant_sign_up_id = Column(Integer, primary_key=True, autoincrement=True)
     lease_id = Column(Integer, nullable=False)
     email = Column(String, nullable=False)
     code = Column(String, unique=True, nullable=False)

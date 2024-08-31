@@ -6,9 +6,9 @@ from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
 
 class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(String(255), unique=True, nullable=False)
+    __tablename__ = 'user'
+    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    firebase_uid = Column(String(255), unique=True, nullable=False)
     name = Column(String, nullable=False)
     annual_income = Column(Integer, nullable=False)
     phone_number = Column(String, nullable=False)

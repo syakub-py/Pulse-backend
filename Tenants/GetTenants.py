@@ -29,14 +29,14 @@ def getTenants(userId: str):
                 User.social_security.label('social_security'),
                 User.document_provided_url.label('document_provided_url'),
                 User.document_type.label('document_type'),
-                Property.user_id.label('user_id'),
+                Property.firebase_uid.label('user_id'),
                 TenantLease.lease_id.label('lease_id')
             ). \
                 join(TenantLease, User.id == TenantLease.tenant_id). \
                 join(Lease, TenantLease.lease_id == Lease.lease_id). \
                 join(PropertyLease, PropertyLease.lease_id == Lease.lease_id). \
                 join(Property, Property.property_id == PropertyLease.property_id). \
-                filter(Property.user_id == userId)
+                filter(Property.firebase_uid == userId)
 
             tenants = query.all()
 

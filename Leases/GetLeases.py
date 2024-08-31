@@ -19,10 +19,10 @@ def getLeases(property_id: int):
     try:
         with session() as db_session:
             leases = (
-                db_session.query(Lease, User.uid)
+                db_session.query(Lease, User.firebase_uid)
                 .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .join(TenantLease, Lease.lease_id == TenantLease.lease_id)
-                .join(User, TenantLease.tenant_id == User.id)
+                .join(User, TenantLease.tenant_id == User.user_id)
                 .filter(PropertyLease.property_id == property_id)
                 .all()
             )

@@ -7,8 +7,8 @@ from DB.ORM.Base import Base
 
 
 class Todo(Base):
-    __tablename__ = 'todos'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    __tablename__ = 'todo'
+    todo_id = Column(Integer, primary_key=True, autoincrement=True)
     property_id = Column(Integer, ForeignKey('properties.property_id'))
     title = Column(String(100))
     description = Column(String)

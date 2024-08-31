@@ -1,10 +1,15 @@
 from fastapi import APIRouter
 
+from DB.ORM.Models.Property import Property
+from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.User import User
 from .Classes.UserDetails import UserDetails
+from Chats.CreateChat import createChat
+
 router = APIRouter()
+
 
 @router.post("/user/addUser/")
 def addAUser(user: UserDetails):
@@ -12,7 +17,7 @@ def addAUser(user: UserDetails):
         with session() as db_session:
             new_user = User(
                 name=user.Name,
-                uid=user.UserId,
+                firebase_uid=user.UserId,
                 annual_income=user.AnnualIncome,
                 phone_number=user.PhoneNumber,
                 date_of_birth=user.DateOfBirth,
@@ -26,14 +31,22 @@ def addAUser(user: UserDetails):
 
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(
-                    tenant_id=new_user.id,
+                    tenant_id=new_user.user_id,
                     lease_id=user.LeaseId
                 )
                 db_session.add(new_tenant_lease)
                 db_session.flush()
+                landlord_id = (
+                    db_session.query(User.user_id)
+                    .join(PropertyLease, user.LeaseId == PropertyLease.lease_id)
+                    .join(Property, Property.property_id == PropertyLease.property_id)
+                    .join(User, Property.owner_id == User.user_id)
+                    .first()
+                )
+                createChat(landlord_id, new_user.user_id)
 
             db_session.commit()
 
-            return new_user.id
+            return new_user.user_id
     except Exception as e:
         return {"message": str(e), "status_code": 500}

@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-from PulseAI.GetChatMessages import router as GetChatMessagesRouter
-from PulseAI.CreateChat import router as CreateChatRouter
+from Chats.GetChatMessages import router as GetChatMessagesRouter
 from PulseAI.GenerateResponse import router as GenerateResponseRouter
 
 from Properties.AddProperty import router as AddPropertyRouter
@@ -44,7 +43,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(CreateChatRouter)
 app.include_router(AddPropertyRouter)
 app.include_router(GetPropertiesRouter)
 app.include_router(DeletePropertyRouter)

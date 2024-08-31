@@ -43,7 +43,7 @@ def getProperties(userId: str):
                 .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.id)
                 .filter(
                     or_(
-                        Property.user_id == userId,
+                        Property.firebase_uid == userId,
                         TenantAlias.uid == userId
                     )
                 )

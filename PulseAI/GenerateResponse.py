@@ -4,14 +4,14 @@ import ollama
 from dotenv import load_dotenv
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
-from PulseAI.GetChatMessages import getChatMessages
-from PulseAI.SaveMessagesToDB import saveMessagesToDB
+from Chats.GetChatMessages import getChatMessages
+from Chats.SaveMessagesToDB import saveMessagesToDB
 
 load_dotenv()
 
 router = APIRouter()
 
-@router.get("/chat/generateResponse/{chat_id}/{prompt}", response_model=Dict[str, str])
+@router.get("/pulseChat/generateResponse/{chat_id}/{prompt}", response_model=Dict[str, str])
 def generateResponse(chat_id: int, prompt: str) -> Dict[str, str]:
     try:
         messages = getChatMessages(chat_id)

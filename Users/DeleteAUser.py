@@ -9,7 +9,7 @@ router = APIRouter()
 def deleteAUser(uid: str):
     try:
         with session() as db_session:
-            user = db_session.query(User).filter(User.uid == uid).first()
+            user = db_session.query(User).filter(User.firebase_uid == uid).first()
             if user is None:
                 return {"message": "User not found", "status_code": 500}
 
@@ -17,3 +17,4 @@ def deleteAUser(uid: str):
             db_session.commit()
     except Exception as e:
         return {"message": str(e), "status_code": 500}
+

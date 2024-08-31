@@ -1,14 +1,15 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
 from DB.ORM.Base import Base
 
 class Property(Base):
-    __tablename__ = 'properties'
+    __tablename__ = 'property'
 
     property_id = Column(Integer, primary_key=True)
-    user_id = Column(String(255), nullable=False)
+    owner_id = Column(Integer, ForeignKey('user.user_id'))
+    firebase_uid = Column(String(255), nullable=False)
     nick_name = Column(String(255), nullable=False)
     address = Column(String(255), nullable=False)
     property_type = Column(String(255), nullable=False)

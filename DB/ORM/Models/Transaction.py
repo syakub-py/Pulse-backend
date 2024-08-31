@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
 
 class Transaction(Base):
-    __tablename__ = 'transactions'
-    id = Column(Integer, primary_key=True)
+    __tablename__ = 'transaction'
+    transaction_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(255), ForeignKey('users.uid'))
     property_id = Column(Integer, ForeignKey('properties.property_id'))
     transaction_type = Column(String(50))

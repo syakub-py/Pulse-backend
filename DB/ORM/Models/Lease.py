@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Boolean
 from sqlalchemy.orm import relationship
 
 class Lease(Base):
-    __tablename__ = 'leases'
+    __tablename__ = 'lease'
     lease_id = Column(Integer, primary_key=True)
     start_date = Column(String, nullable=False)
     end_date = Column(String, nullable=False)
