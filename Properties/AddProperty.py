@@ -15,7 +15,7 @@ def addProperty(userId: str, propertyDetails: PropertyDetails):
     try:
         with session() as db_session:
             new_property = Property(
-                user_id=userId,
+                firebase_uid = userId,
                 nick_name=propertyDetails.Name,
                 address=propertyDetails.Address,
                 property_type=propertyDetails.PropertyType,

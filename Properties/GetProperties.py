@@ -35,16 +35,16 @@ def getProperties(userId: str):
                     Property.mortgage_payment,
                     Property.operating_expenses,
                     Property.purchase_price,
-                    (TenantAlias.uid == userId).label("is_tenant")
+                    (TenantAlias.firebase_uid == userId).label("is_tenant")
                 )
                 .outerjoin(PropertyLease, Property.property_id == PropertyLease.property_id)
                 .outerjoin(Lease, PropertyLease.lease_id == Lease.lease_id)
                 .outerjoin(TenantLeaseAlias, Lease.lease_id == TenantLeaseAlias.lease_id)
-                .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.id)
+                .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.user_id)
                 .filter(
                     or_(
                         Property.firebase_uid == userId,
-                        TenantAlias.uid == userId
+                        TenantAlias.firebase_uid == userId
                     )
                 )
             )

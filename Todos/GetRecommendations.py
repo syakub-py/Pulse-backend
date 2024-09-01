@@ -15,7 +15,7 @@ load_dotenv()
 @router.get("/todo/getRecommendations/{todoId}/{propertyAddress}")
 def getRecommendations(todoId: int, propertyAddress:str):
     with session() as db_session:
-        todo = db_session.query(Todo).filter(Todo.id == todoId).first()
+        todo = db_session.query(Todo).filter(Todo.todo_id == todoId).first()
 
         gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
         geocode_result = gmaps.geocode(propertyAddress)

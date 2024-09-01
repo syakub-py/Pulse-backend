@@ -141,7 +141,7 @@ def addTodo(todo: TodoDetails):
 
             db_session.refresh(new_todo)
 
-            return new_todo.id
+            return new_todo.todo_id
     except Exception as e:
         logger.error("Error adding the todo: {}".format(e))
         db_session.rollback()

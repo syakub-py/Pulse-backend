@@ -6,8 +6,8 @@ from DB.ORM.Base import Base
 class Transaction(Base):
     __tablename__ = 'transaction'
     transaction_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String(255), ForeignKey('users.uid'))
-    property_id = Column(Integer, ForeignKey('properties.property_id'))
+    user_id = Column(String(255), ForeignKey('users.firebase_uid'))
+    property_id = Column(Integer, ForeignKey('property.property_id'))
     transaction_type = Column(String(50))
     income_or_expense = Column(String(50))
     amount = Column(DECIMAL(10, 2))

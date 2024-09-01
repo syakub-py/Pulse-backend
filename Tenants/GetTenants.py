@@ -20,7 +20,7 @@ def getTenants(userId: str):
     try:
         with session() as db_session:
             query = db_session.query(
-                User.id.label('id'),
+                User.user_id.label('id'),
                 User.name.label('name'),
                 User.annual_income.label('annual_income'),
                 User.phone_number.label('phone_number'),
@@ -32,7 +32,7 @@ def getTenants(userId: str):
                 Property.firebase_uid.label('user_id'),
                 TenantLease.lease_id.label('lease_id')
             ). \
-                join(TenantLease, User.id == TenantLease.tenant_id). \
+                join(TenantLease, User.user_id == TenantLease.tenant_id). \
                 join(Lease, TenantLease.lease_id == Lease.lease_id). \
                 join(PropertyLease, PropertyLease.lease_id == Lease.lease_id). \
                 join(Property, Property.property_id == PropertyLease.property_id). \

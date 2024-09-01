@@ -9,7 +9,7 @@ router = APIRouter()
 def getChats(userId:str):
     try:
         with session() as db_session:
-            chats = db_session.query(Chat.user_id.contains([userId])).all()
+            chats = db_session.query(Chat.last_message_sender_id.contains([userId])).all()
             if not chats:
                 return {"message": "No chats found", "status_code": 404}
 

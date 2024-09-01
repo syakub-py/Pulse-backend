@@ -22,6 +22,6 @@ def addTransaction(transaction:TransactionDetails):
             db_session.add(new_transaction)
             db_session.commit()
 
-            return new_transaction.id
+            return new_transaction.transaction_id
     except Exception as e:
         return {"message": str(e), "status_code": 500}

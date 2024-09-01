@@ -16,7 +16,7 @@ def getTodos(propertyId:int):
 
             todos_list = [
                 {
-                    "id": todo.id,
+                    "id": todo.todo_id,
                     "PropertyId": todo.property_id,
                     "Title": todo.title,
                     "Status": todo.status,

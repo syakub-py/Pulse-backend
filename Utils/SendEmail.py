@@ -21,7 +21,7 @@ def sendEmail(tenantEmail: str, LeaseId: int):
             existing_user = db_session.query(User).filter(func.lower(User.email) == tenantEmail.lower()).first()
             if existing_user:
                 new_tenant_lease = TenantLease(
-                    tenant_id=existing_user.id,
+                    tenant_id=existing_user.user_id,
                     lease_id=LeaseId
                 )
                 db_session.add(new_tenant_lease)

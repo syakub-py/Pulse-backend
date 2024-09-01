@@ -6,9 +6,8 @@ from DB.ORM.Base import Base
 
 class Property(Base):
     __tablename__ = 'property'
-
     property_id = Column(Integer, primary_key=True)
-    owner_id = Column(Integer, ForeignKey('user.user_id'))
+    owner_id = Column(Integer, ForeignKey('users.user_id'))
     firebase_uid = Column(String(255), nullable=False)
     nick_name = Column(String(255), nullable=False)
     address = Column(String(255), nullable=False)
