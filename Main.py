@@ -23,6 +23,8 @@ from Todos.GetRecommendations import router as GetRecommendationsRouter
 
 from Users.AddAUser import router as AddUserRouter
 from Users.DeleteAUser import router as DeleteUserRouter
+from Users.GetUid import router as GetUidRouter
+
 
 from Utils.SendEmail import router as SendEmailRouter
 
@@ -62,6 +64,7 @@ app.include_router(SendEmailRouter)
 
 app.include_router(AddUserRouter)
 app.include_router(DeleteUserRouter)
+app.include_router(GetUidRouter)
 
 app.include_router(GetTenantsRouter)
 
