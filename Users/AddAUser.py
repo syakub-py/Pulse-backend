@@ -43,6 +43,7 @@ def addAUser(user: UserDetails):
                     .join(User, Property.owner_id == User.user_id)
                     .first()
                 )
+
                 createChat(landlord_id, new_user.user_id)
 
             db_session.commit()

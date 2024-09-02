@@ -2,16 +2,13 @@ from fastapi import APIRouter
 import pandas as pd
 from sqlalchemy import or_
 from sqlalchemy.orm import aliased
-
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Property import Property
-
 from LoggerConfig import pulse_logger as logger
-
 
 router = APIRouter()
 
@@ -73,4 +70,4 @@ def getProperties(userId: str):
             return properties_df.to_json(orient="records")
     except Exception as e:
         logger.error(f"Error retrieving properties: {str(e)}")
-        return {"message":str(e), "status_code": 500}
+        return {"message": str(e), "status_code": 500}

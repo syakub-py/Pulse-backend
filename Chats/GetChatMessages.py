@@ -16,7 +16,7 @@ def getChatMessages(chatId: int) -> List[dict]:
         with session() as db_session:
             messages = db_session.query(
                 Message.id.label('_id'),
-                Message.role.label('user'),
+                Message.role.label('username'),
                 Message.message.label('text'),
                 Message.created_at.label('createdAt')
             ).join(Chat, Chat.chat_id == Message.chat_id) \

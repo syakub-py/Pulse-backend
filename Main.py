@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 
 from Chats.GetChatMessages import router as GetChatMessagesRouter
+from Chats.GetChats import router as GetChatsRouter
 from PulseAI.GenerateResponse import router as GenerateResponseRouter
 
 from Properties.AddProperty import router as AddPropertyRouter
@@ -30,6 +31,8 @@ from Analytics.GenerateAnalytics import router as GenerateAnalyticsRouter
 from Transactions.AddTransaction import router as AddTransactionRouter
 from Transactions.GetTransactions import router as GetTransactionsRouter
 
+from SocketConnection import router as SocketConnectionRouter
+
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -49,6 +52,7 @@ app.include_router(DeletePropertyRouter)
 
 app.include_router(GetChatMessagesRouter)
 app.include_router(GenerateResponseRouter)
+app.include_router(GetChatsRouter)
 
 app.include_router(CheckTenantCodeRouter)
 app.include_router(AddLeaseRouter)
@@ -71,3 +75,4 @@ app.include_router(GenerateAnalyticsRouter)
 app.include_router(AddTransactionRouter)
 app.include_router(GetTransactionsRouter)
 
+app.include_router(SocketConnectionRouter)
