@@ -13,7 +13,7 @@ from LoggerConfig import pulse_logger as logger
 router = APIRouter()
 
 @router.get("/property/getProperty/{userId}")
-def getProperties(userId: str):
+def getProperties(userId: int):
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:
@@ -32,7 +32,7 @@ def getProperties(userId: str):
                     Property.mortgage_payment,
                     Property.operating_expenses,
                     Property.purchase_price,
-                    (TenantAlias.firebase_uid == userId).label("is_tenant")
+                    (TenantAlias.user_id == userId).label("is_tenant")
                 )
                 .outerjoin(PropertyLease, Property.property_id == PropertyLease.property_id)
                 .outerjoin(Lease, PropertyLease.lease_id == Lease.lease_id)
@@ -40,8 +40,8 @@ def getProperties(userId: str):
                 .outerjoin(TenantAlias, TenantLeaseAlias.tenant_id == TenantAlias.user_id)
                 .filter(
                     or_(
-                        Property.firebase_uid == userId,
-                        TenantAlias.firebase_uid == userId
+                        Property.owner_id == userId,
+                        TenantAlias.user_id == userId
                     )
                 )
             )

@@ -29,7 +29,7 @@ def addAUser(user: UserDetails):
             db_session.add(new_user)
             db_session.flush()
 
-            #creates the pulse chat
+            #create the pulse AI chat
             createChat(new_user.user_id, 0)
 
             if user.LeaseId is not None:

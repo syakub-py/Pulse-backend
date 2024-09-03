@@ -14,7 +14,7 @@ import pandas as pd
 router = APIRouter()
 
 @router.get("/tenant/getTenants/{userId}")
-def getTenants(userId: str):
+def getTenants(userId: int):
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:
@@ -36,7 +36,7 @@ def getTenants(userId: str):
                 join(Lease, TenantLease.lease_id == Lease.lease_id). \
                 join(PropertyLease, PropertyLease.lease_id == Lease.lease_id). \
                 join(Property, Property.property_id == PropertyLease.property_id). \
-                filter(Property.firebase_uid == userId)
+                filter(Property.owner_id == userId)
 
             tenants = query.all()
 

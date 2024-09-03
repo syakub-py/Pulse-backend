@@ -6,10 +6,10 @@ router = APIRouter()
 
 
 @router.delete('/user/deleteUser/{uid}')
-def deleteAUser(uid: str):
+def deleteAUser(uid: int):
     try:
         with session() as db_session:
-            user = db_session.query(User).filter(User.firebase_uid == uid).first()
+            user = db_session.query(User).filter(User.user_id == uid).first()
             if user is None:
                 return {"message": "User not found", "status_code": 500}
 
