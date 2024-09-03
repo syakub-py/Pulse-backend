@@ -24,25 +24,9 @@ def generateResponse(chat_id: int, prompt: str) -> Dict[str, str]:
                 for msg in messages
                 if 'user' in msg and 'text' in msg
             ] + [{'role': 'user', 'content': prompt}]
-
-        try:
-            saveMessagesToDB(chat_id, prompt, "user")
-        except Exception as e:
-            logger.error(f"Failed to save user message to DB: {e}")
-
-        try:
-            aiResponse = ollama.chat(model=os.getenv("CHAT_MODEL"), messages=messages_list)
-            response_content = aiResponse['message']['content']
-
-            try:
-                saveMessagesToDB(chat_id, response_content, "assistant")
-            except Exception as e:
-                logger.error(f"Failed to save AI response to DB: {e}")
-
-            return {"text": response_content}
-        except Exception as e:
-            logger.error(f"Failed to generate AI response: {e}")
-            return {"error": "Failed to generate AI response"}
+        aiResponse = ollama.chat(model=os.getenv("CHAT_MODEL"), messages=messages_list)
+        response_content = aiResponse['message']['content']
+        return response_content
 
     except Exception as e:
         logger.error(f"Failed to process chat: {e}")

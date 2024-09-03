@@ -5,10 +5,10 @@ from DB.ORM.Utils.Session import session_scope as session
 router = APIRouter()
 
 @router.get("/chat/getChats/{userId}")
-def getChats(userId:str):
+def getChats(userId:int):
     try:
         with session() as db_session:
-            chats = db_session.query(Chat.last_message_sender_id == userId).all()
+            chats = db_session.query(Chat).filter(Chat.last_message_sender_id == userId).all()
             if not chats:
                 return {"message": "No chats found", "status_code": 404}
 

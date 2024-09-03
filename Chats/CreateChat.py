@@ -6,16 +6,15 @@ from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 
 
-
-def createChat(tenantId: int, landlordId: int):
+def createChat(partyOneId: int, partyTwoId: int):
     try:
-        if tenantId == landlordId:
+        if partyOneId == partyTwoId:
             return {"message": "landlord and tenant are the same", "status_code": 500}
         with session() as db_session:
             existing_chat = db_session.query(Chat).filter(
                     or_(
-                        Chat.last_message_sender_id == tenantId,
-                        Chat.last_message_sender_id == landlordId
+                        Chat.last_message_sender_id == partyOneId,
+                        Chat.last_message_sender_id == partyTwoId
                     )
                 ).first()
             if existing_chat:
@@ -27,8 +26,8 @@ def createChat(tenantId: int, landlordId: int):
             db_session.add(new_chat)
             logger.info('Successfully created chat')
 
-            ChatParticipant(chat_id = new_chat.chat_id, user_id=tenantId)
-            ChatParticipant(chat_id = new_chat.chat_id, user_id=landlordId)
+            ChatParticipant(chat_id=new_chat.chat_id, user_id=partyOneId)
+            ChatParticipant(chat_id=new_chat.chat_id, user_id=partyTwoId)
 
             db_session.commit()
             return new_chat.chat_id
@@ -36,3 +35,6 @@ def createChat(tenantId: int, landlordId: int):
         logger.error(f"Error creating Chat: {str(e)}")
         db_session.rollback()
         return {"message": str(e), "status_code": 500}
+
+
+createChat(1, 2)

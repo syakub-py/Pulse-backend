@@ -29,6 +29,9 @@ def addAUser(user: UserDetails):
             db_session.add(new_user)
             db_session.flush()
 
+            #creates the pulse chat
+            createChat(new_user.user_id, 0)
+
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(
                     tenant_id=new_user.user_id,
