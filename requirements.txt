@@ -3,3 +3,4 @@ sqlalchemy==2.0.34
 pandas==2.2.2
 python-dotenv==1.0.1
 resend==2.4.0
+mypy==1.11.2
