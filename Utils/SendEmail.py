@@ -9,13 +9,14 @@ from DB.ORM.Models.User import User
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from datetime import datetime, timedelta
+from typing import Union, Dict, Any
 
 
 router = APIRouter()
 
 
 @router.get("/api/sendEmail/{LeaseId}/{tenantEmail}")
-def sendEmail(tenantEmail: str, LeaseId: int):
+def sendEmail(tenantEmail: str, LeaseId: int) -> Union[Dict[str, Any], None]:
     try:
         with session() as db_session:
             existing_user = db_session.query(User).filter(func.lower(User.email) == tenantEmail.lower()).first()
@@ -58,6 +59,8 @@ def sendEmail(tenantEmail: str, LeaseId: int):
                 resend.Emails.send(params)
 
             db_session.commit()
+
+            return None
     except Exception as e:
         db_session.rollback()
         return {"message": str(e), "status_code": 500}

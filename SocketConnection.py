@@ -4,7 +4,7 @@ router = APIRouter()
 
 active_users: set[str] = set()
 
-def get_active_users():
+def get_active_users() -> set[str]:
     return active_users
 
 

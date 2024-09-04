@@ -7,12 +7,13 @@ from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.User import User
 from .Classes.UserDetails import UserDetails
 from Chats.CreateChat import createChat
+from typing import Union, Dict, Any
 
 router = APIRouter()
 
 
 @router.post("/user/addUser/")
-def addAUser(user: UserDetails):
+def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
     try:
         with session() as db_session:
             new_user = User(
@@ -30,7 +31,7 @@ def addAUser(user: UserDetails):
             db_session.flush()
 
             #create the pulse AI chat
-            createChat(new_user.user_id, 0)
+            createChat(int(new_user.user_id), 0)
 
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(
@@ -51,6 +52,6 @@ def addAUser(user: UserDetails):
 
             db_session.commit()
 
-            return new_user.user_id
+            return int(new_user.user_id)
     except Exception as e:
         return {"message": str(e), "status_code": 500}

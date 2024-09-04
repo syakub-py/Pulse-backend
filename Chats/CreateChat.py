@@ -3,9 +3,10 @@ from DB.ORM.Models.Chat import Chat
 from DB.ORM.Models.ChatParticipant import ChatParticipant
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
+from typing import Union, Dict, Any
 
 
-def createChat(partyOneId: int, partyTwoId: int):
+def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
     try:
         if partyOneId == partyTwoId:
             return {"message": "landlord and tenant are the same", "status_code": 500}
@@ -19,7 +20,7 @@ def createChat(partyOneId: int, partyTwoId: int):
             ).first()
             if existing_chat:
                 logger.info('Chat already exists')
-                return existing_chat.chat_id
+                return int(existing_chat.chat_id)
 
             new_chat = Chat()
             db_session.add(new_chat)
@@ -32,7 +33,7 @@ def createChat(partyOneId: int, partyTwoId: int):
 
             db_session.commit()
             logger.info('Successfully created chat')
-            return new_chat.chat_id
+            return int(new_chat.chat_id)
     except Exception as e:
         logger.error(f"Error creating Chat: {str(e)}")
         db_session.rollback()
