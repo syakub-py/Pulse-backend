@@ -1,6 +1,6 @@
 name: Type-Check for FastAPI Backend
 
-on: [push, pull_request]
+on: push
 
 jobs:
   type-check:
