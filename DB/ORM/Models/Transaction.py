@@ -2,6 +2,8 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
+from decimal import Decimal
+from typing import cast
 
 class Transaction(Base):
     __tablename__ = 'transaction'
@@ -10,7 +12,7 @@ class Transaction(Base):
     property_id = Column(Integer, ForeignKey('property.property_id'))
     transaction_type = Column(String(50))
     income_or_expense = Column(String(50))
-    amount = Column(DECIMAL(10, 2))
+    amount: Decimal = cast(Decimal, Column(DECIMAL(10, 2)))
     description = Column(String(200))
     date = Column(String(40))
     created_at = Column(String, default=lambda: datetime.now().strftime("%a %b %d %Y %H:%M:%S"))

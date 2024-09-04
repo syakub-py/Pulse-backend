@@ -2,8 +2,7 @@ from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 
 router = APIRouter()
 
-active_users = set()
-
+active_users: set[str] = set()
 
 def get_active_users():
     return active_users
@@ -21,5 +20,5 @@ async def init_websocket_connection(websocket: WebSocket, token: str):
         print(f"{token} disconnected. Active users: {list(active_users)}")
 
 
-def isUserActive(uid: int):
+def isUserActive(uid: int) -> bool:
     return uid in active_users
