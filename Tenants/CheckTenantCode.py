@@ -5,11 +5,12 @@ from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Utils.Session import session_scope as session
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
+from typing import Union, Dict, Any
 
 router = APIRouter()
 
 @router.get("/tenant/checkTenantCode/{tenantCode}")
-def checkTenantCode(tenantCode:str):
+def checkTenantCode(tenantCode:str) -> Union[Dict[str, Any]]:
     try:
         if not tenantCode:
             return {"message": "no tenant code was provided", "status_code": 500}

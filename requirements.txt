@@ -5,3 +5,5 @@ python-dotenv==1.0.1
 resend==2.4.0
 mypy==1.11.2
 pandas-stubs==2.2.2.240807
+ollama==0.3.2
+googlemaps==4.10.0

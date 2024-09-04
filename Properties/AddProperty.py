@@ -3,11 +3,12 @@ from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.Property import Property
 from .Classes.PropertyDetails import PropertyDetails
+from typing import Union, Dict, Any
 
 router = APIRouter()
 
 @router.post("/property/addProperty/{userId}")
-def addProperty(userId: str, propertyDetails: PropertyDetails):
+def addProperty(userId: str, propertyDetails: PropertyDetails) -> Union[int, Dict[str, Any]]:
     logger.info(f"Adding property for user: {userId}")
     if not userId:
         logger.error("No userId provided")
@@ -30,7 +31,7 @@ def addProperty(userId: str, propertyDetails: PropertyDetails):
             db_session.commit()
 
             logger.info(f"Property added successfully. Property ID: {new_property.property_id}")
-            return new_property.property_id
+            return int(new_property.property_id)
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error: {str(e)}")

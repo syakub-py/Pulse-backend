@@ -7,6 +7,7 @@ from DB.ORM.Models.Todo import Todo
 import ollama
 from dotenv import load_dotenv
 import os
+from typing import Union, Dict, Any
 
 from .Classes.TodoDetails import TodoDetails
 
@@ -112,7 +113,7 @@ place_types = [
 ]
 
 @router.post("/todo/addTodo/")
-def addTodo(todo: TodoDetails):
+def addTodo(todo: TodoDetails) -> Union[int, Dict[str, Any]]:
     if not todo:
         return {"message": "no todo details were provided", "status_code": 500}
     try:
@@ -141,16 +142,10 @@ def addTodo(todo: TodoDetails):
 
             db_session.refresh(new_todo)
 
-            return new_todo.todo_id
+            return int(new_todo.todo_id)
     except Exception as e:
         logger.error("Error adding the todo: {}".format(e))
         db_session.rollback()
         return {"message": str(e), "status_code": 500}
     finally:
         db_session.close()
-
-
-
-
-
-

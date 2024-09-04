@@ -5,6 +5,7 @@ from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
+from typing import Union, Dict, Any
 
 from LoggerConfig import pulse_logger as logger
 
@@ -12,7 +13,7 @@ router = APIRouter()
 
 
 @router.delete("/lease/deleteLease/{leaseId}")
-def deleteLease(leaseId: int):
+def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:
         logger.error("No leaseId provided")
@@ -40,6 +41,7 @@ def deleteLease(leaseId: int):
             db_session.commit()
 
             logger.info(f"Lease and associated tenants deleted successfully: {leaseId}")
+            return None
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error deleting a lease: {str(e)}")

@@ -42,13 +42,13 @@ def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
                 db_session.flush()
                 landlord_id = (
                     db_session.query(User.user_id)
-                    .join(PropertyLease, user.LeaseId == PropertyLease.lease_id)
+                    .join(PropertyLease, user.LeaseId == int(PropertyLease.lease_id))
                     .join(Property, Property.property_id == PropertyLease.property_id)
                     .join(User, Property.owner_id == User.user_id)
                     .first()
                 )
 
-                createChat(landlord_id, new_user.user_id)
+                createChat(landlord_id, int(new_user.user_id))
 
             db_session.commit()
 

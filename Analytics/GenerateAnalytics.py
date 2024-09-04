@@ -7,10 +7,11 @@ from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.Transaction import Transaction
 from sqlalchemy import func, cast, Date
+from typing import Union, Dict, Any
 
 router = APIRouter()
 
-def generate_random_rgba():
+def generate_random_rgba() -> str:
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
@@ -18,7 +19,7 @@ def generate_random_rgba():
     return f"rgba({r}, {g}, {b}, {a})"
 
 @router.get("/analytics/generateExpenseAnalytics/{propertyId}")
-def generateExpenseAnalytics(propertyId: int):
+def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict[str, Any]]]:
     try:
         with session() as db_session:
             property = db_session.query(Property).filter(Property.property_id == propertyId).first()
@@ -74,7 +75,7 @@ def generateExpenseAnalytics(propertyId: int):
         return {"message": str(e), "status_code": 500}
 
 @router.get("/analytics/generateIncomeAnalytics/{propertyId}")
-def generateIncomeAnalytics(propertyId: int):
+def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
     try:
         with session() as db_session:
 

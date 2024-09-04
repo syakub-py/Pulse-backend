@@ -3,12 +3,13 @@ from fastapi import APIRouter
 
 from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
+from typing import Union, Dict, Any
 
 router = APIRouter()
 
 
 @router.get('/transaction/getTransaction/{propertyId}')
-def getTransactions(propertyId: int):
+def getTransactions(propertyId: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:
             transactions = db_session.query(Transaction).filter(Transaction.property_id == propertyId).all()

@@ -9,15 +9,17 @@ def get_active_users() -> set[str]:
 
 
 @router.websocket("/ws/")
-async def init_websocket_connection(websocket: WebSocket, token: str):
+async def init_websocket_connection(websocket: WebSocket, token: str) -> None:
     try:
         await websocket.accept()
         active_users.add(token)
         print(f"{token} connected. Active users: {list(active_users)}")
 
+        return None
     except WebSocketDisconnect:
         active_users.remove(token)
         print(f"{token} disconnected. Active users: {list(active_users)}")
+        return None
 
 
 def isUserActive(uid: int) -> bool:

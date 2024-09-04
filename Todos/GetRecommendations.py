@@ -6,6 +6,7 @@ import googlemaps
 
 from DB.ORM.Models.Todo import Todo
 from DB.ORM.Utils.Session import session_scope as session
+from typing import Union, Dict, Any
 
 
 router = APIRouter()
@@ -13,9 +14,12 @@ load_dotenv()
 
 
 @router.get("/todo/getRecommendations/{todoId}/{propertyAddress}")
-def getRecommendations(todoId: int, propertyAddress:str):
+def getRecommendations(todoId: int, propertyAddress:str) -> Union[str, Dict[str, Any]]:
     with session() as db_session:
         todo = db_session.query(Todo).filter(Todo.todo_id == todoId).first()
+
+        if todo is None:
+            return {"message": f"No todo found with ID {todoId}", "status_code": 404}
 
         gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_KEY"))
         geocode_result = gmaps.geocode(propertyAddress)
