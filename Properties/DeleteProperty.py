@@ -9,7 +9,7 @@ from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from typing import Dict, Any
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 router = APIRouter()
 
@@ -24,52 +24,43 @@ def deleteProperty(propertyId: int) -> Dict[str, Any]:
                 logger.error(f"Property {propertyId} not found")
                 return {"message": "Property not found", "status_code": 500}
 
-            property_leases_stmt = select(PropertyLease).where(PropertyLease.property_id == propertyId)
-            property_leases_to_delete = db_session.execute(property_leases_stmt).scalars().all()
-            lease_ids = [pl.lease_id for pl in property_leases_to_delete]
+            tenant_leases_delete_stmt = (
+                delete(TenantLease)
+                .where(TenantLease.lease_id.in_(
+                    select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
+                ))
+            )
+            db_session.execute(tenant_leases_delete_stmt)
 
-            leases_stmt = select(Lease).where(Lease.lease_id.in_(lease_ids))
-            leases_to_delete = db_session.execute(leases_stmt).scalars().all()
+            property_leases_delete_stmt = (
+                delete(PropertyLease)
+                .where(PropertyLease.property_id == propertyId)
+            )
+            db_session.execute(property_leases_delete_stmt)
 
-            tenant_ids = []
-            for lease in leases_to_delete:
-                tenant_leases_stmt = select(TenantLease).where(TenantLease.lease_id == lease.lease_id)
-                tenant_leases = db_session.execute(tenant_leases_stmt).scalars().all()
-                tenant_ids.extend([tl.tenant_id for tl in tenant_leases])
-                for tenant_lease in tenant_leases:
-                    db_session.delete(tenant_lease)
+            leases_delete_stmt = (
+                delete(Lease)
+                .where(Lease.lease_id.in_(
+                    select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
+                ))
+            )
+            db_session.execute(leases_delete_stmt)
 
-            todos_stmt = select(Todo).where(Todo.property_id == propertyId)
-            todos_to_delete = db_session.execute(todos_stmt).scalars().all()
+            todos_delete_stmt = delete(Todo).where(Todo.property_id == propertyId)
+            db_session.execute(todos_delete_stmt)
 
-            transactions_stmt = select(Transaction).where(Transaction.property_id == propertyId)
-            transactions_to_delete = db_session.execute(transactions_stmt).scalars().all()
+            transactions_delete_stmt = delete(Transaction).where(Transaction.property_id == propertyId)
+            db_session.execute(transactions_delete_stmt)
 
-            pending_signups_stmt = select(PendingTenantSignUp).where(PendingTenantSignUp.lease_id.in_(lease_ids))
-            pending_signups_to_delete = db_session.execute(pending_signups_stmt).scalars().all()
-
-            for signup in pending_signups_to_delete:
-                db_session.delete(signup)
-            db_session.flush()
-
-            for property_lease in property_leases_to_delete:
-                db_session.delete(property_lease)
-            db_session.flush()
-
-            for lease in leases_to_delete:
-                db_session.delete(lease)
-            db_session.flush()
+            pending_signups_delete_stmt = (
+                delete(PendingTenantSignUp)
+                .where(PendingTenantSignUp.lease_id.in_(
+                    select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
+                ))
+            )
+            db_session.execute(pending_signups_delete_stmt)
 
             db_session.delete(property_to_delete)
-            db_session.flush()
-
-            for todo in todos_to_delete:
-                db_session.delete(todo)
-            db_session.flush()
-
-            for transaction in transactions_to_delete:
-                db_session.delete(transaction)
-            db_session.flush()
 
             db_session.commit()
 
