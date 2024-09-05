@@ -21,4 +21,6 @@ async def init_websocket_connection(websocket: WebSocket, token: str) -> None:
         return None
 
 def isUserActive(uid: int) -> bool:
-    return uid in active_users
+    return False
+    # TODO: Fix this
+    # return uid in active_users
