@@ -7,7 +7,7 @@ import googlemaps
 from DB.ORM.Models.Todo import Todo
 from DB.ORM.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
-
+from sqlalchemy import select
 
 router = APIRouter()
 load_dotenv()
@@ -16,7 +16,8 @@ load_dotenv()
 @router.get("/todo/getRecommendations/{todoId}/{propertyAddress}")
 def getRecommendations(todoId: int, propertyAddress:str) -> Union[str, Dict[str, Any]]:
     with session() as db_session:
-        todo = db_session.query(Todo).filter(Todo.todo_id == todoId).first()
+        todo_select_stmt = select(Todo).filter(Todo.todo_id == todoId)
+        todo = db_session.execute(todo_select_stmt).first()
 
         if todo is None:
             return {"message": f"No todo found with ID {todoId}", "status_code": 404}
@@ -26,7 +27,7 @@ def getRecommendations(todoId: int, propertyAddress:str) -> Union[str, Dict[str,
         location = geocode_result[0]['geometry']['location']
         latitude, longitude = location['lat'], location['lng']
 
-        places_result = gmaps.places_nearby(location=(latitude, longitude), radius=1500, type=str(todo.recommended_professional).lower())
+        places_result = gmaps.places_nearby(location=(latitude, longitude), radius=1500, type=str(todo[0].recommended_professional).lower())
 
         place_details = [
             {

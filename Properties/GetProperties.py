@@ -9,11 +9,13 @@ from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Property import Property
 from LoggerConfig import pulse_logger as logger
+from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
 @router.get("/property/getProperty/{userId}")
-def getProperties(userId: int):
+def getProperties(userId: int) -> Union[str, Dict[str, Any]]:
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:
@@ -21,8 +23,8 @@ def getProperties(userId: int):
             TenantAlias = aliased(User)
             TenantLeaseAlias = aliased(TenantLease)
 
-            query = (
-                db_session.query(
+            property_stmt = (
+                select(
                     Property.property_id,
                     Property.nick_name,
                     Property.address,
@@ -46,7 +48,7 @@ def getProperties(userId: int):
                 )
             )
 
-            properties = query.all()
+            properties = db_session.execute(property_stmt).all()
 
             properties_list = [
                 {

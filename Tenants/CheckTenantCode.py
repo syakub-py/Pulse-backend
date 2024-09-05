@@ -6,6 +6,7 @@ from DB.ORM.Utils.Session import session_scope as session
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
+from sqlalchemy import select, update
 
 router = APIRouter()
 
@@ -15,15 +16,20 @@ def checkTenantCode(tenantCode:str) -> Union[Dict[str, Any]]:
         if not tenantCode:
             return {"message": "no tenant code was provided", "status_code": 500}
         with session() as db_session:
-            result = db_session.query(PendingTenantSignUp).filter(PendingTenantSignUp.code == tenantCode).first()
-            if result:
-                if result.expires and result.expires >= datetime.date(datetime.now()) and not result.is_code_used:
-                    db_session.query(PendingTenantSignUp).filter(
-                        PendingTenantSignUp.code == tenantCode
-                    ).update({"is_code_used": True})
-                    return {"isValid": True, "lease_id": result.lease_id}
+            pending_signup_select = select(PendingTenantSignUp).filter(PendingTenantSignUp.code == tenantCode)
+            result = db_session.execute(pending_signup_select).first()
 
-            return {"isValid": False, "lease_id": 0}
+            # Check for invalid conditions first
+            if not result or not result[0].expires or result[0].expires < datetime.date(datetime.now()) or result[0].is_code_used:
+                return {"isValid": False, "lease_id": 0}
+
+            pending_signup_update = update(PendingTenantSignUp).where(
+                PendingTenantSignUp.code == tenantCode
+            ).values(is_code_used=True)
+            db_session.execute(pending_signup_update)
+            db_session.commit()
+
+            return {"isValid": True, "lease_id": result[0].lease_id}
     except Exception as e:
         logger.error(f"Error retrieving properties: {str(e)}")
         return {"message": str(e), "status_code": 500}

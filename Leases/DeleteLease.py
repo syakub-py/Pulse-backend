@@ -1,16 +1,15 @@
 from fastapi import APIRouter
 
 from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
-
 
 @router.delete("/lease/deleteLease/{leaseId}")
 def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
@@ -21,17 +20,23 @@ def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
 
     try:
         with session() as db_session:
-            tenant_leases = db_session.query(TenantLease).filter(TenantLease.lease_id == leaseId).all()
+            tenant_leases_stmt = select(TenantLease).where(TenantLease.lease_id == leaseId)
+            tenant_leases = db_session.execute(tenant_leases_stmt).scalars().all()
+
             for tenant_lease in tenant_leases:
                 db_session.delete(tenant_lease)
             db_session.flush()
 
-            property_lease = db_session.query(PropertyLease).filter(PropertyLease.lease_id == leaseId).first()
+            property_lease_stmt = select(PropertyLease).where(PropertyLease.lease_id == leaseId)
+            property_lease = db_session.execute(property_lease_stmt).scalars().first()
+
             if property_lease:
                 db_session.delete(property_lease)
                 db_session.flush()
 
-            lease = db_session.query(Lease).filter(Lease.lease_id == leaseId).first()
+            lease_stmt = select(Lease).where(Lease.lease_id == leaseId)
+            lease = db_session.execute(lease_stmt).scalars().first()
+
             if not lease:
                 logger.error(f"Lease not found: {leaseId}")
                 return {"message": "Lease not found", "status_code": 500}

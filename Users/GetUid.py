@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from DB.ORM.Models.User import User
 from DB.ORM.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -9,11 +10,12 @@ router = APIRouter()
 def getUid(firebase_uid: str, username: str) -> Union[int, Dict[str, Any]]:
     try:
         with session() as db_session:
-            user = db_session.query(User).filter(User.email == username).first()
-            if not user:
+            user_select_stmt = select(User).filter(User.email == username)
+            result = db_session.execute(user_select_stmt).first()
+            if result is None:
                 return {"message": "User not found", "status_code": 404}
             if firebase_uid:
-                return int(user.user_id)
+                return int(result[0].user_id)
             return {"message": "User not authenticated", "status_code": 500}
     except Exception as e:
         return {"message": str(e), "status_code": 500}

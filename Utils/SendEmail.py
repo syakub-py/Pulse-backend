@@ -10,6 +10,7 @@ from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from datetime import datetime, timedelta
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 
 router = APIRouter()
@@ -19,10 +20,12 @@ router = APIRouter()
 def sendEmail(tenantEmail: str, LeaseId: int) -> Union[Dict[str, Any], None]:
     try:
         with session() as db_session:
-            existing_user = db_session.query(User).filter(func.lower(User.email) == tenantEmail.lower()).first()
-            if existing_user:
+            user_select_stmt = select(User).filter(func.lower(User.email) == tenantEmail.lower())
+            result = db_session.execute(user_select_stmt).first()
+
+            if result:
                 new_tenant_lease = TenantLease(
-                    tenant_id=existing_user.user_id,
+                    tenant_id=result[0].user_id,
                     lease_id=LeaseId
                 )
                 db_session.add(new_tenant_lease)

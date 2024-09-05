@@ -1,3 +1,7 @@
+import pandas as pd
+from sqlalchemy import select
+from fastapi import APIRouter
+from typing import Union, Dict, Any
 from LoggerConfig import pulse_logger as logger
 
 from DB.ORM.Utils.Session import session_scope as session
@@ -7,38 +11,35 @@ from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.Property import Property
 
-from fastapi import APIRouter
-
-import pandas as pd
-
 router = APIRouter()
 
 @router.get("/tenant/getTenants/{userId}")
-def getTenants(userId: int):
+def getTenants(userId: int) -> Union[str, Dict[str, Any]]:
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:
         with session() as db_session:
-            query = db_session.query(
-                User.user_id.label('id'),
-                User.name.label('name'),
-                User.annual_income.label('annual_income'),
-                User.phone_number.label('phone_number'),
-                User.date_of_birth.label('date_of_birth'),
-                User.email.label('email'),
-                User.social_security.label('social_security'),
-                User.document_provided_url.label('document_provided_url'),
-                User.document_type.label('document_type'),
-                Property.firebase_uid.label('user_id'),
-                TenantLease.lease_id.label('lease_id')
-            ). \
-                join(TenantLease, User.user_id == TenantLease.tenant_id). \
-                join(Lease, TenantLease.lease_id == Lease.lease_id). \
-                join(PropertyLease, PropertyLease.lease_id == Lease.lease_id). \
-                join(Property, Property.property_id == PropertyLease.property_id). \
-                filter(Property.owner_id == userId)
-
-            tenants = query.all()
+            tenant_select = (
+                select(
+                    User.user_id.label('id'),
+                    User.name.label('name'),
+                    User.annual_income.label('annual_income'),
+                    User.phone_number.label('phone_number'),
+                    User.date_of_birth.label('date_of_birth'),
+                    User.email.label('email'),
+                    User.social_security.label('social_security'),
+                    User.document_provided_url.label('document_provided_url'),
+                    User.document_type.label('document_type'),
+                    Property.firebase_uid.label('user_id'),
+                    TenantLease.lease_id.label('lease_id')
+                )
+                .join(TenantLease, User.user_id == TenantLease.tenant_id)
+                .join(Lease, TenantLease.lease_id == Lease.lease_id)
+                .join(PropertyLease, PropertyLease.lease_id == Lease.lease_id)
+                .join(Property, Property.property_id == PropertyLease.property_id)
+                .filter(Property.owner_id == userId)
+            )
+            tenants = db_session.execute(tenant_select).all()
 
             tenants_list = [
                 {

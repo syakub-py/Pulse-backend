@@ -3,16 +3,19 @@ from fastapi import APIRouter
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Todo import Todo
 from LoggerConfig import pulse_logger as logger
+from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
 @router.get("/todo/getTodos/{propertyId}")
-def getTodos(propertyId:int):
+def getTodos(propertyId:int) -> Union[str, Dict[str, Any]]:
     if not propertyId:
         return {"message": "propertyId is required", "status_code": 500}
     try:
         with session() as db_session:
-            todos = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
+            todo_select_stmt = select(Todo).filter(Todo.property_id == propertyId)
+            todos = db_session.execute(todo_select_stmt).all()
 
             todos_list = [
                 {

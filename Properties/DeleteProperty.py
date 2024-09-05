@@ -9,11 +9,12 @@ from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
+from typing import Dict, Any
 
 router = APIRouter()
 
 @router.delete("/property/deleteProperty/{propertyId}")
-def deleteProperty(propertyId: int):
+def deleteProperty(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             property_to_delete = db_session.query(Property).filter(Property.property_id == propertyId).first()

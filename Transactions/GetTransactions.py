@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -12,7 +13,8 @@ router = APIRouter()
 def getTransactions(propertyId: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:
-            transactions = db_session.query(Transaction).filter(Transaction.property_id == propertyId).all()
+            transaction_select_stmt = select(Transaction).filter(Transaction.property_id == propertyId)
+            transactions = db_session.execute(transaction_select_stmt).all()
 
             transaction_data = [
                 {
