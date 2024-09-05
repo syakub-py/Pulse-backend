@@ -3,7 +3,7 @@ from sqlalchemy import select
 from datetime import datetime
 from typing import Dict, Any
 
-from LoggerConfig import pulse_logger as logger
+from App.LoggerConfig import pulse_logger as logger
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease

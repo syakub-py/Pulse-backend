@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, Session
 
 from App.DB.Base import Base
 from App.DB.Config import DATABASE_URL
-from LoggerConfig import pulse_database_logger as logger
+from App.LoggerConfig import pulse_database_logger as logger
 
 @contextmanager
 def session_scope() -> Generator[scoped_session[Session], None, None]:

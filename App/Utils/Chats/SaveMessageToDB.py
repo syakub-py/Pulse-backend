@@ -1,5 +1,5 @@
 from typing import Union
-from LoggerConfig import pulse_database_logger as logger
+from App.LoggerConfig import pulse_database_logger as logger
 from App.DB.Models.Message import Message
 from App.DB.Session import session_scope as session
 

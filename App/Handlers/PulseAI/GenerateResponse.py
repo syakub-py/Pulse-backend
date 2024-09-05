@@ -2,7 +2,7 @@ import os
 from typing import Dict, Any
 import ollama
 from dotenv import load_dotenv
-from LoggerConfig import pulse_logger as logger
+from App.LoggerConfig import pulse_logger as logger
 from App.Handlers.Chat.GetChatMessages import getChatMessages
 from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 from ollama import Message

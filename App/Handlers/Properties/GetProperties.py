@@ -7,7 +7,7 @@ from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.Property import Property
-from LoggerConfig import pulse_logger as logger
+from App.LoggerConfig import pulse_logger as logger
 from typing import Dict, Any
 from sqlalchemy import select
 

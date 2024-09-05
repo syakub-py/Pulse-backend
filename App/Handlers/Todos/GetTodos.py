@@ -1,7 +1,7 @@
 import pandas as pd
 from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
-from LoggerConfig import pulse_logger as logger
+from App.LoggerConfig import pulse_logger as logger
 from typing import Dict, Any
 from sqlalchemy import select
 

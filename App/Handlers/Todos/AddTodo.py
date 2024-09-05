@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from LoggerConfig import pulse_logger as logger
+from App.LoggerConfig import pulse_logger as logger
 from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
 import ollama
