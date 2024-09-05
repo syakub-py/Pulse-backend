@@ -9,6 +9,6 @@ router = APIRouter()
 
 @router.post("/chat/sendMessage/")
 async def send_message(message: Message, websocket: WebSocket) -> None:
-    saveMessagesToDB(message.chat_id, message.message, message.sender_id)
-    if isUserActive(message.sender_id):
-        await websocket.send_text(message.message)
+    saveMessagesToDB(int(message.chat_id), str(message.message), int(message.sender_id))
+    if isUserActive(int(message.sender_id)):
+        await websocket.send_text(str(message.message))

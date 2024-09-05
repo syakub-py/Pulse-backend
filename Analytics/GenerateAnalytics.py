@@ -8,6 +8,7 @@ from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.Transaction import Transaction
 from sqlalchemy import func, cast, Date
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -22,20 +23,32 @@ def generate_random_rgba() -> str:
 def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict[str, Any]]]:
     try:
         with session() as db_session:
-            property = db_session.query(Property).filter(Property.property_id == propertyId).first()
+            property_filter_stmt = (
+                select(Property)
+                .filter(Property.property_id == propertyId)
+            )
+            property = db_session.execute(property_filter_stmt).first()
+
             if property is None:
                 return {"message": f"No property found with ID {propertyId}", "status_code": 404}
 
-            lease = db_session.query(Lease).join(PropertyLease, Lease.lease_id == PropertyLease.lease_id).filter(PropertyLease.property_id == propertyId).first()
+            lease_filter_stmt = (
+                select(Lease)
+                .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
+                .filter(PropertyLease.property_id == propertyId)
+            )
+            lease = db_session.execute(lease_filter_stmt).first()
+
             if lease is None:
                 return {"message": f"No lease found with ID {propertyId}", "status_code": 404}
 
-            expense_transactions = (
-                db_session.query(Transaction)
+            transaction_filter_stmt = (
+                select(Transaction)
                 .filter(Transaction.property_id == propertyId)
                 .filter(Transaction.income_or_expense == "expense")
-                .all()
             )
+            expense_transactions = db_session.execute(transaction_filter_stmt).all()
+
             mapped_expense_data = [
                 {
                     "name": transaction.transaction_type,
@@ -78,17 +91,26 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
 def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
     try:
         with session() as db_session:
+            property_filter_stmt = (
+                select(Property)
+                .filter(Property.property_id == propertyId)
+            )
+            property = db_session.execute(property_filter_stmt).first()
 
-            property = db_session.query(Property).filter(Property.property_id == propertyId).first()
             if property is None:
                 return {"message": f"No property found with ID {propertyId}", "status_code": 404}
 
-            lease = db_session.query(Lease).join(PropertyLease, Lease.lease_id == PropertyLease.lease_id).filter(PropertyLease.property_id == propertyId).first()
+            lease_filter_stmt = (
+                select(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
+                .filter(PropertyLease.property_id == propertyId)
+            )
+            lease = db_session.execute(lease_filter_stmt).first()
+
             if lease is None:
                 return {"message": f"No lease found with ID {propertyId}", "status_code": 404}
 
-            income_transactions = (
-                db_session.query(
+            income_transactions_filter_stmt = (
+                select(
                     func.to_char(cast(Transaction.date, Date), 'MM').label('month'),
                     func.sum(Transaction.amount).label('total_amount')
                 )
@@ -96,8 +118,9 @@ def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
                 .filter(Transaction.income_or_expense == "income")
                 .group_by('month')
                 .order_by('month')
-                .all()
             )
+            income_transactions = db_session.execute(income_transactions_filter_stmt).all()
+
             monthly_data = {str(i).zfill(2): 0 for i in range(1, 13)}
 
             for transaction in income_transactions:

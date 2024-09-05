@@ -4,7 +4,7 @@ from DB.ORM.Models.ChatParticipant import ChatParticipant
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
-
+from sqlalchemy import select
 
 def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
     try:
@@ -12,13 +12,20 @@ def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
             return {"message": "landlord and tenant are the same", "status_code": 500}
 
         with session() as db_session:
-            existing_chat = db_session.query(Chat).filter(
-                or_(
-                    Chat.last_message_sender_id == partyOneId,
-                    Chat.last_message_sender_id == partyTwoId
+            stmt = (
+                select(Chat)
+                .filter(
+                    or_(
+                        Chat.last_message_sender_id == partyOneId,
+                        Chat.last_message_sender_id == partyTwoId
+                    )
                 )
-            ).first()
-            if existing_chat:
+            )
+
+            result = db_session.execute(stmt).first()
+
+            if result:
+                existing_chat: Chat = result[0]
                 logger.info('Chat already exists')
                 return int(existing_chat.chat_id)
 

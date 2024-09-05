@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from sqlalchemy import select
 
 from DB.ORM.Models.Property import Property
 from DB.ORM.Models.PropertyLease import PropertyLease
@@ -40,13 +41,16 @@ def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
                 )
                 db_session.add(new_tenant_lease)
                 db_session.flush()
-                landlord_id = (
-                    db_session.query(User.user_id)
-                    .join(PropertyLease, user.LeaseId == int(PropertyLease.lease_id))
+
+                stmt = (
+                    select(User.user_id)
+                    .join(PropertyLease, user.LeaseId == PropertyLease.lease_id)
                     .join(Property, Property.property_id == PropertyLease.property_id)
                     .join(User, Property.owner_id == User.user_id)
-                    .first()
                 )
+
+                result = db_session.execute(stmt).first()
+                landlord_id = result[0] if result else None
 
                 createChat(landlord_id, int(new_user.user_id))
 

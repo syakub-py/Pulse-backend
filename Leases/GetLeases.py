@@ -9,31 +9,35 @@ from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 import pandas as pd
+from typing import Union, Dict, Any
+from sqlalchemy import select
 
 from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
 @router.get("/lease/getLeases/{property_id}")
-def getLeases(property_id: int):
+def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:
-            leases = (
-                db_session.query(Lease, User.firebase_uid)
+            select_leases_stmt = (
+                select(Lease, User.firebase_uid)
                 .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .join(TenantLease, Lease.lease_id == TenantLease.lease_id)
                 .join(User, TenantLease.tenant_id == User.user_id)
                 .filter(PropertyLease.property_id == property_id)
-                .all()
             )
 
-            pending_signups = (
-                db_session.query(Lease, PendingTenantSignUp)
+            leases = db_session.execute(select_leases_stmt).all()
+
+            pending_signups_stmt = (
+                select(Lease, PendingTenantSignUp)
                 .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .join(PendingTenantSignUp, Lease.lease_id == PendingTenantSignUp.lease_id)
                 .filter(PropertyLease.property_id == property_id)
-                .all()
             )
+
+            pending_signups = db_session.execute(pending_signups_stmt).all()
 
             lease_data = [
                 {

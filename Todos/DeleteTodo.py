@@ -3,6 +3,7 @@ from LoggerConfig import pulse_logger as logger
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Todo import Todo
 from typing import Union, Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -13,8 +14,13 @@ def deleteTodo(todo_id: int) -> Union[None, Dict[str, Any]]:
         return {"message": "todo_id was not provided", "status_code": 500}
     try:
         with session() as db_session:
-            todo = db_session.query(Todo).filter(Todo.id == todo_id).first()
-            db_session.delete(todo)
+            todo_filter_stmt = select(Todo).filter(Todo.todo_id == todo_id)
+            result = db_session.execute(todo_filter_stmt).first()
+
+            if result is None:
+                return {"message": "todo not found", "status_code": 500}
+
+            db_session.delete(result[0])
             db_session.commit()
             logger.info(f'Deleted todo {todo_id}')
         return None
