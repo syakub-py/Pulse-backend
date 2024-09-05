@@ -5,7 +5,7 @@ from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.Lease import Lease
 from typing import Union, Dict, Any
-from sqlalchemy import select
+from sqlalchemy import delete
 
 from LoggerConfig import pulse_logger as logger
 
@@ -20,29 +20,24 @@ def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
 
     try:
         with session() as db_session:
-            tenant_leases_stmt = select(TenantLease).where(TenantLease.lease_id == leaseId)
-            tenant_leases = db_session.execute(tenant_leases_stmt).scalars().all()
+            tenant_leases_delete_stmt = delete(TenantLease).where(TenantLease.lease_id == leaseId)
+            db_session.execute(tenant_leases_delete_stmt)
 
-            for tenant_lease in tenant_leases:
-                db_session.delete(tenant_lease)
             db_session.flush()
 
-            property_lease_stmt = select(PropertyLease).where(PropertyLease.lease_id == leaseId)
-            property_lease = db_session.execute(property_lease_stmt).scalars().first()
+            property_lease_delete_stmt = delete(PropertyLease).where(PropertyLease.lease_id == leaseId)
+            db_session.execute(property_lease_delete_stmt)
 
-            if property_lease:
-                db_session.delete(property_lease)
-                db_session.flush()
+            db_session.flush()
 
-            lease_stmt = select(Lease).where(Lease.lease_id == leaseId)
-            lease = db_session.execute(lease_stmt).scalars().first()
+            lease_delete_stmt = delete(Lease).where(Lease.lease_id == leaseId)
+            result = db_session.execute(lease_delete_stmt)
 
-            if not lease:
+            if result.rowcount == 0:
                 logger.error(f"Lease not found: {leaseId}")
                 return {"message": "Lease not found", "status_code": 500}
-            db_session.delete(lease)
-            db_session.flush()
 
+            db_session.flush()
             db_session.commit()
 
             logger.info(f"Lease and associated tenants deleted successfully: {leaseId}")
