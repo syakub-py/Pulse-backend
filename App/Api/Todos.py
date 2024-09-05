@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 from fastapi import APIRouter
 from Models.TodoDetails import TodoDetails
 from App.Handlers.Todos.AddTodo import addTodo
@@ -9,17 +9,17 @@ from App.Handlers.Todos.GetRecommendations import getRecommendations
 todoRoutes = APIRouter(prefix="/todo")
 
 @todoRoutes.post("/addTodo/", response_model=Dict)
-async def add_todo(todo: TodoDetails):
+def add_todo(todo: TodoDetails) -> (int | Dict[str, Any]):
     return addTodo(todo)
 
 @todoRoutes.delete("/deleteTodo/{todo_id}", response_model=Dict)
-async def delete_todo(todo_id: int):
+def delete_todo(todo_id: int) -> (None | Dict[str, Any]):
     return deleteTodo(todo_id)
 
 @todoRoutes.post("/getRecommendations/{todoId}/{propertyAddress}", response_model=Dict)
-async def get_recommendations(todoId: int, propertyAddress: str):
+def get_recommendations(todoId: int, propertyAddress: str) -> (str | Dict[str, Any]):
     return getRecommendations(todoId, propertyAddress)
 
 @todoRoutes.post("/getTodos/{propertyId}", response_model=Dict)
-async def get_todos(propertyId: int):
+def get_todos(propertyId: int) -> (str | Dict[str, Any]):
     return getTodos(propertyId)

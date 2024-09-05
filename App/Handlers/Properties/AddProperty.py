@@ -2,9 +2,9 @@ from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.Property import Property
 from App.Models.PropertyDetails import PropertyDetails
-from typing import Union, Dict, Any
+from typing import Dict, Any
 
-def addProperty(userId: str, propertyDetails: PropertyDetails) -> Union[int, Dict[str, Any]]:
+def addProperty(userId: str, propertyDetails: PropertyDetails) -> (int | Dict[str, Any]):
     logger.info(f"Adding property for user: {userId}")
     if not userId:
         logger.error("No userId provided")

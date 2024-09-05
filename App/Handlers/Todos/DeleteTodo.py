@@ -1,10 +1,10 @@
 from LoggerConfig import pulse_logger as logger
 from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import delete
 
-def deleteTodo(todo_id: int) -> Union[None, Dict[str, Any]]:
+def deleteTodo(todo_id: int) -> (None | Dict[str, Any]):
     if not todo_id:
         return {"message": "todo_id was not provided", "status_code": 500}
     try:

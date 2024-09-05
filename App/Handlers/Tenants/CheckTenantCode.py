@@ -4,10 +4,10 @@ from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 
 from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select, update
 
-def checkTenantCode(tenantCode:str) -> Union[Dict[str, Any]]:
+def checkTenantCode(tenantCode:str) -> Dict[str, Any]:
     try:
         if not tenantCode:
             return {"message": "no tenant code was provided", "status_code": 500}

@@ -6,7 +6,7 @@ from App.DB.Models.ChatParticipant import ChatParticipant
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
 
-def getChats(userId: int) -> Union[list[Dict[str, Any]], Dict[str, Any]]:
+def getChats(userId: int) -> (list[Dict[str, Any]] | Dict[str, Any]):
     try:
         with session() as db_session:
             ChatParticipantAlias = aliased(ChatParticipant)

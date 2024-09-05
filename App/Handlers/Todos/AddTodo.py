@@ -6,7 +6,7 @@ from App.DB.Models.Todo import Todo
 import ollama
 from dotenv import load_dotenv
 import os
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from ollama import Message
 
 from App.Models.TodoDetails import TodoDetails
@@ -111,7 +111,7 @@ place_types = [
     "zoo"
 ]
 
-def addTodo(todo: TodoDetails) -> Union[int, Dict[str, Any]]:
+def addTodo(todo: TodoDetails) -> (int | Dict[str, Any]):
     if not todo:
         return {"message": "no todo details were provided", "status_code": 500}
     try:

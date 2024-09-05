@@ -1,5 +1,5 @@
 import os
-from typing import Union, Dict, Any
+from typing import Dict, Any
 import ollama
 from dotenv import load_dotenv
 from LoggerConfig import pulse_logger as logger
@@ -9,7 +9,7 @@ from ollama import Message
 
 load_dotenv()
 
-def generateResponse(chat_id: int, prompt: str) -> Union[Dict[str, str], Dict[str, Any]]:
+def generateResponse(chat_id: int, prompt: str) -> (Dict[str, str] | Dict[str, Any]):
     try:
         messages = getChatMessages(chat_id)
         if not messages:

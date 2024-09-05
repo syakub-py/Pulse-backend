@@ -3,10 +3,10 @@ from App.DB.Models.Chat import Chat
 from App.DB.Models.ChatParticipant import ChatParticipant
 from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
-def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
+def createChat(partyOneId: int, partyTwoId: int) -> (int | Dict[str, Any]):
     try:
         if partyOneId == partyTwoId:
             return {"message": "landlord and tenant are the same", "status_code": 500}

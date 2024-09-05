@@ -1,12 +1,12 @@
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.Lease import Lease
-from typing import Union, Dict, Any
+from typing import Dict, Any
 
 from LoggerConfig import pulse_logger as logger
 from Models.LeaseDetails import LeaseDetails
 
-def addLease(propertyId: int, lease: LeaseDetails) -> Union[int, Dict[str, Any]]:
+def addLease(propertyId: int, lease: LeaseDetails) -> (int | Dict[str, Any]):
     logger.info(f"Adding lease for property: {propertyId}")
 
     if not propertyId:

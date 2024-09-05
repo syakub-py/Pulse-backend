@@ -2,10 +2,10 @@ import pandas as pd
 from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
 from LoggerConfig import pulse_logger as logger
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
-def getTodos(propertyId: int) -> Union[str, Dict[str, Any]]:
+def getTodos(propertyId: int) -> (str | Dict[str, Any]):
     if not propertyId:
         return {"message": "propertyId is required", "status_code": 500}
     try:

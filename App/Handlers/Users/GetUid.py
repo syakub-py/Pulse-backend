@@ -1,9 +1,9 @@
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
-def getUid(firebase_uid: str, username: str) -> Union[int, Dict[str, Any]]:
+def getUid(firebase_uid: str, username: str) -> (int | Dict[str, Any]):
     try:
         with session() as db_session:
             user_select_stmt = select(User).filter(User.email == username)

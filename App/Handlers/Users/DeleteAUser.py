@@ -1,9 +1,9 @@
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import delete
 
-def deleteAUser(userId: int) -> Union[None, Dict[str, Any]]:
+def deleteAUser(userId: int) -> (None | Dict[str, Any]):
     try:
         with session() as db_session:
             user_delete_stmt = delete(User).where(User.user_id == userId)

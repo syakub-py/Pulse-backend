@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 from fastapi import APIRouter
 from App.Handlers.Transactions.GetTransactions import getTransactions
 from App.Handlers.Transactions.AddTransaction import addTransaction
@@ -7,9 +7,9 @@ from App.Models.TransactionDetails import TransactionDetails
 transactionsRoutes = APIRouter(prefix="/transaction")
 
 @transactionsRoutes.get("/getTransaction/{propertyId}", response_model=Dict)
-async def get_transactions(propertyId: int):
+def get_transactions(propertyId: int) -> (str | Dict[str, Any]):
     return getTransactions(propertyId)
 
 @transactionsRoutes.get("/addTransaction/", response_model=Dict)
-async def add_transaction(transaction: TransactionDetails):
+def add_transaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
     return addTransaction(transaction)

@@ -1,7 +1,7 @@
 import pandas as pd
 from sqlalchemy import select
 from datetime import datetime
-from typing import Union, Dict, Any
+from typing import Dict, Any
 
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
@@ -11,7 +11,7 @@ from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 
-def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
+def getLeases(property_id: int) -> (str | Dict[str, Any]):
     try:
         with session() as db_session:
             select_leases_stmt = (

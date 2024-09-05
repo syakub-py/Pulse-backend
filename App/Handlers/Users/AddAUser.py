@@ -7,9 +7,9 @@ from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
 from App.Models.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
-from typing import Union, Dict, Any
+from typing import Dict, Any
 
-def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
+def addAUser(user: UserDetails) -> (int | Dict[str, Any]):
     try:
         with session() as db_session:
             new_user = User(

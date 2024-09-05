@@ -8,10 +8,10 @@ from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.Property import Property
 from LoggerConfig import pulse_logger as logger
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
-def getProperties(userId: int) -> Union[str, Dict[str, Any]]:
+def getProperties(userId: int) -> (str | Dict[str, Any]):
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:

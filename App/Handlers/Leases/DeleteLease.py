@@ -2,12 +2,12 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.Lease import Lease
 from App.DB.Models.TenantLease import TenantLease
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import delete
 
 from LoggerConfig import pulse_logger as logger
 
-def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
+def deleteLease(leaseId: int) -> (None | Dict[str, Any]):
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:
         logger.error("No leaseId provided")

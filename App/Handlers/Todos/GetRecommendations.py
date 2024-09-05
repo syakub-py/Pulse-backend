@@ -5,12 +5,12 @@ import googlemaps
 
 from App.DB.Models.Todo import Todo
 from App.DB.Session import session_scope as session
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
 load_dotenv()
 
-def getRecommendations(todoId: int, propertyAddress: str) -> Union[str, Dict[str, Any]]:
+def getRecommendations(todoId: int, propertyAddress: str) -> (str | Dict[str, Any]):
     with session() as db_session:
         todo_select_stmt = select(Todo).filter(Todo.todo_id == todoId)
         todo = db_session.execute(todo_select_stmt).scalars().first()

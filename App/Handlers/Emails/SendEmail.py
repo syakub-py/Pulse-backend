@@ -8,10 +8,10 @@ from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from datetime import datetime, timedelta
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
-def sendEmail(tenantEmail: str, LeaseId: int) -> Union[Dict[str, Any], None]:
+def sendEmail(tenantEmail: str, LeaseId: int) -> (None | Dict[str, Any]):
     try:
         with session() as db_session:
             user_select_stmt = select(User).filter(func.lower(User.email) == tenantEmail.lower())

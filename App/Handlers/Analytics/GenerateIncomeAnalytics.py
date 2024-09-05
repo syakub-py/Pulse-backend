@@ -1,5 +1,5 @@
 from sqlalchemy import func, cast, Date
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from sqlalchemy import select
 
 from App.DB.Models.Property import Property
@@ -9,7 +9,7 @@ from App.DB.Models.Lease import Lease
 from App.DB.Models.Transaction import Transaction
 from App.Utils.GenerateRandomRGBA import generate_random_rgba
 
-def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
+def generateIncomeAnalytics(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             property_filter_stmt = select(Property).filter(Property.property_id == propertyId)

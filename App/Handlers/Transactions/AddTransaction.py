@@ -1,10 +1,10 @@
 from App.DB.Models.Transaction import Transaction
 from App.DB.Session import session_scope as session
-from typing import Union, Dict, Any
+from typing import Dict, Any
 
 from App.Models.TransactionDetails import TransactionDetails
 
-def addTransaction(transaction: TransactionDetails) -> Union[int, Dict[str, Any]]:
+def addTransaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
     try:
         with session() as db_session:
             new_transaction = Transaction(
