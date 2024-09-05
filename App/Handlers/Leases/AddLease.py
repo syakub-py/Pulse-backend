@@ -1,6 +1,6 @@
-from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Utils.Session import session_scope as session
-from DB.ORM.Models.Lease import Lease
+from App.DB.Models.PropertyLease import PropertyLease
+from App.DB.Utils.Session import session_scope as session
+from App.DB.Models.Lease import Lease
 from fastapi import APIRouter
 from typing import Union, Dict, Any
 

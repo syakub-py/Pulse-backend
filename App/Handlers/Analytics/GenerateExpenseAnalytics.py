@@ -1,11 +1,12 @@
 import random
 from fastapi import APIRouter
 
-from DB.ORM.Models.Property import Property
-from DB.ORM.Utils.Session import session_scope as session
-from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Models.Lease import Lease
-from DB.ORM.Models.Transaction import Transaction
+from App.DB.Models.Property import Property
+from App.DB.Utils.Session import session_scope as session
+from App.DB.Models.PropertyLease import PropertyLease
+from App.DB.Models.Lease import Lease
+from App.DB.Models.Transaction import Transaction
+
 from typing import Union, Dict, Any
 from sqlalchemy import select
 

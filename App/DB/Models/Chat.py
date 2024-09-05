@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 from sqlalchemy.orm import relationship
 from DB.ORM.Base import Base
-from DB.ORM.Models.Message import Message
+from App.DB.Models.Message import Message
 
 class Chat(Base):
     __tablename__ = 'chat'

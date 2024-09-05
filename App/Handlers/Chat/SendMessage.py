@@ -1,7 +1,7 @@
 from fastapi import APIRouter, WebSocket
 
 from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
-from DB.ORM.Models.Message import Message
+from App.DB.Models.Message import Message
 from App.SocketConnection import isUserActive
 
 router = APIRouter()

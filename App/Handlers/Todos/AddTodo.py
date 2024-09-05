@@ -2,15 +2,15 @@ from datetime import datetime
 
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
-from DB.ORM.Utils.Session import session_scope as session
-from DB.ORM.Models.Todo import Todo
+from App.DB.Utils.Session import session_scope as session
+from App.DB.Models.Todo import Todo
 import ollama
 from dotenv import load_dotenv
 import os
 from typing import Union, Dict, Any
 from ollama import Message
 
-from ..App.Models.TodoDetails import TodoDetails
+from App.Models.TodoDetails import TodoDetails
 
 router = APIRouter()
 load_dotenv()

@@ -1,10 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session, Session
-from DB.ORM.Config import DATABASE_URL
-from contextlib import contextmanager
-from DB.ORM.Base import Base
-from LoggerConfig import pulse_database_logger as logger
 from typing import Generator
+from sqlalchemy import create_engine
+from contextlib import contextmanager
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
+
+from App.DB.Base import Base
+from App.DB.Config import DATABASE_URL
+from LoggerConfig import pulse_database_logger as logger
 
 @contextmanager
 def session_scope() -> Generator[scoped_session[Session], None, None]:

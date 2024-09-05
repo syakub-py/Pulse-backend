@@ -1,7 +1,7 @@
 from sqlalchemy import or_
-from DB.ORM.Models.Chat import Chat
-from DB.ORM.Models.ChatParticipant import ChatParticipant
-from DB.ORM.Utils.Session import session_scope as session
+from App.DB.Models.Chat import Chat
+from App.DB.Models.ChatParticipant import ChatParticipant
+from App.DB.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
 from sqlalchemy import select

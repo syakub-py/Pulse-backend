@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import os
 import googlemaps
 
-from DB.ORM.Models.Todo import Todo
-from DB.ORM.Utils.Session import session_scope as session
+from App.DB.Models.Todo import Todo
+from App.DB.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 from sqlalchemy import select
 

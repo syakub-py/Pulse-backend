@@ -9,6 +9,7 @@ from App.Handlers.Properties.AddProperty import router as AddPropertyRouter
 from App.Handlers.Properties.GetProperties import router as GetPropertiesRouter
 from App.Handlers.Properties.DeleteProperty import router as DeletePropertyRouter
 
+from App.Handlers.Leases.AddLease import router as AddLeaseRouter
 from App.Handlers.Leases.GetLeases import router as GetLeasesRouter
 from App.Handlers.Leases.DeleteLease import router as DeleteLeaseRouter
 
@@ -20,14 +21,9 @@ from App.Handlers.Todos.GetTodos import router as GetTodosRouter
 from App.Handlers.Todos.DeleteTodo import router as DeleteTodoRouter
 from App.Handlers.Todos.GetRecommendations import router as GetRecommendationsRouter
 
-from App.Handlers.Leases.GetLeases import router as GetLeasesRouter
-from App.Handlers.Leases.DeleteLease import router as DeleteLeaseRouter
-from App.Handlers.Leases.GetLeases import router as GetLeasesRouter
-
 from App.Handlers.Users.AddAUser import router as AddUserRouter
 from App.Handlers.Users.DeleteAUser import router as DeleteUserRouter
 from App.Handlers.Users.GetUid import router as GetUidRouter
-
 
 from App.Handlers.Emails.SendEmail import router as SendEmailRouter
 

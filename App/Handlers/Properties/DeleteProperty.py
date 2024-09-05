@@ -1,13 +1,13 @@
 from fastapi import APIRouter
-from DB.ORM.Models.Property import Property
-from DB.ORM.Models.Lease import Lease
-from DB.ORM.Models.PropertyLease import PropertyLease
-from DB.ORM.Models.TenantLease import TenantLease
-from DB.ORM.Models.Todo import Todo
-from DB.ORM.Models.Transaction import Transaction
-from DB.ORM.Utils.Session import session_scope as session
+from App.DB.Models.Property import Property
+from App.DB.Models.Lease import Lease
+from App.DB.Models.PropertyLease import PropertyLease
+from App.DB.Models.TenantLease import TenantLease
+from App.DB.Models.Todo import Todo
+from App.DB.Models.Transaction import Transaction
+from App.DB.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
-from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
+from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from typing import Dict, Any
 from sqlalchemy import select, delete
 

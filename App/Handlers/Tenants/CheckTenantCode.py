@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
+from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 
-from DB.ORM.Utils.Session import session_scope as session
+from App.DB.Utils.Session import session_scope as session
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
