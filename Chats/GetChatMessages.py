@@ -16,7 +16,7 @@ router = APIRouter()
 def getChatMessages(chatId: int) -> list[Dict[str | Hashable, Any]]:
     try:
         with session() as db_session:
-            stmt = (
+            select_chat_messages_stmt = (
                 select(
                     Message.message_id.label('_id'),
                     Message.sender_id.label('senderId'),
@@ -26,7 +26,7 @@ def getChatMessages(chatId: int) -> list[Dict[str | Hashable, Any]]:
                 .join(Chat, Chat.chat_id == Message.chat_id)
                 .filter(Chat.chat_id == chatId)
             )
-            messages = db_session.execute(stmt).all()
+            messages = db_session.execute(select_chat_messages_stmt).fetchall()
 
             return pd.DataFrame([{
                 '_id': msg._id,

@@ -39,7 +39,7 @@ def getTenants(userId: int) -> Union[str, Dict[str, Any]]:
                 .join(Property, Property.property_id == PropertyLease.property_id)
                 .filter(Property.owner_id == userId)
             )
-            tenants = db_session.execute(tenant_select).all()
+            tenants = db_session.execute(tenant_select).fetchall()
 
             tenants_list = [
                 {

@@ -22,7 +22,7 @@ def getChats(userId: int) -> Union[list[Dict[str, Any]], Dict[str, Any]]:
                 .filter(ChatParticipant.user_id == userId)
             )
 
-            chats = db_session.execute(chats_stmt).all()
+            chats = db_session.execute(chats_stmt).scalars().all()
 
             if not chats:
                 return {"message": "No chats found", "status_code": 404}
@@ -37,12 +37,12 @@ def getChats(userId: int) -> Union[list[Dict[str, Any]], Dict[str, Any]]:
                     )
                 )
 
-                other_participant_result = db_session.execute(other_participant_stmt).first()
+                other_participant_result = db_session.execute(other_participant_stmt).scalars().first()
 
                 if other_participant_result is None:
                     continue
 
-                if other_participant_result[0].user_id == 0:
+                if other_participant_result.user_id == 0:
                     chats_data.append({
                         "chatId": chat.chat_id,
                         "LastMessage": chat.last_message,
@@ -60,26 +60,25 @@ def getChats(userId: int) -> Union[list[Dict[str, Any]], Dict[str, Any]]:
                         "Messages": [message.message_content for message in chat.messages]
                     })
                 else:
-                    other_user_stmt = select(UserAlias).filter(UserAlias.user_id == other_participant_result[0].user_id)
-                    result = db_session.execute(other_user_stmt).first()
+                    other_user_stmt = select(UserAlias).filter(UserAlias.user_id == other_participant_result.user_id)
+                    other_user_result = db_session.execute(other_user_stmt).scalars().first()
 
-                    if result is None:
+                    if other_user_result is None:
                         continue
 
-                    other_user: User = result[0]
                     chats_data.append({
                         "chatId": chat.chat_id,
                         "LastMessage": chat.last_message,
                         "OtherUserDetails": {
-                            "userId": other_user.user_id,
-                            "Name": other_user.name,
-                            "PhoneNumber": other_user.phone_number,
-                            "Email": other_user.email,
-                            "AnnualIncome": other_user.annual_income,
-                            "DateOfBirth": other_user.date_of_birth,
-                            "DocumentType": other_user.document_type,
-                            "DocumentProvidedUrl": other_user.document_provided_url,
-                            "SocialSecurity": other_user.social_security,
+                            "userId": other_user_result.user_id,
+                            "Name": other_user_result.name,
+                            "PhoneNumber": other_user_result.phone_number,
+                            "Email": other_user_result.email,
+                            "AnnualIncome": other_user_result.annual_income,
+                            "DateOfBirth": other_user_result.date_of_birth,
+                            "DocumentType": other_user_result.document_type,
+                            "DocumentProvidedUrl": other_user_result.document_provided_url,
+                            "SocialSecurity": other_user_result.social_security,
                         },
                         "Messages": [message.message_content for message in chat.messages]
                     })

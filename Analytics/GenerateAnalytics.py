@@ -27,7 +27,7 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
                 select(Property)
                 .filter(Property.property_id == propertyId)
             )
-            property = db_session.execute(property_filter_stmt).first()
+            property = db_session.execute(property_filter_stmt).scalars().first()
 
             if property is None:
                 return {"message": f"No property found with ID {propertyId}", "status_code": 404}
@@ -37,7 +37,7 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
                 .join(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .filter(PropertyLease.property_id == propertyId)
             )
-            lease = db_session.execute(lease_filter_stmt).first()
+            lease = db_session.execute(lease_filter_stmt).scalars().first()
 
             if lease is None:
                 return {"message": f"No lease found with ID {propertyId}", "status_code": 404}
@@ -47,7 +47,7 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
                 .filter(Transaction.property_id == propertyId)
                 .filter(Transaction.income_or_expense == "expense")
             )
-            expense_transactions = db_session.execute(transaction_filter_stmt).all()
+            expense_transactions = db_session.execute(transaction_filter_stmt).scalars().all()
 
             mapped_expense_data = [
                 {
@@ -63,21 +63,21 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
             return mapped_expense_data + [
                 {
                     "name": "Operating Expenses",
-                    "expenseAmount": int(property.operating_expenses),
+                    "expenseAmount": property.operating_expenses,
                     "color": generate_random_rgba(),
                     "legendFontColor": "#7F7F7F",
                     "legendFontSize": 15,
                 },
                 {
                     "name": "Property Taxes",
-                    "expenseAmount": int(property.property_tax),
+                    "expenseAmount": property.property_tax,
                     "color": generate_random_rgba(),
                     "legendFontColor": "#7F7F7F",
                     "legendFontSize": 15,
                 },
                 {
                     "name": "Mortgage Payment",
-                    "expenseAmount": int(property.mortgage_payment),
+                    "expenseAmount": property.mortgage_payment,
                     "color": generate_random_rgba(),
                     "legendFontColor": "#7F7F7F",
                     "legendFontSize": 15,
@@ -95,7 +95,7 @@ def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
                 select(Property)
                 .filter(Property.property_id == propertyId)
             )
-            property = db_session.execute(property_filter_stmt).first()
+            property = db_session.execute(property_filter_stmt).scalars().first()
 
             if property is None:
                 return {"message": f"No property found with ID {propertyId}", "status_code": 404}
@@ -104,7 +104,7 @@ def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
                 select(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
                 .filter(PropertyLease.property_id == propertyId)
             )
-            lease = db_session.execute(lease_filter_stmt).first()
+            lease = db_session.execute(lease_filter_stmt).scalars().first()
 
             if lease is None:
                 return {"message": f"No lease found with ID {propertyId}", "status_code": 404}
@@ -119,7 +119,7 @@ def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
                 .group_by('month')
                 .order_by('month')
             )
-            income_transactions = db_session.execute(income_transactions_filter_stmt).all()
+            income_transactions = db_session.execute(income_transactions_filter_stmt).fetchall()
 
             monthly_data = {str(i).zfill(2): 0 for i in range(1, 13)}
 

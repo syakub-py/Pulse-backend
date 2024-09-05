@@ -48,7 +48,7 @@ def getProperties(userId: int) -> Union[str, Dict[str, Any]]:
                 )
             )
 
-            properties = db_session.execute(property_stmt).all()
+            properties = db_session.execute(property_stmt).fetchall()
 
             properties_list = [
                 {

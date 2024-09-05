@@ -49,8 +49,7 @@ def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
                     .join(User, Property.owner_id == User.user_id)
                 )
 
-                result = db_session.execute(stmt).first()
-                landlord_id = result[0] if result else None
+                landlord_id = db_session.execute(stmt).scalars().first()
 
                 createChat(landlord_id, int(new_user.user_id))
 

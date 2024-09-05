@@ -14,7 +14,7 @@ def getTransactions(propertyId: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:
             transaction_select_stmt = select(Transaction).filter(Transaction.property_id == propertyId)
-            transactions = db_session.execute(transaction_select_stmt).all()
+            transactions = db_session.execute(transaction_select_stmt).scalars()
 
             transaction_data = [
                 {

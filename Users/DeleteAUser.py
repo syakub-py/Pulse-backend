@@ -11,12 +11,12 @@ def deleteAUser(userId: int) -> Union[None, Dict[str, Any]]:
     try:
         with session() as db_session:
             user_select_stmt = select(User).filter(User.user_id == userId)
-            result = db_session.execute(user_select_stmt).first()
+            result = db_session.execute(user_select_stmt).scalars().first()
 
             if result is None:
                 return {"message": "User not found", "status_code": 500}
 
-            db_session.delete(result[0])
+            db_session.delete(result)
             db_session.commit()
         return None
     except Exception as e:

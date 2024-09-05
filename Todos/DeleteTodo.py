@@ -15,12 +15,12 @@ def deleteTodo(todo_id: int) -> Union[None, Dict[str, Any]]:
     try:
         with session() as db_session:
             todo_filter_stmt = select(Todo).filter(Todo.todo_id == todo_id)
-            result = db_session.execute(todo_filter_stmt).first()
+            result = db_session.execute(todo_filter_stmt).scalars().first()
 
             if result is None:
                 return {"message": "todo not found", "status_code": 500}
 
-            db_session.delete(result[0])
+            db_session.delete(result)
             db_session.commit()
             logger.info(f'Deleted todo {todo_id}')
         return None

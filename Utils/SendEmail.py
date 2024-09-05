@@ -21,11 +21,11 @@ def sendEmail(tenantEmail: str, LeaseId: int) -> Union[Dict[str, Any], None]:
     try:
         with session() as db_session:
             user_select_stmt = select(User).filter(func.lower(User.email) == tenantEmail.lower())
-            result = db_session.execute(user_select_stmt).first()
+            result = db_session.execute(user_select_stmt).scalars().first()
 
             if result:
                 new_tenant_lease = TenantLease(
-                    tenant_id=result[0].user_id,
+                    tenant_id=result.user_id,
                     lease_id=LeaseId
                 )
                 db_session.add(new_tenant_lease)

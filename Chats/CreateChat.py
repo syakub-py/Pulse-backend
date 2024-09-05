@@ -12,7 +12,7 @@ def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
             return {"message": "landlord and tenant are the same", "status_code": 500}
 
         with session() as db_session:
-            stmt = (
+            chat_select_stmt = (
                 select(Chat)
                 .filter(
                     or_(
@@ -22,12 +22,11 @@ def createChat(partyOneId: int, partyTwoId: int) -> Union[int, Dict[str, Any]]:
                 )
             )
 
-            result = db_session.execute(stmt).first()
+            chat_result = db_session.execute(chat_select_stmt).scalars().first()
 
-            if result:
-                existing_chat: Chat = result[0]
+            if chat_result:
                 logger.info('Chat already exists')
-                return int(existing_chat.chat_id)
+                return int(chat_result.chat_id)
 
             new_chat = Chat()
             db_session.add(new_chat)

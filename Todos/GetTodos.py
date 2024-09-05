@@ -15,7 +15,7 @@ def getTodos(propertyId:int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:
             todo_select_stmt = select(Todo).filter(Todo.property_id == propertyId)
-            todos = db_session.execute(todo_select_stmt).all()
+            todos = db_session.execute(todo_select_stmt).scalars()
 
             todos_list = [
                 {

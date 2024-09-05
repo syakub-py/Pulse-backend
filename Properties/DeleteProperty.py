@@ -3,13 +3,13 @@ from DB.ORM.Models.Property import Property
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.TenantLease import TenantLease
-from DB.ORM.Models.User import User
 from DB.ORM.Models.Todo import Todo
 from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from typing import Dict, Any
+from sqlalchemy import select
 
 router = APIRouter()
 
@@ -17,30 +17,36 @@ router = APIRouter()
 def deleteProperty(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
-            property_to_delete = db_session.query(Property).filter(Property.property_id == propertyId).first()
+            property_stmt = select(Property).where(Property.property_id == propertyId)
+            property_to_delete = db_session.execute(property_stmt).scalars().first()
 
             if not property_to_delete:
                 logger.error(f"Property {propertyId} not found")
                 return {"message": "Property not found", "status_code": 500}
 
-            property_leases_to_delete = db_session.query(PropertyLease).filter(PropertyLease.property_id == propertyId).all()
+            property_leases_stmt = select(PropertyLease).where(PropertyLease.property_id == propertyId)
+            property_leases_to_delete = db_session.execute(property_leases_stmt).scalars().all()
             lease_ids = [pl.lease_id for pl in property_leases_to_delete]
 
-            leases_to_delete = db_session.query(Lease).filter(Lease.lease_id.in_(lease_ids)).all()
+            leases_stmt = select(Lease).where(Lease.lease_id.in_(lease_ids))
+            leases_to_delete = db_session.execute(leases_stmt).scalars().all()
 
             tenant_ids = []
             for lease in leases_to_delete:
-                tenant_leases = db_session.query(TenantLease).filter(TenantLease.lease_id == lease.lease_id).all()
+                tenant_leases_stmt = select(TenantLease).where(TenantLease.lease_id == lease.lease_id)
+                tenant_leases = db_session.execute(tenant_leases_stmt).scalars().all()
                 tenant_ids.extend([tl.tenant_id for tl in tenant_leases])
                 for tenant_lease in tenant_leases:
                     db_session.delete(tenant_lease)
 
+            todos_stmt = select(Todo).where(Todo.property_id == propertyId)
+            todos_to_delete = db_session.execute(todos_stmt).scalars().all()
 
-            todos_to_delete = db_session.query(Todo).filter(Todo.property_id == propertyId).all()
+            transactions_stmt = select(Transaction).where(Transaction.property_id == propertyId)
+            transactions_to_delete = db_session.execute(transactions_stmt).scalars().all()
 
-            transactions_to_delete = db_session.query(Transaction).filter(Transaction.property_id == propertyId).all()
-
-            pending_signups_to_delete = db_session.query(PendingTenantSignUp).filter(PendingTenantSignUp.lease_id.in_(lease_ids)).all()
+            pending_signups_stmt = select(PendingTenantSignUp).where(PendingTenantSignUp.lease_id.in_(lease_ids))
+            pending_signups_to_delete = db_session.execute(pending_signups_stmt).scalars().all()
 
             for signup in pending_signups_to_delete:
                 db_session.delete(signup)

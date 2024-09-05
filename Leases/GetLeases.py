@@ -1,18 +1,17 @@
-from datetime import datetime
-
+import pandas as pd
 from fastapi import APIRouter
+from sqlalchemy import select
+from datetime import datetime
+from typing import Union, Dict, Any
 
+
+from LoggerConfig import pulse_logger as logger
 from DB.ORM.Models.PendingTenantSignUp import PendingTenantSignUp
 from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.Lease import Lease
 from DB.ORM.Models.User import User
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
-import pandas as pd
-from typing import Union, Dict, Any
-from sqlalchemy import select
-
-from LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
 
@@ -28,7 +27,7 @@ def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
                 .filter(PropertyLease.property_id == property_id)
             )
 
-            leases = db_session.execute(select_leases_stmt).all()
+            leases = db_session.execute(select_leases_stmt).fetchall()
 
             pending_signups_stmt = (
                 select(Lease, PendingTenantSignUp)
@@ -37,7 +36,7 @@ def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
                 .filter(PropertyLease.property_id == property_id)
             )
 
-            pending_signups = db_session.execute(pending_signups_stmt).all()
+            pending_signups = db_session.execute(pending_signups_stmt).fetchall()
 
             lease_data = [
                 {
