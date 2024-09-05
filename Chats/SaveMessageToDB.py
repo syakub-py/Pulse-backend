@@ -3,7 +3,7 @@ from DB.ORM.Utils.Session import session_scope as session
 from LoggerConfig import pulse_database_logger as logger
 from typing import Union
 
-def saveMessagesToDB(chat_id: int, message: str, senderId: int) -> Union[int, None]:
+def saveMessageToDB(chat_id: int, message: str, senderId: int) -> Union[int, None]:
     try:
         with session() as db_session:
             new_message = Message(

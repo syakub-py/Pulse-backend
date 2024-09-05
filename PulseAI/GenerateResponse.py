@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from Chats.GetChatMessages import getChatMessages
-from Chats.SaveMessagesToDB import saveMessagesToDB
+from Chats.SaveMessageToDB import saveMessageToDB
 from ollama import Message
 
 load_dotenv()
