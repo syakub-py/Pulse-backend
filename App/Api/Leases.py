@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from fastapi import APIRouter
 from App.Handlers.Leases.AddLease import addLease
-from Models.LeaseDetails import LeaseDetails
+from App.Models.LeaseDetails import LeaseDetails
 from App.Handlers.Leases.DeleteLease import deleteLease
 from App.Handlers.Leases.GetLeases import getLeases
 

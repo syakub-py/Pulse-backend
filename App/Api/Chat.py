@@ -4,8 +4,8 @@ from App.Handlers.Chat.GetChats import getChats
 from App.Handlers.Chat.SendMessage import sendMessage
 from App.Handlers.Chat.GetChatMessages import getChatMessages
 from typing import Dict, Any, Hashable
-from App.DB.Models.Message import Message
-from fastapi import WebSocket
+# from App.DB.Models.Message import Message
+# from fastapi import WebSocket
 
 chatRoutes = APIRouter(prefix="/chat")
 
@@ -17,6 +17,6 @@ def get_chat_messages(property_id: int) -> list[Dict[str | Hashable, Any]]:
 def get_chats(userId: int) -> (list[Dict[str, Any]] | Dict[str, Any]):
     return getChats(userId)
 
-@chatRoutes.post("/sendMessage/", response_model=Dict)
-async def send_message(message: Message, websocket: WebSocket) -> None:
-    return await sendMessage(message, websocket)
+# @chatRoutes.post("/sendMessage/", response_model=Dict)
+# async def send_message(message: Message, websocket: WebSocket) -> None:
+#     return await sendMessage(message, websocket)

@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from fastapi import APIRouter
-from Models.PropertyDetails import PropertyDetails
+from App.Models.PropertyDetails import PropertyDetails
 from App.Handlers.Properties.AddProperty import addProperty
 from App.Handlers.Properties.DeleteProperty import deleteProperty
 from App.Handlers.Properties.GetProperties import getProperties

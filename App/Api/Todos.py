@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from fastapi import APIRouter
-from Models.TodoDetails import TodoDetails
+from App.Models.TodoDetails import TodoDetails
 from App.Handlers.Todos.AddTodo import addTodo
 from App.Handlers.Todos.GetTodos import getTodos
 from App.Handlers.Todos.DeleteTodo import deleteTodo
