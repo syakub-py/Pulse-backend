@@ -1,13 +1,14 @@
 from fastapi import APIRouter
 from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
+from typing import Union, Dict, Any
 
 from .Classes.TransactionDetails import TransactionDetails
 
 router = APIRouter()
 
 @router.post('/transaction/addTransaction/')
-def addTransaction(transaction:TransactionDetails):
+def addTransaction(transaction:TransactionDetails) -> Union[int, Dict[str, Any]]:
     try:
         with session() as db_session:
             new_transaction = Transaction(
@@ -22,6 +23,6 @@ def addTransaction(transaction:TransactionDetails):
             db_session.add(new_transaction)
             db_session.commit()
 
-            return new_transaction.transaction_id
+            return int(new_transaction.transaction_id)
     except Exception as e:
         return {"message": str(e), "status_code": 500}
