@@ -9,7 +9,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 
 def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
     try:

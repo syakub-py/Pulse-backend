@@ -1,5 +1,5 @@
 import pandas as pd
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any

@@ -1,5 +1,5 @@
 from App.DB.Models.Property import Property
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.Transaction import Transaction

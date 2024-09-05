@@ -5,7 +5,7 @@ from sqlalchemy import func
 
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Models.User import User
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from datetime import datetime, timedelta
 from typing import Union, Dict, Any

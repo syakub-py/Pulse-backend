@@ -3,7 +3,7 @@ from sqlalchemy import select
 from typing import Union, Dict, Any
 from LoggerConfig import pulse_logger as logger
 
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Models.PropertyLease import PropertyLease

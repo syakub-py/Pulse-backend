@@ -1,5 +1,5 @@
 from LoggerConfig import pulse_logger as logger
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.Todo import Todo
 from typing import Union, Dict, Any
 from sqlalchemy import delete

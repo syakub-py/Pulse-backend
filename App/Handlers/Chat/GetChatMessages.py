@@ -2,7 +2,7 @@ import pandas as pd
 
 from App.DB.Models.Message import Message
 from App.DB.Models.Chat import Chat
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 
 from LoggerConfig import pulse_logger as logger
 from typing import Dict, Any, Hashable

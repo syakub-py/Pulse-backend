@@ -3,7 +3,7 @@ from sqlalchemy import select
 from App.DB.Models.Property import Property
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
 from App.Models.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat

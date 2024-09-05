@@ -1,4 +1,4 @@
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.Property import Property
 from App.Models.PropertyDetails import PropertyDetails

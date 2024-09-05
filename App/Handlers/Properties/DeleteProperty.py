@@ -4,7 +4,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Models.Todo import Todo
 from App.DB.Models.Transaction import Transaction
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from typing import Dict, Any

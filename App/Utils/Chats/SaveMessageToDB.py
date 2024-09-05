@@ -1,7 +1,7 @@
 from typing import Union
 from LoggerConfig import pulse_database_logger as logger
 from App.DB.Models.Message import Message
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 
 def saveMessageToDB(chat_id: int, message: str, senderId: int) -> Union[int, None]:
     try:

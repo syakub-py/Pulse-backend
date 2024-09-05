@@ -2,7 +2,7 @@ from datetime import datetime
 
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 
-from App.DB.Utils.Session import session_scope as session
+from App.DB.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
 from sqlalchemy import select, update
