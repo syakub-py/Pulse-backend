@@ -2,17 +2,13 @@ import os
 from typing import Union, Dict, Any
 import ollama
 from dotenv import load_dotenv
-from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from App.Handlers.Chat.GetChatMessages import getChatMessages
-from Chats.SaveMessageToDB import saveMessageToDB
+from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 from ollama import Message
 
 load_dotenv()
 
-router = APIRouter()
-
-@router.get("/pulseChat/generateResponse/{chat_id}/{prompt}", response_model=Dict[str, str])
 def generateResponse(chat_id: int, prompt: str) -> Union[Dict[str, str], Dict[str, Any]]:
     try:
         messages = getChatMessages(chat_id)

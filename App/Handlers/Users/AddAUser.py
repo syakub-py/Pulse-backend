@@ -1,4 +1,3 @@
-from fastapi import APIRouter
 from sqlalchemy import select
 
 from App.DB.Models.Property import Property
@@ -10,10 +9,6 @@ from App.Models.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
 from typing import Union, Dict, Any
 
-router = APIRouter()
-
-
-@router.post("/user/addUser/")
 def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
     try:
         with session() as db_session:

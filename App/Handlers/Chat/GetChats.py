@@ -1,5 +1,4 @@
 from sqlalchemy import select
-from fastapi import APIRouter
 from sqlalchemy.orm import aliased
 from typing import Union, Dict, Any
 from App.DB.Models.Chat import Chat
@@ -7,9 +6,6 @@ from App.DB.Models.ChatParticipant import ChatParticipant
 from App.DB.Models.User import User
 from App.DB.Utils.Session import session_scope as session
 
-router = APIRouter()
-
-@router.get("/chat/getChats/{userId}")
 def getChats(userId: int) -> Union[list[Dict[str, Any]], Dict[str, Any]]:
     try:
         with session() as db_session:

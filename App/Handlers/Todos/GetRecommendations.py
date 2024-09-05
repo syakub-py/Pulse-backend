@@ -1,4 +1,3 @@
-from fastapi import APIRouter
 import pandas as pd
 from dotenv import load_dotenv
 import os
@@ -9,12 +8,9 @@ from App.DB.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 from sqlalchemy import select
 
-router = APIRouter()
 load_dotenv()
 
-
-@router.get("/todo/getRecommendations/{todoId}/{propertyAddress}")
-def getRecommendations(todoId: int, propertyAddress:str) -> Union[str, Dict[str, Any]]:
+def getRecommendations(todoId: int, propertyAddress: str) -> Union[str, Dict[str, Any]]:
     with session() as db_session:
         todo_select_stmt = select(Todo).filter(Todo.todo_id == todoId)
         todo = db_session.execute(todo_select_stmt).scalars().first()
@@ -39,6 +35,3 @@ def getRecommendations(todoId: int, propertyAddress:str) -> Union[str, Dict[str,
         ]
 
         return pd.DataFrame(place_details).to_json(orient="records")
-
-
-

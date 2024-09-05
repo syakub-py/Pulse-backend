@@ -1,16 +1,11 @@
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Utils.Session import session_scope as session
 from App.DB.Models.Lease import Lease
-from fastapi import APIRouter
 from typing import Union, Dict, Any
 
 from LoggerConfig import pulse_logger as logger
 from Models.LeaseDetails import LeaseDetails
 
-router = APIRouter()
-
-
-@router.post("/lease/addLease/{propertyId}")
 def addLease(propertyId: int, lease: LeaseDetails) -> Union[int, Dict[str, Any]]:
     logger.info(f"Adding lease for property: {propertyId}")
 

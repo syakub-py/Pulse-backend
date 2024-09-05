@@ -1,6 +1,4 @@
-from typing import List
 import pandas as pd
-from fastapi import APIRouter
 
 from App.DB.Models.Message import Message
 from App.DB.Models.Chat import Chat
@@ -10,9 +8,6 @@ from LoggerConfig import pulse_logger as logger
 from typing import Dict, Any, Hashable
 from sqlalchemy import select
 
-router = APIRouter()
-
-@router.get("/chat/getMessages/{chatId}")
 def getChatMessages(chatId: int) -> list[Dict[str | Hashable, Any]]:
     try:
         with session() as db_session:

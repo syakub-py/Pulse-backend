@@ -1,5 +1,3 @@
-from fastapi import APIRouter
-
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Utils.Session import session_scope as session
 from App.DB.Models.Lease import Lease
@@ -9,9 +7,6 @@ from sqlalchemy import delete
 
 from LoggerConfig import pulse_logger as logger
 
-router = APIRouter()
-
-@router.delete("/lease/deleteLease/{leaseId}")
 def deleteLease(leaseId: int) -> Union[None, Dict[str, Any]]:
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:

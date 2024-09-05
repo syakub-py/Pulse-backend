@@ -1,6 +1,5 @@
 import pandas as pd
 from sqlalchemy import select
-from fastapi import APIRouter
 from typing import Union, Dict, Any
 from LoggerConfig import pulse_logger as logger
 
@@ -11,9 +10,6 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.Property import Property
 
-router = APIRouter()
-
-@router.get("/tenant/getTenants/{userId}")
 def getTenants(userId: int) -> Union[str, Dict[str, Any]]:
     if not userId:
         return {"message": "userId is required", "status_code": 500}

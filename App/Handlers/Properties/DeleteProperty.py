@@ -1,4 +1,3 @@
-from fastapi import APIRouter
 from App.DB.Models.Property import Property
 from App.DB.Models.Lease import Lease
 from App.DB.Models.PropertyLease import PropertyLease
@@ -11,9 +10,6 @@ from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
 from typing import Dict, Any
 from sqlalchemy import select, delete
 
-router = APIRouter()
-
-@router.delete("/property/deleteProperty/{propertyId}")
 def deleteProperty(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:

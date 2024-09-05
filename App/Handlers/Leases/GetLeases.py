@@ -1,9 +1,7 @@
 import pandas as pd
-from fastapi import APIRouter
 from sqlalchemy import select
 from datetime import datetime
 from typing import Union, Dict, Any
-
 
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.PendingTenantSignUp import PendingTenantSignUp
@@ -13,9 +11,6 @@ from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Utils.Session import session_scope as session
 
-router = APIRouter()
-
-@router.get("/lease/getLeases/{property_id}")
 def getLeases(property_id: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:

@@ -1,12 +1,8 @@
-from fastapi import APIRouter
 from App.DB.Models.User import User
 from App.DB.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 from sqlalchemy import delete
 
-router = APIRouter()
-
-@router.delete('/user/deleteUser/{userId}')
 def deleteAUser(userId: int) -> Union[None, Dict[str, Any]]:
     try:
         with session() as db_session:

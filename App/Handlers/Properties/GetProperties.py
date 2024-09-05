@@ -1,4 +1,3 @@
-from fastapi import APIRouter
 import pandas as pd
 from sqlalchemy import or_
 from sqlalchemy.orm import aliased
@@ -12,9 +11,6 @@ from LoggerConfig import pulse_logger as logger
 from typing import Union, Dict, Any
 from sqlalchemy import select
 
-router = APIRouter()
-
-@router.get("/property/getProperty/{userId}")
 def getProperties(userId: int) -> Union[str, Dict[str, Any]]:
     if not userId:
         return {"message": "userId is required", "status_code": 500}

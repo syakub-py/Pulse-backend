@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from App.DB.Utils.Session import session_scope as session
 from App.DB.Models.Todo import Todo
@@ -12,7 +11,6 @@ from ollama import Message
 
 from App.Models.TodoDetails import TodoDetails
 
-router = APIRouter()
 load_dotenv()
 place_types = [
     "accounting",
@@ -113,7 +111,6 @@ place_types = [
     "zoo"
 ]
 
-@router.post("/todo/addTodo/")
 def addTodo(todo: TodoDetails) -> Union[int, Dict[str, Any]]:
     if not todo:
         return {"message": "no todo details were provided", "status_code": 500}

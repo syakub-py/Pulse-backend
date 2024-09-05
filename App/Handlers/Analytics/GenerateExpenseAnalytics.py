@@ -1,25 +1,13 @@
-import random
-from fastapi import APIRouter
-
 from App.DB.Models.Property import Property
 from App.DB.Utils.Session import session_scope as session
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.Transaction import Transaction
+from App.Utils.GenerateRandomRGBA import generate_random_rgba
 
 from typing import Union, Dict, Any
 from sqlalchemy import select
 
-router = APIRouter()
-
-def generate_random_rgba() -> str:
-    r = random.randint(0, 255)
-    g = random.randint(0, 255)
-    b = random.randint(0, 255)
-    a = round(random.uniform(0.5, 1), 2)
-    return f"rgba({r}, {g}, {b}, {a})"
-
-@router.get("/analytics/generateExpenseAnalytics/{propertyId}")
 def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict[str, Any]]]:
     try:
         with session() as db_session:

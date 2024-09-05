@@ -1,4 +1,3 @@
-from fastapi import APIRouter
 import resend
 import os
 import random
@@ -12,11 +11,6 @@ from datetime import datetime, timedelta
 from typing import Union, Dict, Any
 from sqlalchemy import select
 
-
-router = APIRouter()
-
-
-@router.get("/api/sendEmail/{LeaseId}/{tenantEmail}")
 def sendEmail(tenantEmail: str, LeaseId: int) -> Union[Dict[str, Any], None]:
     try:
         with session() as db_session:

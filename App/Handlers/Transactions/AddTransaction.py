@@ -1,14 +1,10 @@
-from fastapi import APIRouter
 from App.DB.Models.Transaction import Transaction
 from App.DB.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 
 from App.Models.TransactionDetails import TransactionDetails
 
-router = APIRouter()
-
-@router.post('/transaction/addTransaction/')
-def addTransaction(transaction:TransactionDetails) -> Union[int, Dict[str, Any]]:
+def addTransaction(transaction: TransactionDetails) -> Union[int, Dict[str, Any]]:
     try:
         with session() as db_session:
             new_transaction = Transaction(

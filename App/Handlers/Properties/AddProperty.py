@@ -1,13 +1,9 @@
-from fastapi import APIRouter
 from App.DB.Utils.Session import session_scope as session
 from LoggerConfig import pulse_logger as logger
 from App.DB.Models.Property import Property
 from App.Models.PropertyDetails import PropertyDetails
 from typing import Union, Dict, Any
 
-router = APIRouter()
-
-@router.post("/property/addProperty/{userId}")
 def addProperty(userId: str, propertyDetails: PropertyDetails) -> Union[int, Dict[str, Any]]:
     logger.info(f"Adding property for user: {userId}")
     if not userId:

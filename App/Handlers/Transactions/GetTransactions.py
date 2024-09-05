@@ -1,15 +1,10 @@
 import pandas as pd
-from fastapi import APIRouter
 
 from App.DB.Models.Transaction import Transaction
 from App.DB.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 from sqlalchemy import select
 
-router = APIRouter()
-
-
-@router.get('/transaction/getTransaction/{propertyId}')
 def getTransactions(propertyId: int) -> Union[str, Dict[str, Any]]:
     try:
         with session() as db_session:

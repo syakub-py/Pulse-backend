@@ -1,14 +1,9 @@
-from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
 from App.DB.Utils.Session import session_scope as session
 from App.DB.Models.Todo import Todo
 from typing import Union, Dict, Any
 from sqlalchemy import delete
 
-router = APIRouter()
-
-
-@router.delete("/todo/deleteTodo/{todo_id}")
 def deleteTodo(todo_id: int) -> Union[None, Dict[str, Any]]:
     if not todo_id:
         return {"message": "todo_id was not provided", "status_code": 500}
