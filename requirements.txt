@@ -7,3 +7,4 @@ mypy==1.11.2
 pandas-stubs==2.2.2.240807
 ollama==0.3.2
 googlemaps==4.10.0
+uvicorn==0.30.6
