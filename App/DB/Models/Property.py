@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
-from DB.ORM.Base import Base
+from App.DB.Base import Base
 
 class Property(Base):
     __tablename__ = 'property'

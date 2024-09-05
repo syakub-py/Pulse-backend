@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
-from DB.ORM.Base import Base
+from App.DB.Base import Base
 from decimal import Decimal
 from typing import cast
 

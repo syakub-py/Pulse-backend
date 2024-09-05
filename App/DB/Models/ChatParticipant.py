@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey
-from DB.ORM.Base import Base
+from App.DB.Base import Base
 
 class ChatParticipant(Base):
     __tablename__ = 'chat_participant'

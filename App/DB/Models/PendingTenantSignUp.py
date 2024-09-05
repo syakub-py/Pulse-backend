@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, Date
-from DB.ORM.Base import Base
+from App.DB.Base import Base
 
 class PendingTenantSignUp(Base):
     __tablename__ = 'pending_tenant_sign_up'

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 from sqlalchemy.orm import relationship
-from DB.ORM.Base import Base
+from App.DB.Base import Base
 from App.DB.Models.Message import Message
 
 class Chat(Base):
