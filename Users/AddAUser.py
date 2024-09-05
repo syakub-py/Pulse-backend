@@ -44,12 +44,15 @@ def addAUser(user: UserDetails) -> Union[int, Dict[str, Any]]:
 
                 stmt = (
                     select(User.user_id)
-                    .join(PropertyLease, user.LeaseId == PropertyLease.lease_id)
+                    .join(PropertyLease, PropertyLease.lease_id == user.LeaseId)
                     .join(Property, Property.property_id == PropertyLease.property_id)
                     .join(User, Property.owner_id == User.user_id)
                 )
 
                 landlord_id = db_session.execute(stmt).scalars().first()
+
+                if landlord_id is None:
+                    return {"message": "cannot find landlord", "status_code": 500}
 
                 createChat(landlord_id, int(new_user.user_id))
 
