@@ -23,10 +23,7 @@ def generate_random_rgba() -> str:
 def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict[str, Any]]]:
     try:
         with session() as db_session:
-            property_filter_stmt = (
-                select(Property)
-                .filter(Property.property_id == propertyId)
-            )
+            property_filter_stmt = select(Property).filter(Property.property_id == propertyId)
             property = db_session.execute(property_filter_stmt).scalars().first()
 
             if property is None:
@@ -91,19 +88,13 @@ def generateExpenseAnalytics(propertyId: int) -> Union[Dict[str, Any], list[dict
 def generateIncomeAnalytics(propertyId: int) -> Union[Dict[str, Any]]:
     try:
         with session() as db_session:
-            property_filter_stmt = (
-                select(Property)
-                .filter(Property.property_id == propertyId)
-            )
+            property_filter_stmt = select(Property).filter(Property.property_id == propertyId)
             property = db_session.execute(property_filter_stmt).scalars().first()
 
             if property is None:
                 return {"message": f"No property found with ID {propertyId}", "status_code": 404}
 
-            lease_filter_stmt = (
-                select(PropertyLease, Lease.lease_id == PropertyLease.lease_id)
-                .filter(PropertyLease.property_id == propertyId)
-            )
+            lease_filter_stmt = select(PropertyLease, Lease.lease_id == PropertyLease.lease_id).filter(PropertyLease.property_id == propertyId)
             lease = db_session.execute(lease_filter_stmt).scalars().first()
 
             if lease is None:
