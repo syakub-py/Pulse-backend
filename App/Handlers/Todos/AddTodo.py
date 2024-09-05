@@ -10,7 +10,7 @@ import os
 from typing import Union, Dict, Any
 from ollama import Message
 
-from .Classes.TodoDetails import TodoDetails
+from ..App.Models.TodoDetails import TodoDetails
 
 router = APIRouter()
 load_dotenv()

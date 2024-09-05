@@ -4,7 +4,7 @@ import ollama
 from dotenv import load_dotenv
 from fastapi import APIRouter
 from LoggerConfig import pulse_logger as logger
-from Chats.GetChatMessages import getChatMessages
+from App.Handlers.Chat.GetChatMessages import getChatMessages
 from Chats.SaveMessageToDB import saveMessageToDB
 from ollama import Message
 

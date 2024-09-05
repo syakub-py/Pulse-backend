@@ -6,7 +6,7 @@ from DB.ORM.Models.PropertyLease import PropertyLease
 from DB.ORM.Models.TenantLease import TenantLease
 from DB.ORM.Utils.Session import session_scope as session
 from DB.ORM.Models.User import User
-from .Classes.UserDetails import UserDetails
+from ..App.Models.UserDetails import UserDetails
 from Chats.CreateChat import createChat
 from typing import Union, Dict, Any
 

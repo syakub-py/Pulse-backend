@@ -3,7 +3,7 @@ from DB.ORM.Models.Transaction import Transaction
 from DB.ORM.Utils.Session import session_scope as session
 from typing import Union, Dict, Any
 
-from .Classes.TransactionDetails import TransactionDetails
+from ..App.Models.TransactionDetails import TransactionDetails
 
 router = APIRouter()
 

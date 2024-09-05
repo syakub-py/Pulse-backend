@@ -1,11 +1,10 @@
 from fastapi import APIRouter, WebSocket
 
-from Chats.SaveMessageToDB import saveMessageToDB
+from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 from DB.ORM.Models.Message import Message
-from SocketConnection import isUserActive
+from App.SocketConnection import isUserActive
 
 router = APIRouter()
-
 
 @router.post("/chat/sendMessage/")
 async def send_message(message: Message, websocket: WebSocket) -> None:
