@@ -53,7 +53,7 @@ def getTenants(userId: int) -> (str | Dict[str, Any]):
                 for tenant in tenants
             ]
 
-            return pd.DataFrame(tenants_list).to_json(orient="records")
+            return {"data": pd.DataFrame(tenants_list).to_json(orient="records"), "status_code": 200}
     except Exception as e:
         logger.error(f"Error retrieving tenants: {str(e)}")
         return {"message": str(e), "status_code":500}

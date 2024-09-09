@@ -7,9 +7,9 @@ from App.Models.TransactionDetails import TransactionDetails
 transactionsRoutes = APIRouter(prefix="/transaction")
 
 @transactionsRoutes.get("/getTransaction/{propertyId}", response_model=Dict)
-def get_transactions(propertyId: int) -> (str | Dict[str, Any]):
+def get_transactions(propertyId: int) -> Dict[str, Any]:
     return getTransactions(propertyId)
 
 @transactionsRoutes.get("/addTransaction/", response_model=Dict)
-def add_transaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
+def add_transaction(transaction: TransactionDetails) ->Dict[str, Any]:
     return addTransaction(transaction)

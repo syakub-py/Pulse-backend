@@ -22,6 +22,6 @@ def getTransactions(propertyId: int) -> (str | Dict[str, Any]):
                 for transaction in transactions
             ]
 
-            return pd.DataFrame(transaction_data).to_json(orient='records')
+            return {"data": pd.DataFrame(transaction_data).to_json(orient='records'), "status_code":200}
     except Exception as e:
         return {"message": str(e), "status_code":500}

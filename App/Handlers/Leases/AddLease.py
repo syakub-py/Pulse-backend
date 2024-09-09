@@ -35,7 +35,8 @@ def addLease(propertyId: int, lease: LeaseDetails) -> (int | Dict[str, Any]):
 
             db_session.commit()
             logger.info(f"Lease added successfully. Lease ID: {new_lease.lease_id}")
-            return int(new_lease.lease_id)
+            return {"lease_id": int(new_lease.lease_id), "status_code": 200}
+
         except Exception as e:
             db_session.rollback()
             logger.error(e)

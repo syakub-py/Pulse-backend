@@ -51,7 +51,7 @@ def addTodo(todo: TodoDetails) -> Dict[str, Any]:
             db_session.commit()
             db_session.refresh(new_todo)
 
-            return {"message": "Todo added successfully", "todo_id": new_todo.todo_id, "status_code": 201}
+            return {"todo_id": new_todo.todo_id, "status_code": 201}
 
     except SQLAlchemyError as e:
         logger.error(f"Database error adding the todo: {e}")

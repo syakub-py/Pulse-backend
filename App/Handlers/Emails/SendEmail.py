@@ -57,7 +57,7 @@ def sendEmail(tenantEmail: str, LeaseId: int) -> (None | Dict[str, Any]):
 
             db_session.commit()
 
-            return None
+            return {"message":"email sent successfully", "status_code":200}
     except Exception as e:
         db_session.rollback()
         return {"message": str(e), "status_code": 500}

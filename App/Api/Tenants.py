@@ -10,5 +10,5 @@ def check_tenant_code(tenantCode: str) -> Dict[str, Any]:
     return checkTenantCode(tenantCode)
 
 @tenantRoutes.get("/getTenants/{userId}", response_model=Dict)
-def get_tenants(userId: int) -> (str | Dict[str, Any]):
+def get_tenants(userId: int) -> Dict[str, Any]:
     return getTenants(userId)

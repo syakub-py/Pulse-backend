@@ -7,7 +7,7 @@ from sqlalchemy import delete
 
 from App.LoggerConfig import pulse_logger as logger
 
-def deleteLease(leaseId: int) -> (None | Dict[str, Any]):
+def deleteLease(leaseId: int) -> Dict[str, Any]:
     logger.info(f"Deleting lease: {leaseId}")
     if not leaseId:
         logger.error("No leaseId provided")
@@ -36,7 +36,8 @@ def deleteLease(leaseId: int) -> (None | Dict[str, Any]):
             db_session.commit()
 
             logger.info(f"Lease and associated tenants deleted successfully: {leaseId}")
-            return None
+            return {"message":"deleted lease successfully", "status_code":200}
+
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error deleting a lease: {str(e)}")
