@@ -1,5 +1,4 @@
 from sqlalchemy import select
-
 from App.DB.Models.Property import Property
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
@@ -9,7 +8,7 @@ from App.Models.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
 from typing import Dict, Any
 
-def addAUser(user: UserDetails) -> (int | Dict[str, Any]):
+def addAUser(user: UserDetails) -> Dict[str, Any]:
     try:
         with session() as db_session:
             new_user = User(
@@ -23,10 +22,11 @@ def addAUser(user: UserDetails) -> (int | Dict[str, Any]):
                 social_security=user.SocialSecurity,
                 document_type=user.DocumentType,
             )
+
+
             db_session.add(new_user)
             db_session.flush()
 
-            #create the pulse AI chat
             createChat(int(new_user.user_id), 0)
 
             if user.LeaseId is not None:
@@ -53,6 +53,7 @@ def addAUser(user: UserDetails) -> (int | Dict[str, Any]):
 
             db_session.commit()
 
-            return int(new_user.user_id)
+            return {"userId": int(new_user.user_id), "message": "success"}
     except Exception as e:
+        print(f"Error in addAUser: {str(e)}")
         return {"message": str(e), "status_code": 500}

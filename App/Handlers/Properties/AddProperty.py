@@ -4,15 +4,17 @@ from App.DB.Models.Property import Property
 from App.Models.PropertyDetails import PropertyDetails
 from typing import Dict, Any
 
-def addProperty(userId: str, propertyDetails: PropertyDetails) -> (int | Dict[str, Any]):
-    logger.info(f"Adding property for user: {userId}")
-    if not userId:
+def addProperty(postgresId:int, firebaseUserId: str, propertyDetails: PropertyDetails) -> Dict[str, Any]:
+    logger.info(f"Adding property for user: {firebaseUserId}")
+    if not firebaseUserId:
         logger.error("No userId provided")
-        return {"message":"no userId provided", "status_code":500}
+        return {"message": "No userId provided", "status_code": 500}
+
     try:
         with session() as db_session:
             new_property = Property(
-                firebase_uid = userId,
+                owner_id=postgresId,
+                firebase_uid=firebaseUserId,
                 nick_name=propertyDetails.Name,
                 address=propertyDetails.Address,
                 property_type=propertyDetails.PropertyType,
@@ -27,10 +29,8 @@ def addProperty(userId: str, propertyDetails: PropertyDetails) -> (int | Dict[st
             db_session.commit()
 
             logger.info(f"Property added successfully. Property ID: {new_property.property_id}")
-            return int(new_property.property_id)
+            return {"property_id": int(new_property.property_id), "status_code": 200}
     except Exception as e:
         db_session.rollback()
         logger.error(f"Unexpected error: {str(e)}")
-        return {"message":str(e), "status_code":500}
-    finally:
-        db_session.close()
+        return {"message": str(e), "status_code": 500}

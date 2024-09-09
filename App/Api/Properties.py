@@ -7,14 +7,14 @@ from App.Handlers.Properties.GetProperties import getProperties
 
 propertiesRoutes = APIRouter(prefix="/property")
 
-@propertiesRoutes.post("/addProperty/{userId}", response_model=Dict)
-def add_propertylease(userId: str, propertyDetails: PropertyDetails) -> (int | Dict[str, Any]):
-    return addProperty(userId, propertyDetails)
+@propertiesRoutes.post("/addProperty/{postgresUserId}/{firebaseUserId}", response_model=Dict)
+def add_property(postgresUserId:int, firebaseUserId: str, propertyDetails: PropertyDetails) -> (int | Dict[str, Any]):
+    return addProperty(postgresUserId, firebaseUserId, propertyDetails)
 
 @propertiesRoutes.delete("/deleteProperty/{propertyId}", response_model=Dict)
-def delete_lease(propertyId: int) -> Dict[str, Any]:
+def delete_property(propertyId: int) -> Dict[str, Any]:
     return deleteProperty(propertyId)
 
 @propertiesRoutes.get("/getProperty/{userId}", response_model=Dict)
-def get_properties(property_id: int) -> (str | Dict[str, Any]):
-    return getProperties(property_id)
+def get_property(userId: int) -> (str | Dict[str, Any]):
+    return getProperties(userId)
