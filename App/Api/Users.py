@@ -11,7 +11,7 @@ usersRoutes = APIRouter(prefix="/user")
 def get_uid(firebase_uid: str) ->Dict[str, Any]:
     return getUid(firebase_uid)
 
-@usersRoutes.get("/addUser/", response_model=Dict)
+@usersRoutes.post("/addUser/", response_model=Dict)
 def add_a_user(user: UserDetails) ->Dict[str, Any]:
     return addAUser(user)
 

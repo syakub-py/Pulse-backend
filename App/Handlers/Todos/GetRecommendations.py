@@ -1,16 +1,14 @@
-import pandas as pd
 from dotenv import load_dotenv
 import os
 import googlemaps
-
 from App.DB.Models.Todo import Todo
 from App.DB.Session import session_scope as session
-from typing import Dict, Any
+from typing import Dict, Any, List
 from sqlalchemy import select
 
 load_dotenv()
 
-def getRecommendations(todoId: int, propertyAddress: str) -> (str | Dict[str, Any]):
+def getRecommendations(todoId: int, propertyAddress: str) -> Dict[str, Any]:
     with session() as db_session:
         todo_select_stmt = select(Todo).filter(Todo.todo_id == todoId)
         todo = db_session.execute(todo_select_stmt).scalars().first()
@@ -34,4 +32,4 @@ def getRecommendations(todoId: int, propertyAddress: str) -> (str | Dict[str, An
             for place in places_result["results"]
         ]
 
-        return pd.DataFrame(place_details).to_json(orient="records")
+        return {"data": place_details, "status_code": 200}

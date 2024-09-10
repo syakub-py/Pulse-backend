@@ -1,4 +1,8 @@
 from sqlalchemy import select
+from sqlalchemy.orm import aliased
+from sqlalchemy.exc import SQLAlchemyError
+from fastapi import HTTPException
+
 from App.DB.Models.Property import Property
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
@@ -7,10 +11,12 @@ from App.DB.Models.User import User
 from App.Models.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
 from typing import Dict, Any
+from App.LoggerConfig import pulse_logger as logger
 
 def addAUser(user: UserDetails) -> Dict[str, Any]:
     try:
         with session() as db_session:
+            logger.info(f"Adding new user: {user.Name}")
             new_user = User(
                 name=user.Name,
                 firebase_uid=user.UserId,
@@ -22,7 +28,6 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
                 social_security=user.SocialSecurity,
                 document_type=user.DocumentType,
             )
-
 
             db_session.add(new_user)
             db_session.flush()
@@ -36,24 +41,34 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
                 )
                 db_session.add(new_tenant_lease)
                 db_session.flush()
+                OwnerUser = aliased(User)
 
                 stmt = (
-                    select(User.user_id)
+                    select(OwnerUser.user_id)
                     .join(PropertyLease, PropertyLease.lease_id == user.LeaseId)
                     .join(Property, Property.property_id == PropertyLease.property_id)
-                    .join(User, Property.owner_id == User.user_id)
+                    .where(Property.owner_id == OwnerUser.user_id)
                 )
 
-                landlord_id = db_session.execute(stmt).scalars().first()
+                result = db_session.execute(stmt)
+                landlord_id = result.one_or_none()
 
                 if landlord_id is None:
-                    return {"message": "cannot find landlord", "status_code": 500}
-
-                createChat(landlord_id, int(new_user.user_id))
+                    logger.error(f"Cannot find landlord for lease ID: {user.LeaseId}")
+                    return {"message": "cant find the landlord for this tenant", "status_code": 404}
+                createChat(int(landlord_id), int(new_user.user_id))
 
             db_session.commit()
+            logger.info(f"User {new_user.user_id} added successfully")
+            return {"user_id": int(new_user.user_id), "status_code": 201}
 
-            return {"userId": int(new_user.user_id), "message": "success"}
+    except SQLAlchemyError as e:
+        logger.error(f"Database error in addAUser: {str(e)}")
+        db_session.rollback()
+        raise HTTPException(status_code=500, detail="Database error occurred")
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        print(f"Error in addAUser: {str(e)}")
-        return {"message": str(e), "status_code": 500}
+        logger.error(f"Unexpected error in addAUser: {str(e)}")
+        db_session.rollback()
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")
