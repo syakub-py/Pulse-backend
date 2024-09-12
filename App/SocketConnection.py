@@ -1,9 +1,10 @@
+import json
+
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 from typing import Dict
-
+from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 router = APIRouter()
 
-# Dictionary to map user IDs to their WebSocket connections
 active_users: Dict[int, WebSocket] = {}
 
 def get_active_users() -> Dict[int, WebSocket]:
@@ -15,10 +16,11 @@ async def init_websocket_connection(websocket: WebSocket, token: int):
         await websocket.accept()
         active_users[token] = websocket
         print(f"{token} connected. Active users: {list(active_users.keys())}")
-
         while True:
             try:
                 data = await websocket.receive_text()
+                # if firebaseToken:
+                #     saveMessageToDB(data['chat_id'], data['message'], token)
                 print(f"Received data from {token}: {data}")
             except WebSocketDisconnect:
                 break

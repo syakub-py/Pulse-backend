@@ -9,16 +9,17 @@ from ollama import Message
 
 load_dotenv()
 
-def generateResponse(chat_id: int, prompt: str) -> (Dict[str, str] | Dict[str, Any]):
+def generateResponse(chat_id: int, prompt: str, sender_id:int) -> Dict[str, Any]:
     try:
         messages = getChatMessages(chat_id)
         if not messages:
             messages_list = [Message(role='user', content=prompt)]
         else:
-            content=os.getenv("MODEL_SYSTEM_PROMPT")
+            content = os.getenv("MODEL_SYSTEM_PROMPT")
             if content is None:
                 return {"message": "model system prompt not found", "status_code": 500}
             system_prompt = Message(role="system", content=content)
+            saveMessageToDB(chat_id, prompt, sender_id)
 
             messages_list = [system_prompt] + [
                 Message(role=msg['user'], content=msg['text'])
@@ -32,8 +33,9 @@ def generateResponse(chat_id: int, prompt: str) -> (Dict[str, str] | Dict[str, A
 
         aiResponse = ollama.chat(model, messages=messages_list)
 
-        response_content: Dict[str, str] = aiResponse['message']['content']
-        return response_content
+        response_content: str = aiResponse['message']['content']
+        saveMessageToDB(chat_id, response_content, 0)
+        return {"data": response_content}
     except Exception as e:
         logger.error(f"Failed to process chat: {e}")
         return {"error": "Failed to process chat"}
