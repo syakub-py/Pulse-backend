@@ -38,7 +38,6 @@ def getChats(userId: int) -> Dict[str, Any]:
                 if other_participant_result is None:
                     continue
 
-                # Default "Pulse AI" user
                 if other_participant_result.user_id == 0:
                     other_user_details = {
                         "userId": 0,
@@ -74,7 +73,7 @@ def getChats(userId: int) -> Dict[str, Any]:
                     "chatId": chat.chat_id,
                     "LastMessage": chat.last_message,
                     "OtherUserDetails": other_user_details,
-                    "Messages": [message.message_content for message in chat.messages]
+                    "Messages": [message.message for message in chat.messages]
                 })
 
             return {"chats": chats_data}
