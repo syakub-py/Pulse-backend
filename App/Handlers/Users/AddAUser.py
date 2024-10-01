@@ -17,6 +17,22 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
     try:
         with session() as db_session:
             logger.info(f"Adding new user: {user.Name}")
+            bot_user = db_session.query(User).filter(User.name == "Pulse AI").first()
+            if not bot_user:
+                bot_user = User(
+                    name="Pulse AI",
+                    firebase_uid="Pulse_AI",
+                    annual_income=0,
+                    phone_number="0",
+                    date_of_birth="1994-10-10",
+                    email="support@pulseai.com",
+                    document_provided_url="",
+                    social_security="101-101-1001",
+                    document_type="",
+                )
+                db_session.add(bot_user)
+                db_session.flush()
+
             new_user = User(
                 name=user.Name,
                 firebase_uid=user.UserId,
@@ -32,7 +48,7 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
             db_session.add(new_user)
             db_session.flush()
 
-            createChat(int(new_user.user_id), 0)
+            createChat(int(new_user.user_id), bot_user.user_id)
 
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(

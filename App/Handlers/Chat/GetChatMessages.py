@@ -1,31 +1,35 @@
+import pandas as pd
+
 from App.DB.Models.Message import Message
 from App.DB.Models.Chat import Chat
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
 
 from App.LoggerConfig import pulse_logger as logger
-from typing import  Any, Hashable
+from typing import Any, Dict, List, Union
 from sqlalchemy import select
 
-def getChatMessages(chatId: int) -> dict[str, list[dict[str, dict[str, str | Any] | Any]] | int] | list[
-    dict[Hashable, Any]]:
+
+def getChatMessages(chatId: int) -> Dict[str, Union[List[Dict[str, Any]], int]]:
     try:
         with session() as db_session:
-            select_chat_messages_stmt = (
+            user_message_query = (
                 select(
                     Message.message_id.label('_id'),
                     Message.sender_id.label('senderId'),
                     Message.message.label('text'),
                     Message.created_at.label('createdAt'),
-                    User.user_id.label('userId'),
-                    User.name.label('userName'),
-                    # User.avatar.label('userAvatar')
+                    User.name.label('user_name'),
+                    User.email.label('email'),
+                    User.user_id.label('userId')
                 )
-                .join(Chat, Chat.chat_id == Message.chat_id)
                 .join(User, User.user_id == Message.sender_id)
-                .filter(Chat.chat_id == chatId)
+                .filter(Message.chat_id == chatId)
+                .order_by(Message.created_at)
             )
-            messages = db_session.execute(select_chat_messages_stmt).fetchall()
+            messages = db_session.execute(user_message_query).fetchall()
+            if not messages:
+                return {"data": [], "status_code": 200}
 
             return {
                 "data": [{
@@ -33,13 +37,13 @@ def getChatMessages(chatId: int) -> dict[str, list[dict[str, dict[str, str | Any
                     'text': msg.text,
                     'createdAt': msg.createdAt,
                     'user': {
-                        '_id': msg.userId,
-                        'name': msg.userName,
-                        'avatar': msg.userAvatar
+                        '_id': 0,
+                        'name': msg.email if hasattr(msg, 'email') else "Pulse AI",
+                        'avatar': getattr(msg, 'userAvatar', None)
                     }
                 } for msg in messages],
                 "status_code": 200
             }
     except Exception as e:
-        logger.error("Error getting chat messages:", str(e))
-        return {"message": "couldn't get chat messages: %s" % str(e), "status_code": 500}
+        logger.error("Error getting chat messages: %s", str(e))
+        return {"message": f"Couldn't get chat messages: {str(e)}", "status_code": 500}
