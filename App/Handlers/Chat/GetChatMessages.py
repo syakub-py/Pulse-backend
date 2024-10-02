@@ -1,5 +1,3 @@
-import pandas as pd
-
 from App.DB.Models.Message import Message
 from App.DB.Models.Chat import Chat
 from App.DB.Models.User import User
