@@ -4,16 +4,16 @@ from starlette.middleware.cors import CORSMiddleware
 
 from App.SocketConnection import router as SocketConnectionRouter
 
-from App.Api.Analytics import analyticsRoutes
-from App.Api.Chat import chatRoutes
-from App.Api.Email import emailRoutes
-from App.Api.Leases import leasesRoutes
-from App.Api.Properties import propertiesRoutes
-from App.Api.PulseAI import pulseAIRoutes
-from App.Api.Tenants import tenantRoutes
-from App.Api.Todos import todoRoutes
-from App.Api.Transactions import transactionsRoutes
-from App.Api.Users import usersRoutes
+from App.Endpoints.Analytics import analyticsRoutes
+from App.Endpoints.Chat import chatRoutes
+from App.Endpoints.Email import emailRoutes
+from App.Endpoints.Leases import leasesRoutes
+from App.Endpoints.Properties import propertiesRoutes
+from App.Endpoints.PulseAI import pulseAIRoutes
+from App.Endpoints.Tenants import tenantRoutes
+from App.Endpoints.Todos import todoRoutes
+from App.Endpoints.Transactions import transactionsRoutes
+from App.Endpoints.Users import usersRoutes
 
 load_dotenv()
 app = FastAPI()

@@ -2,7 +2,7 @@ from typing import Dict, Any
 from fastapi import APIRouter
 from App.Handlers.Transactions.GetTransactions import getTransactions
 from App.Handlers.Transactions.AddTransaction import addTransaction
-from App.Models.TransactionDetails import TransactionDetails
+from App.EndpointInputModels.TransactionDetails import TransactionDetails
 
 transactionsRoutes = APIRouter(prefix="/transaction")
 

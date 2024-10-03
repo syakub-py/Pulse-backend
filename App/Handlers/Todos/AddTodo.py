@@ -8,7 +8,7 @@ import ollama
 from dotenv import load_dotenv
 import os
 from ollama import Message
-from App.Models.TodoDetails import TodoDetails
+from App.EndpointInputModels.TodoDetails import TodoDetails
 
 load_dotenv()
 

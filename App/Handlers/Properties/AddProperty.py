@@ -1,7 +1,7 @@
 from App.DB.Session import session_scope as session
 from App.LoggerConfig import pulse_logger as logger
 from App.DB.Models.Property import Property
-from App.Models.PropertyDetails import PropertyDetails
+from App.EndpointInputModels.PropertyDetails import PropertyDetails
 from typing import Dict, Any
 
 def addProperty(postgresId:int, firebaseUserId: str, propertyDetails: PropertyDetails) -> Dict[str, Any]:

@@ -8,7 +8,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
-from App.Models.UserDetails import UserDetails
+from App.EndpointInputModels.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
 from typing import Dict, Any
 from App.LoggerConfig import pulse_logger as logger
@@ -67,11 +67,12 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
                 )
 
                 result = db_session.execute(stmt)
-                landlord_id = result.one_or_none()
+                landlord_row = result.one_or_none()
 
-                if landlord_id is None:
+                if landlord_row is None:
                     logger.error(f"Cannot find landlord for lease ID: {user.LeaseId}")
                     return {"message": "cant find the landlord for this tenant", "status_code": 404}
+                landlord_id = landlord_row[0]
                 createChat(int(landlord_id), int(new_user.user_id))
 
             db_session.commit()
@@ -81,10 +82,10 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
     except SQLAlchemyError as e:
         logger.error(f"Database error in addAUser: {str(e)}")
         db_session.rollback()
-        raise HTTPException(status_code=500, detail="Database error occurred")
+        return {"message": "Database error occurred", "status_code": 500}
     except HTTPException as he:
         raise he
     except Exception as e:
         logger.error(f"Unexpected error in addAUser: {str(e)}")
         db_session.rollback()
-        raise HTTPException(status_code=500, detail="An unexpected error occurred")
+        return {"message": "An unexpected error occurred", "status_code": 500}

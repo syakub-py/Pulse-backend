@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from App.Handlers.Users.AddAUser import addAUser
 from App.Handlers.Users.DeleteAUser import deleteAUser
 from App.Handlers.Users.GetUid import getUid
-from App.Models.UserDetails import UserDetails
+from App.EndpointInputModels.UserDetails import UserDetails
 
 usersRoutes = APIRouter(prefix="/user")
 

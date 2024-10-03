@@ -3,7 +3,7 @@ import json
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 from typing import Dict
 
-from App.Models.MessageDetails import Message
+from App.EndpointInputModels.MessageDetails import MessageDetails
 from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 
 router = APIRouter()
@@ -16,7 +16,7 @@ def get_active_users() -> Dict[int, WebSocket]:
 
 
 @router.websocket("/ws/")
-async def init_websocket_connection(websocket: WebSocket, token: int):
+async def handle_websocket_connection(websocket: WebSocket, token: int):
     try:
         await websocket.accept()
         active_users[token] = websocket
@@ -26,14 +26,11 @@ async def init_websocket_connection(websocket: WebSocket, token: int):
                 data = await websocket.receive_text()
                 json_data = json.loads(data)
                 if token:
-                    print(json_data["chat"]["chat_id"], json_data["chat"]["details"]["text"])
-                    # await sendMessage(token, json_data)
-                    # saveMessageToDB(json_data["Message"]["chat_id"], json_data["Message"]["details"]["text"], token)
-
-                print(f"Received data from {token}: {json_data}")
+                    print(f"{token} disconnected. Active users: {list(active_users.keys())}")
+                    await sendMessage(token, json_data["details"])
+                    # saveMessageToDB(json_data["chat_id"], json_data["details"]["text"], token)
             except WebSocketDisconnect:
                 break
-
     except WebSocketDisconnect:
         pass
     finally:
@@ -46,7 +43,7 @@ def isUserActive(uid: int) -> bool:
     return uid in active_users
 
 
-async def sendMessage(user_id: int, message: Message) -> dict:
+async def sendMessage(user_id: int, message: MessageDetails) -> dict:
     if isUserActive(user_id):
         websocket = active_users[user_id]
         try:
@@ -56,7 +53,7 @@ async def sendMessage(user_id: int, message: Message) -> dict:
                 'createdAt': message.createdAt,
                 'user': {
                     '_id': message.user.id,
-                    'name': message.email if hasattr(message, 'email') else "Pulse AI",
+                    'name': message.email,
                     'avatar': getattr(message, 'userAvatar', None)
                 }
             }

@@ -4,7 +4,7 @@ from App.DB.Models.Lease import Lease
 from typing import Dict, Any
 
 from App.LoggerConfig import pulse_logger as logger
-from App.Models.LeaseDetails import LeaseDetails
+from App.EndpointInputModels.LeaseDetails import LeaseDetails
 
 def addLease(propertyId: int, lease: LeaseDetails) -> (int | Dict[str, Any]):
     logger.info(f"Adding lease for property: {propertyId}")
