@@ -4,7 +4,7 @@ from App.Handlers.Chat.GetChatMessages import getChatMessages
 from typing import Dict, Any, Hashable
 
 from App.EndpointInputModels.MessageDetails import MessageDetails
-from App.SocketConnection import sendMessage
+from App.SocketConnection import send_message
 
 chatRoutes = APIRouter(prefix="/chat")
 
@@ -18,4 +18,4 @@ def get_chats(userId: int) -> (list[Dict[str, Any]] | Dict[str, Any]):
 
 @chatRoutes.post("/sendMessage/{user_id}", response_model=Dict)
 async def send_message(user_id: int, message: MessageDetails):
-    return await sendMessage(user_id, message)
+    return await send_message(user_id, message)

@@ -1,5 +1,4 @@
 import json
-
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 from typing import Dict
 
@@ -10,41 +9,35 @@ router = APIRouter()
 
 active_users: Dict[int, WebSocket] = {}
 
-
-def get_active_users() -> Dict[int, WebSocket]:
-    return active_users
-
-
 @router.websocket("/ws/")
-async def handle_websocket_connection(websocket: WebSocket, token: int):
+async def handle_websocket_connection(websocket: WebSocket, token: int, otherUserToken: int):
     try:
         await websocket.accept()
         active_users[token] = websocket
         print(f"{token} connected. Active users: {list(active_users.keys())}")
+
         while True:
-            try:
-                data = await websocket.receive_text()
-                json_data = json.loads(data)
-                if token:
-                    print(f"{token} disconnected. Active users: {list(active_users.keys())}")
-                    await sendMessage(token, json_data["details"])
-                    # saveMessageToDB(json_data["chat_id"], json_data["details"]["text"], token)
-            except WebSocketDisconnect:
-                break
+            data = await websocket.receive_text()
+            json_data = json.loads(data)
+            if token:
+                print(f"{token} received {json_data}")
+                await send_message(otherUserToken, json_data["details"])
+                # Uncomment if you want to save messages to the database
+                # saveMessageToDB(json_data["chat_id"], json_data["details"]["text"], token)
+
     except WebSocketDisconnect:
-        pass
+        print(f"{token} disconnected. Active users: {list(active_users.keys())}")
     finally:
         if token in active_users:
             del active_users[token]
-            print(f"{token} disconnected. Active users: {list(active_users.keys())}")
 
-
-def isUserActive(uid: int) -> bool:
+def is_user_active(uid: int) -> bool:
     return uid in active_users
 
+async def send_message(user_id: int, message: MessageDetails) -> dict:
+    print("Is other user active: " + str(is_user_active(user_id)))
 
-async def sendMessage(user_id: int, message: MessageDetails) -> dict:
-    if isUserActive(user_id):
+    if is_user_active(user_id):
         websocket = active_users[user_id]
         try:
             data = {
@@ -53,12 +46,11 @@ async def sendMessage(user_id: int, message: MessageDetails) -> dict:
                 'createdAt': message.createdAt,
                 'user': {
                     '_id': message.user.id,
-                    'name': message.email,
+                    'name': message.user.name,
                     'avatar': getattr(message, 'userAvatar', None)
                 }
             }
-
-            await websocket.send_text(str(data))
+            await websocket.send_text(json.dumps(data))  # Use json.dumps to serialize properly
             return {"status": "success", "message": "Message sent successfully"}
         except WebSocketDisconnect:
             return {"status": "error", "message": "WebSocket disconnected"}
