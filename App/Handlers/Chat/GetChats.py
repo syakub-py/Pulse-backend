@@ -40,7 +40,7 @@ def getChats(userId: int) -> Dict[str, Any]:
 
                 if other_participant_result.user_id == 0:
                     other_user_details = {
-                        "userId": 0,
+                        "id": 0,
                         "Name": "Pulse AI",
                         "PhoneNumber": "",
                         "Email": "",
@@ -58,7 +58,7 @@ def getChats(userId: int) -> Dict[str, Any]:
                         continue
 
                     other_user_details = {
-                        "userId": other_user_result.user_id,
+                        "id": other_user_result.user_id,
                         "Name": other_user_result.name,
                         "PhoneNumber": other_user_result.phone_number,
                         "Email": other_user_result.email,
