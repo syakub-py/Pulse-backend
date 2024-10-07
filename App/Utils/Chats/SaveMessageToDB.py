@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict
 from App.LoggerConfig import pulse_database_logger as logger
 from App.DB.Models.Message import Message
@@ -12,6 +13,7 @@ def saveMessageToDB(chat_id: int, message: str, senderId: int) -> Dict[str, Any]
                 chat_id=chat_id,
                 message=message,
                 sender_id=senderId,
+                created_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             )
 
             db_session.add(new_message)

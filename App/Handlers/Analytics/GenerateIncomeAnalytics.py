@@ -8,6 +8,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.Transaction import Transaction
 from App.Utils.GenerateRandomRGBA import generate_random_rgba
+from App.LoggerConfig import pulse_logger as logger
 
 def generateIncomeAnalytics(propertyId: int) -> Dict[str, Any]:
     try:
@@ -43,12 +44,11 @@ def generateIncomeAnalytics(propertyId: int) -> Dict[str, Any]:
                 total_amount = transaction.total_amount
                 monthly_data[month] = total_amount + int(lease.monthly_rent)
 
-            print(monthly_data)
-            return {
+            return {"data": {
                 "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 "data": [monthly_data[str(i).zfill(2)] for i in range(1, 13)],
                 "color": generate_random_rgba(),
-            }
+            }, "status_code": 200}
     except Exception as e:
-        print("Error:", e)
+        logger.error("An error occurred while getting income analytics" + str(e))
         return {"message": str(e), "status_code": 500}

@@ -5,7 +5,7 @@ from App.DB.Session import session_scope as session
 from typing import Dict, Any
 from sqlalchemy import select
 
-def getTransactions(propertyId: int) -> (str | Dict[str, Any]):
+def getTransactions(propertyId: int) -> str | Dict[str, Any]:
     try:
         with session() as db_session:
             transaction_select_stmt = select(Transaction).filter(Transaction.property_id == propertyId)

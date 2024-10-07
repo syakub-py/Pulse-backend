@@ -45,7 +45,7 @@ def generateExpenseAnalytics(propertyId: int) -> Dict[str, Any] | list[dict[str,
                 for transaction in expense_transactions
             ]
 
-            return mapped_expense_data + [
+            return {"data":mapped_expense_data + [
                 {
                     "name": "Operating Expenses",
                     "expenseAmount": property.operating_expenses,
@@ -67,7 +67,7 @@ def generateExpenseAnalytics(propertyId: int) -> Dict[str, Any] | list[dict[str,
                     "legendFontColor": "#7F7F7F",
                     "legendFontSize": 15,
                 },
-            ]
+            ]}
 
     except Exception as e:
         return {"message": str(e), "status_code": 500}

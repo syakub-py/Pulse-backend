@@ -6,7 +6,7 @@ from typing import Dict, Any
 from App.LoggerConfig import pulse_logger as logger
 from App.EndpointParams.LeaseDetails import LeaseDetails
 
-def addLease(propertyId: int, lease: LeaseDetails) -> (int | Dict[str, Any]):
+def addLease(propertyId: int, lease: LeaseDetails) -> int | Dict[str, Any]:
     logger.info(f"Adding lease for property: {propertyId}")
 
     if not propertyId:
