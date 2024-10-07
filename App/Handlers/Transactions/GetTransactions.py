@@ -1,4 +1,4 @@
-import pandas as pd
+from App.LoggerConfig import pulse_logger as logger
 
 from App.DB.Models.Transaction import Transaction
 from App.DB.Session import session_scope as session
@@ -22,6 +22,7 @@ def getTransactions(propertyId: int) -> (str | Dict[str, Any]):
                 for transaction in transactions
             ]
 
-            return {"data": pd.DataFrame(transaction_data).to_json(orient='records'), "status_code":200}
+            return {"data": transaction_data, "status_code":200}
     except Exception as e:
-        return {"message": str(e), "status_code":500}
+        logger.error("error when getting transactions: " + str(e))
+        return {"message": str(e), "status_code": 500}

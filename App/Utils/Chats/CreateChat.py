@@ -6,7 +6,7 @@ from App.LoggerConfig import pulse_logger as logger
 from typing import Dict, Any
 from sqlalchemy import select
 
-def createChat(partyOneId: int, partyTwoId: int) -> (int | Dict[str, Any]):
+def createChat(partyOneId: int, partyTwoId: int):
     try:
         if partyOneId == partyTwoId:
             return {"message": "landlord and tenant are the same", "status_code": 500}
@@ -26,7 +26,6 @@ def createChat(partyOneId: int, partyTwoId: int) -> (int | Dict[str, Any]):
 
             if chat_result:
                 logger.info('Chat already exists')
-                return int(chat_result.chat_id)
 
             new_chat = Chat()
             db_session.add(new_chat)
@@ -39,8 +38,6 @@ def createChat(partyOneId: int, partyTwoId: int) -> (int | Dict[str, Any]):
 
             db_session.commit()
             logger.info('Successfully created chat')
-            return int(new_chat.chat_id)
     except Exception as e:
         logger.error(f"Error creating Chat: {str(e)}")
         db_session.rollback()
-        return {"message": str(e), "status_code": 500}

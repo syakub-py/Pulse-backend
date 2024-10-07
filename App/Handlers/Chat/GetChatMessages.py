@@ -37,7 +37,7 @@ def getChatMessages(chatId: int) -> Dict[str, Union[List[Dict[str, Any]], int]]:
                     'user': {
                         '_id': 0,
                         'name': msg.email if hasattr(msg, 'email') else "Pulse AI",
-                        'avatar': getattr(msg, 'userAvatar', None)
+                        'avatar': getattr(msg, 'userAvatar', "")
                     }
                 } for msg in messages],
                 "status_code": 200

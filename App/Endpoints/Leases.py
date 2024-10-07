@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from fastapi import APIRouter
 from App.Handlers.Leases.AddLease import addLease
-from App.EndpointInputModels.LeaseDetails import LeaseDetails
+from App.EndpointParams.LeaseDetails import LeaseDetails
 from App.Handlers.Leases.DeleteLease import deleteLease
 from App.Handlers.Leases.GetLeases import getLeases
 
@@ -15,6 +15,6 @@ def add_lease(propertyId: int, lease: LeaseDetails) -> Dict[str, Any]:
 def delete_lease(leaseId: int) -> Dict[str, Any]:
     return deleteLease(leaseId)
 
-@leasesRoutes.get("/getLeases/{property_id}", response_model=Dict)
-def get_leases(property_id: int) -> Dict[str, Any]:
-    return getLeases(property_id)
+@leasesRoutes.get("/getLeases/{propertyId}", response_model=Dict)
+def get_leases(propertyId: int) -> Dict[str, Any]:
+    return getLeases(propertyId)

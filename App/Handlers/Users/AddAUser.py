@@ -8,7 +8,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
-from App.EndpointInputModels.UserDetails import UserDetails
+from App.EndpointParams.UserDetails import UserDetails
 from App.Utils.Chats.CreateChat import createChat
 from typing import Dict, Any
 from App.LoggerConfig import pulse_logger as logger
@@ -83,8 +83,6 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
         logger.error(f"Database error in addAUser: {str(e)}")
         db_session.rollback()
         return {"message": "Database error occurred", "status_code": 500}
-    except HTTPException as he:
-        raise he
     except Exception as e:
         logger.error(f"Unexpected error in addAUser: {str(e)}")
         db_session.rollback()

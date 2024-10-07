@@ -2,7 +2,7 @@ from App.DB.Models.Transaction import Transaction
 from App.DB.Session import session_scope as session
 from typing import Dict, Any
 
-from App.EndpointInputModels.TransactionDetails import TransactionDetails
+from App.EndpointParams.TransactionDetails import TransactionDetails
 
 def addTransaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
     try:

@@ -8,7 +8,7 @@ from App.Utils.GenerateRandomRGBA import generate_random_rgba
 from typing import Dict, Any
 from sqlalchemy import select
 
-def generateExpenseAnalytics(propertyId: int) -> (Dict[str, Any] | list[dict[str, Any]]):
+def generateExpenseAnalytics(propertyId: int) -> Dict[str, Any] | list[dict[str, Any]]:
     try:
         with session() as db_session:
             property_filter_stmt = select(Property).filter(Property.property_id == propertyId)

@@ -1,12 +1,12 @@
 from App.DB.Session import session_scope as session
 from App.LoggerConfig import pulse_logger as logger
 from App.DB.Models.Property import Property
-from App.EndpointInputModels.PropertyDetails import PropertyDetails
+from App.EndpointParams.PropertyDetails import PropertyDetails
 from typing import Dict, Any
 
 def addProperty(postgresId:int, firebaseUserId: str, propertyDetails: PropertyDetails) -> Dict[str, Any]:
     logger.info(f"Adding property for user: {firebaseUserId}")
-    if not firebaseUserId:
+    if not firebaseUserId or not postgresId:
         logger.error("No userId provided")
         return {"message": "No userId provided", "status_code": 500}
 

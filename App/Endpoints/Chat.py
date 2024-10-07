@@ -10,5 +10,5 @@ def get_chat_messages(chatId: int) -> list[Dict[str | Hashable, Any]]:
     return getChatMessages(chatId)
 
 @chatRoutes.get("/getChats/{userId}", response_model=Dict)
-def get_chats(userId: int) -> (list[Dict[str, Any]] | Dict[str, Any]):
+def get_chats(userId: int) -> list[Dict[str, Any]] | Dict[str, Any]:
     return getChats(userId)
