@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from App.Handlers.Chat.GetChats import getChats
 from App.Handlers.Chat.GetChatMessages import getChatMessages
 from typing import Dict, Any, Hashable
-from App.EndpointInputModels.MessageDetails import MessageDetails
 
 chatRoutes = APIRouter(prefix="/chat")
 

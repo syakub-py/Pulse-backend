@@ -1,8 +1,6 @@
 import json
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 from typing import Dict
-
-from App.EndpointInputModels.MessageDetails import MessageDetails
 from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
 
 router = APIRouter()
@@ -16,26 +14,27 @@ async def handle_websocket_connection(websocket: WebSocket, senderUserToken: int
         active_users[senderUserToken] = websocket
         print(f"{senderUserToken} connected. Active users: {list(active_users.keys())}")
         while True:
-            data = await websocket.receive_text()
-            json_data = json.loads(data)
-            if senderUserToken:
+            if senderUserToken and receiverUserToken:
+                data = await websocket.receive_text()
+                json_data = json.loads(data)
                 message = json_data['details']
+                saveMessageToDB(json_data["chat_id"], message["text"], senderUserToken)
                 print(f"{receiverUserToken} received {json_data}")
                 if is_user_active(receiverUserToken):
                     otherUserWebsocket = active_users[receiverUserToken]
                     try:
                         data = {
-                            '_id': message["_id"],
-                            'text': message["text"],
-                            'createdAt': message["createdAt"],
-                            'user': {
-                                '_id': message["user"]["_id"],
-                                'name': message["user"]["name"],
-                                'avatar': getattr(message, 'avatar', None)
+                            "_id": message["_id"],
+                            "text": message["text"],
+                            "createdAt": message["createdAt"],
+                            "user": {
+                                "_id": message["user"]["_id"],
+                                "name": message["user"]["name"],
+                                "avatar": getattr(message, "avatar", "")
                             }
                         }
 
-                        await otherUserWebsocket.send_text(str(data))
+                        await otherUserWebsocket.send_text(json.dumps(data))
                         print("Message sent successfully")
                     except Exception as e:
                         print(f"Failed to send message: {str(e)}")
