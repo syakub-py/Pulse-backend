@@ -6,10 +6,10 @@ from App.Handlers.Analytics.GenerateIncomeAnalytics import generateIncomeAnalyti
 analyticsRoutes = APIRouter(prefix="/analytics")
 
 @analyticsRoutes.get("/generateExpenseAnalytics/{propertyId}", response_model=Dict)
-def generate_expense_analytics(propertyId: int) -> Dict[str, Any] | list[dict[str, Any]]:
+def generate_expense_analytics(propertyId: int) -> Dict[str, Any]:
     return generateExpenseAnalytics(propertyId)
 
-@analyticsRoutes.get("/generateIncomeAnalytics/{propertyId}")
+@analyticsRoutes.get("/generateIncomeAnalytics/{propertyId}", response_model=Dict)
 def generate_income_analytics(propertyId: int) -> Dict[str, Any]:
     return generateIncomeAnalytics(propertyId)
 

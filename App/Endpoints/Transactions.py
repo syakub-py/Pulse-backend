@@ -11,5 +11,5 @@ def get_transactions(propertyId: int) -> Dict[str, Any]:
     return getTransactions(propertyId)
 
 @transactionsRoutes.post("/addTransaction/", response_model=Dict)
-def add_transaction(transaction: TransactionDetails) ->Dict[str, Any]:
+def add_transaction(transaction: TransactionDetails) -> Dict[str, Any]:
     return addTransaction(transaction)

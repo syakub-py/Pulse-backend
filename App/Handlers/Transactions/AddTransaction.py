@@ -9,7 +9,7 @@ def addTransaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
         with session() as db_session:
             new_transaction = Transaction(
                 user_id=transaction.userId,
-                amount=transaction.amount,
+                amount= transaction.amount,
                 description=transaction.description,
                 transaction_type=transaction.transactionType,
                 property_id=transaction.propertyId,
@@ -19,6 +19,6 @@ def addTransaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
             db_session.add(new_transaction)
             db_session.commit()
 
-            return {"transaction_id":int(new_transaction.transaction_id), "status_code":200}
+            return {"transaction_id": int(new_transaction.transaction_id), "status_code": 200}
     except Exception as e:
         return {"message": str(e), "status_code": 500}

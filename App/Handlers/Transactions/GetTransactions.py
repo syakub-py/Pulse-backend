@@ -1,11 +1,10 @@
 from App.LoggerConfig import pulse_logger as logger
-
 from App.DB.Models.Transaction import Transaction
 from App.DB.Session import session_scope as session
 from typing import Dict, Any
 from sqlalchemy import select
 
-def getTransactions(propertyId: int) -> str | Dict[str, Any]:
+def getTransactions(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             transaction_select_stmt = select(Transaction).filter(Transaction.property_id == propertyId)
@@ -22,7 +21,7 @@ def getTransactions(propertyId: int) -> str | Dict[str, Any]:
                 for transaction in transactions
             ]
 
-            return {"data": transaction_data, "status_code":200}
+            return {"data": transaction_data, "status_code": 200}
     except Exception as e:
         logger.error("error when getting transactions: " + str(e))
-        return {"message": str(e), "status_code": 500}
+        return {"message": "error when getting transactions: " + str(e), "status_code": 500}

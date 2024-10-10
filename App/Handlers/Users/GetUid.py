@@ -1,9 +1,9 @@
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
-from typing import Dict, Union
+from typing import Dict, Any
 from sqlalchemy import select
 
-def getUid(firebaseUid: str) -> Dict[str, Union[str, int]]:
+def getUid(firebaseUid: str) -> Dict[str, Any]:
     try:
         with session() as db_session:
 

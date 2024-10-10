@@ -23,9 +23,12 @@ def deleteProperty(propertyId: int) -> Dict[str, Any]:
                 logger.error(f"Property {propertyId} not found")
                 return {"message": "Property not found", "status_code": 500}
 
-            tenant_query = select(TenantLease.tenant_id).where(TenantLease.lease_id.in_(
-                select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
-            ))
+            tenant_query = select(TenantLease.tenant_id).where(
+                TenantLease.lease_id.in_(
+                    select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
+                )
+            )
+
             tenant_id = db_session.execute(tenant_query).scalar()
             db_session.flush()
 
@@ -79,6 +82,7 @@ def deleteProperty(propertyId: int) -> Dict[str, Any]:
                     select(PropertyLease.lease_id).where(PropertyLease.property_id == propertyId)
                 ))
             )
+
             db_session.execute(pending_signups_delete_stmt)
             db_session.flush()
 

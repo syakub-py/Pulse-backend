@@ -1,7 +1,6 @@
 from sqlalchemy import func, cast, Date
 from typing import Dict, Any
 from sqlalchemy import select
-
 from App.DB.Models.Property import Property
 from App.DB.Session import session_scope as session
 from App.DB.Models.PropertyLease import PropertyLease
@@ -23,7 +22,7 @@ def generateIncomeAnalytics(propertyId: int) -> Dict[str, Any]:
             lease = db_session.execute(lease_filter_stmt).scalars().first()
 
             if lease is None:
-                return {"message": f"No lease found with ID {propertyId}", "status_code": 404}
+                return {"message": f"No lease found with for property with id {propertyId}", "status_code": 404}
 
             income_transactions_filter_stmt = (
                 select(
@@ -50,5 +49,5 @@ def generateIncomeAnalytics(propertyId: int) -> Dict[str, Any]:
                 "color": generate_random_rgba(),
             }, "status_code": 200}
     except Exception as e:
-        logger.error("An error occurred while getting income analytics" + str(e))
-        return {"message": str(e), "status_code": 500}
+        logger.error("An error occurred while generating income analytics" + str(e))
+        return {"message": "An error occurred while generating income analytics" + str(e), "status_code": 500}
