@@ -6,7 +6,7 @@ from typing import Dict, Any
 from App.LoggerConfig import pulse_logger as logger
 from App.EndpointParams.LeaseDetails import LeaseDetails
 
-def addLease(propertyId: int, lease: LeaseDetails) -> int | Dict[str, Any]:
+def addLease(propertyId: int, lease: LeaseDetails) -> Dict[str, Any]:
     logger.info(f"Adding lease for property: {propertyId}")
 
     if not propertyId:
@@ -36,7 +36,6 @@ def addLease(propertyId: int, lease: LeaseDetails) -> int | Dict[str, Any]:
             db_session.commit()
             logger.info(f"Lease added successfully. Lease ID: {new_lease.lease_id}")
             return {"lease_id": int(new_lease.lease_id), "status_code": 200}
-
         except Exception as e:
             db_session.rollback()
             logger.error(e)

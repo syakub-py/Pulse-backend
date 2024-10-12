@@ -61,10 +61,9 @@ def getLeases(property_id: int) -> (str | Dict[str, Any]):
                 if not signup.is_code_used
             ]
 
-            df = pd.DataFrame(lease_data + pending_signup_data)
             logger.info("Got Leases Successfully")
 
-            return {"data": df.to_json(orient="records"), "status_code": 200}
+            return {"data": lease_data + pending_signup_data, "status_code": 200}
     except Exception as e:
         logger.error("Error retrieving leases: " + str(e))
         return {"message": "Error retrieving leases: " + str(e), "status_code": 500}

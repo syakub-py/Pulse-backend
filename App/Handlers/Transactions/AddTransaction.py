@@ -4,7 +4,7 @@ from typing import Dict, Any
 
 from App.EndpointParams.TransactionDetails import TransactionDetails
 
-def addTransaction(transaction: TransactionDetails) -> (int | Dict[str, Any]):
+def addTransaction(transaction: TransactionDetails) -> Dict[str, Any]:
     try:
         with session() as db_session:
             new_transaction = Transaction(
