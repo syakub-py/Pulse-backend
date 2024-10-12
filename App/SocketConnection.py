@@ -39,7 +39,6 @@ async def handle_websocket_connection(websocket: WebSocket, senderUserToken: int
                         logger.error(f"{senderUserToken} disconnected. Active users: {list(active_users.keys())}")
     except WebSocketDisconnect:
         logger.info(f"{senderUserToken} disconnected. Active users: {list(active_users.keys())}")
-
     finally:
         if senderUserToken in active_users:
             del active_users[senderUserToken]

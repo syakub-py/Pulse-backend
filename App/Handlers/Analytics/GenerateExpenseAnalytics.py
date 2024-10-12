@@ -7,7 +7,7 @@ from App.LoggerConfig import pulse_logger as logger
 from typing import Dict, Any
 from sqlalchemy import select
 
-def generateExpenseAnalytics(propertyId: int) -> Dict[str, Any] | list[dict[str, Any]]:
+def generateExpenseAnalytics(propertyId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             property_filter_stmt = select(Property).filter(Property.property_id == propertyId)

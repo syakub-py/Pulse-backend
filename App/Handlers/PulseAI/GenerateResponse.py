@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 def generateResponse(chat_id: int, prompt: str, sender_id: int) -> Dict[str, Any]:
     try:
         messages = getChatMessages(chat_id)
-
         if not messages:
             messages_list = [Message(role='user', content=prompt)]
         else:
@@ -29,15 +28,15 @@ def generateResponse(chat_id: int, prompt: str, sender_id: int) -> Dict[str, Any
             system_prompt = Message(role="system", content=content)
             saveMessageToDB(chat_id, prompt, sender_id)
 
-            messages_list = [system_prompt] + [
-                Message(role=msg.get('role', 'user'), content=msg.get('text', ''))
-                for msg in messages if 'role' in msg and 'text' in msg
-            ] + [Message(role='user', content=prompt)]
-
+            messages_list = (
+                    [system_prompt] +
+                    [Message(role=msg['role'], content=msg['text']) for msg in messages if 'role' in msg and 'text' in msg] +
+                    [Message(role='user', content=prompt)]
+            )
         model = os.getenv("CHAT_MODEL")
         if model is None:
             logger.error("CHAT_MODEL not found in environment variables.")
-            return {"message": "model not found", "status_code": 500}
+            return {"message": "CHAT_MODEL not found in environment variables.", "status_code": 500}
 
         aiResponse = ollama.chat(model, messages=messages_list)
         response_content: str = aiResponse.get('message', {}).get('content', '')

@@ -3,10 +3,10 @@ from App.DB.Models.Chat import Chat
 from App.DB.Models.ChatParticipant import ChatParticipant
 from App.DB.Session import session_scope as session
 from App.LoggerConfig import pulse_logger as logger
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from sqlalchemy import select
 
-def createChat(partyOneId: int, partyTwoId: int):
+def createChat(partyOneId: int, partyTwoId: int) ->  Optional[Dict[str, Any]]:
     try:
         if partyOneId == partyTwoId:
             return {"message": "landlord and tenant are the same", "status_code": 500}
@@ -38,6 +38,8 @@ def createChat(partyOneId: int, partyTwoId: int):
 
             db_session.commit()
             logger.info('Successfully created chat')
+            return {"message": "Chat successfully created", "status_code": 201}
     except Exception as e:
         logger.error(f"Error creating Chat: {str(e)}")
         db_session.rollback()
+        return {"message": f"Error creating Chat: {str(e)}", "status_code": 500}

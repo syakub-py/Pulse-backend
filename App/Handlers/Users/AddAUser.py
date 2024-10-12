@@ -1,8 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from sqlalchemy.exc import SQLAlchemyError
-from fastapi import HTTPException
-
 from App.DB.Models.Property import Property
 from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.TenantLease import TenantLease

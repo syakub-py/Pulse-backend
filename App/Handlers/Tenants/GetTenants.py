@@ -9,7 +9,7 @@ from App.DB.Models.PropertyLease import PropertyLease
 from App.DB.Models.Lease import Lease
 from App.DB.Models.Property import Property
 
-def getTenants(userId: int) -> (str | Dict[str, Any]):
+def getTenants(userId: int) -> Dict[str, Any]:
     if not userId:
         return {"message": "userId is required", "status_code": 500}
     try:

@@ -4,11 +4,11 @@ from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
 
 from App.LoggerConfig import pulse_logger as logger
-from typing import Any, Dict, List, Union
+from typing import Any, Dict
 from sqlalchemy import select
 
 
-def getChatMessages(chatId: int) -> Dict[str, Union[List[Dict[str, Any]], int]]:
+def getChatMessages(chatId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             user_message_query = (

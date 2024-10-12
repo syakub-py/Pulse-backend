@@ -19,9 +19,9 @@ def deleteLease(leaseId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             lease_id_stmt = select(Lease).where(Lease.lease_id == leaseId)
-            lease_id = db_session.execute(lease_id_stmt)
+            lease_id = db_session.execute(lease_id_stmt).scalar()
 
-            if lease_id.rowcount == 0:
+            if lease_id is None:
                 return {"message": "Lease not found", "status_code": 404}
 
             tenant_query = select(TenantLease.tenant_id).where(TenantLease.lease_id == leaseId)

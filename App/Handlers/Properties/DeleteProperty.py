@@ -86,6 +86,10 @@ def deleteProperty(propertyId: int) -> Dict[str, Any]:
             db_session.execute(pending_signups_delete_stmt)
             db_session.flush()
 
+            property_delete_stmt = delete(Property).where(Property.property_id == propertyId)
+            db_session.execute(property_delete_stmt)
+            db_session.flush()
+
             db_session.commit()
             return {"message": "Property and associated data deleted successfully", "status_code": 200}
     except Exception as e:
