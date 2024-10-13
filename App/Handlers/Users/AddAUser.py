@@ -7,7 +7,7 @@ from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 from App.DB.Models.User import User
 from App.EndpointParams.UserDetails import UserDetails
-from App.Utils.Chats.CreateChat import createChat
+from App.Handlers.Chat.CreateChat import createChat
 from typing import Dict, Any
 from App.LoggerConfig import pulse_logger as logger
 

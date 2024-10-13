@@ -2,7 +2,7 @@ import ollama
 from dotenv import load_dotenv
 from App.LoggerConfig import pulse_logger as logger
 from App.Handlers.Chat.GetChatMessages import getChatMessages
-from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
+from App.Handlers.Chat.SaveMessageToDB import saveMessageToDB
 from App.DB.Models.User import User
 from App.DB.Session import session_scope as session
 from ollama import Message

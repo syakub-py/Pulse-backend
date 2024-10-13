@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any
 from sqlalchemy import select
 
-def sendEmail(tenantEmail: str, LeaseId: int) -> (None | Dict[str, Any]):
+def sendEmail(tenantEmail: str, LeaseId: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             user_select_stmt = select(User).filter(func.lower(User.email) == tenantEmail.lower())
@@ -57,7 +57,7 @@ def sendEmail(tenantEmail: str, LeaseId: int) -> (None | Dict[str, Any]):
 
             db_session.commit()
 
-            return {"message":"email sent successfully", "status_code":200}
+            return {"message": "email sent successfully", "status_code":200}
     except Exception as e:
         db_session.rollback()
         return {"message": str(e), "status_code": 500}

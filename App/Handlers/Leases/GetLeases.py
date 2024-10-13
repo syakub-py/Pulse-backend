@@ -1,4 +1,3 @@
-import pandas as pd
 from sqlalchemy import select
 from datetime import datetime
 from typing import Dict, Any
@@ -11,7 +10,7 @@ from App.DB.Models.User import User
 from App.DB.Models.TenantLease import TenantLease
 from App.DB.Session import session_scope as session
 
-def getLeases(property_id: int) -> (str | Dict[str, Any]):
+def getLeases(property_id: int) -> Dict[str, Any]:
     try:
         with session() as db_session:
             select_leases_stmt = (

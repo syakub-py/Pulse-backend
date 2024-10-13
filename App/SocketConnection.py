@@ -1,7 +1,7 @@
 import json
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 from typing import Dict
-from App.Utils.Chats.SaveMessageToDB import saveMessageToDB
+from App.Handlers.Chat.SaveMessageToDB import saveMessageToDB
 from App.LoggerConfig import pulse_logger as logger
 
 router = APIRouter()
