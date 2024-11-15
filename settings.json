@@ -1,0 +1,7 @@
+{
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+    "mypy.useDaemon": false,
+    "mypy.configFile": "mypy.ini",
+    "mypy.args": ["--strict"]
+}

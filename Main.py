@@ -1,37 +1,19 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
-
-from PulseAI.GetChatMessages import router as GetChatMessagesRouter
-from PulseAI.CreateChat import router as CreateChatRouter
-from PulseAI.GenerateResponse import router as GenerateResponseRouter
-
-from Properties.AddProperty import router as AddPropertyRouter
-from Properties.GetProperties import router as GetPropertiesRouter
-from Properties.DeleteProperty import router as DeletePropertyRouter
-
-from Leases.AddLease import router as AddLeaseRouter
-from Leases.GetLeases import router as GetLeasesRouter
-from Leases.DeleteLease import router as DeleteLeaseRouter
-
-from Tenants.GetTenants import router as GetTenantsRouter
-from Tenants.CheckTenantCode import router as CheckTenantCodeRouter
-
-from Todos.AddTodo import router as AddTodoRouter
-from Todos.GetTodos import router as GetTodosRouter
-from Todos.DeleteTodo import router as DeleteTodoRouter
-from Todos.GetRecommendations import router as GetRecommendationsRouter
-
-from Users.AddAUser import router as AddUserRouter
-from Users.DeleteAUser import router as DeleteUserRouter
-
-from Utils.SendEmail import router as SendEmailRouter
-
-from Analytics.GenerateAnalytics import router as GenerateAnalyticsRouter
-
-from Transactions.AddTransaction import router as AddTransactionRouter
-from Transactions.GetTransactions import router as GetTransactionsRouter
-
 from starlette.middleware.cors import CORSMiddleware
+
+from App.SocketConnection import router as SocketConnectionRouter
+
+from App.Endpoints.Analytics import analyticsRoutes
+from App.Endpoints.Chat import chatRoutes
+from App.Endpoints.Email import emailRoutes
+from App.Endpoints.Leases import leasesRoutes
+from App.Endpoints.Properties import propertiesRoutes
+from App.Endpoints.PulseAI import pulseAIRoutes
+from App.Endpoints.Tenants import tenantRoutes
+from App.Endpoints.Todos import todoRoutes
+from App.Endpoints.Transactions import transactionsRoutes
+from App.Endpoints.Users import usersRoutes
 
 load_dotenv()
 app = FastAPI()
@@ -44,32 +26,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(CreateChatRouter)
-app.include_router(AddPropertyRouter)
-app.include_router(GetPropertiesRouter)
-app.include_router(DeletePropertyRouter)
+app.include_router(SocketConnectionRouter)
 
-app.include_router(GetChatMessagesRouter)
-app.include_router(GenerateResponseRouter)
-
-app.include_router(CheckTenantCodeRouter)
-app.include_router(AddLeaseRouter)
-app.include_router(GetLeasesRouter)
-app.include_router(DeleteLeaseRouter)
-app.include_router(SendEmailRouter)
-
-app.include_router(AddUserRouter)
-app.include_router(DeleteUserRouter)
-
-app.include_router(GetTenantsRouter)
-
-app.include_router(AddTodoRouter)
-app.include_router(GetTodosRouter)
-app.include_router(DeleteTodoRouter)
-
-app.include_router(GetRecommendationsRouter)
-
-app.include_router(GenerateAnalyticsRouter)
-app.include_router(AddTransactionRouter)
-app.include_router(GetTransactionsRouter)
-
+app.include_router(analyticsRoutes)
+app.include_router(chatRoutes)
+app.include_router(emailRoutes)
+app.include_router(leasesRoutes)
+app.include_router(propertiesRoutes)
+app.include_router(pulseAIRoutes)
+app.include_router(tenantRoutes)
+app.include_router(todoRoutes)
+app.include_router(transactionsRoutes)
+app.include_router(usersRoutes)
