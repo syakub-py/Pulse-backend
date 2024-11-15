@@ -30,7 +30,7 @@ def generateResponse(chat_id: int, prompt: str, sender_id: int) -> Dict[str, Any
 
             messages_list = (
                     [system_prompt] +
-                    [Message(role=msg['role'], content=msg['text']) for msg in messages if 'role' in msg and 'text' in msg] +
+                    [Message(role= msg['role'], content=msg['text']) for msg in messages if 'role' in msg and 'text' in msg] +
                     [Message(role='user', content=prompt)]
             )
         model = os.getenv("CHAT_MODEL")

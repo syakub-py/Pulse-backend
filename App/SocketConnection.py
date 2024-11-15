@@ -20,8 +20,8 @@ async def handle_websocket_connection(
         print(f"{senderUserToken} connected. Active users: {list(active_users.keys())}")
         while True:
             if senderUserToken and receiverUserToken:
-                data = await websocket.receive_text()
-                json_data = json.loads(data)
+                received_data = await websocket.receive_text()
+                json_data = json.loads(received_data)
                 message = json_data['details']
                 saveMessageToDB(json_data["chat_id"], message["text"], senderUserToken)
 
