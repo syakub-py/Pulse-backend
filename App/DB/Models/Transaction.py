@@ -8,7 +8,7 @@ from typing import cast
 class Transaction(Base):
     __tablename__ = 'transaction'
     transaction_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String(255), ForeignKey('users.user_id'))
+    user_id = Column(Integer, ForeignKey('users.user_id'))
     property_id = Column(Integer, ForeignKey('property.property_id'))
     transaction_type = Column(String(50))
     income_or_expense = Column(String(50))

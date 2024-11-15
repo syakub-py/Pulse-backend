@@ -47,7 +47,7 @@ def getProperties(userId: int) -> Dict[str, Any]:
 
             properties_list: List[Dict[str, Any]] = [
                 {
-                    "PropertyId": prop.property_id,
+                    "id": prop.property_id,
                     "Name": prop.nick_name,
                     "Address": prop.address,
                     "PropertyType": prop.property_type,

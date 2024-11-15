@@ -1,6 +1,6 @@
 import json
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter
-from typing import Dict
+from typing import Dict, Any
 from App.Handlers.Chat.SaveMessageToDB import saveMessageToDB
 from App.LoggerConfig import pulse_logger as logger
 
@@ -8,8 +8,12 @@ router = APIRouter()
 
 active_users: Dict[int, WebSocket] = {}
 
-@router.websocket("/ws/")
-async def handle_websocket_connection(websocket: WebSocket, senderUserToken: int, receiverUserToken: int):
+@router.websocket("/initChatSocketConnection/")
+async def handle_websocket_connection(
+        websocket: WebSocket,
+        senderUserToken: int,
+        receiverUserToken: int
+) -> None:
     try:
         await websocket.accept()
         active_users[senderUserToken] = websocket
@@ -20,10 +24,11 @@ async def handle_websocket_connection(websocket: WebSocket, senderUserToken: int
                 json_data = json.loads(data)
                 message = json_data['details']
                 saveMessageToDB(json_data["chat_id"], message["text"], senderUserToken)
+
                 if is_user_active(receiverUserToken):
                     otherUserWebsocket = active_users[receiverUserToken]
                     try:
-                        data = {
+                        data: Dict[str, Any] = {
                             "_id": message["_id"],
                             "text": message["text"],
                             "createdAt": message["createdAt"],

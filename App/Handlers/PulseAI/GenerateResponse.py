@@ -39,7 +39,7 @@ def generateResponse(chat_id: int, prompt: str, sender_id: int) -> Dict[str, Any
             return {"message": "CHAT_MODEL not found in environment variables.", "status_code": 500}
 
         aiResponse = ollama.chat(model, messages=messages_list)
-        response_content: str = aiResponse.get('message', {}).get('content', '')
+        response_content: str = aiResponse.get('message', {}).get('content', '') if isinstance(aiResponse.get('message', {}), dict) else ''
 
         if not response_content:
             logger.error("No content in AI response.")
@@ -51,7 +51,7 @@ def generateResponse(chat_id: int, prompt: str, sender_id: int) -> Dict[str, Any
                 logger.error("Bot user 'Pulse AI' not found in database.")
                 return {"message": "Bot user not found", "status_code": 500}
 
-            bot_user_id = bot_user.user_id
+            bot_user_id = int(bot_user.user_id)
 
         saveMessageToDB(chat_id, response_content, bot_user_id)
 

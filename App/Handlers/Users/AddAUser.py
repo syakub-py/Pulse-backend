@@ -46,7 +46,7 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
             db_session.add(new_user)
             db_session.flush()
 
-            createChat(int(new_user.user_id), bot_user.user_id)
+            createChat(int(new_user.user_id), int(bot_user.user_id))
 
             if user.LeaseId is not None:
                 new_tenant_lease = TenantLease(
@@ -84,4 +84,4 @@ def addAUser(user: UserDetails) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Unexpected error in addAUser: {str(e)}")
         db_session.rollback()
-        return {"message": "An unexpected error occurred", "status_code": 500}
+        return {"message": "An unexpected error occurred", "status_code": 400}
